@@ -37,14 +37,9 @@
     <!-- 상품 등록 -->
     <insert id="insertGoods" parameterType="GoodsVO">
         INSERT INTO goods (
-            g_category, g_name, g_brand, g_discription, g_qty, g_price,
-            g_sale_price, g_credate, g_manufactured_date, g_expiration_date,
-            g_delivery_price, g_delivery_date, g_status, g_stock
-        ) VALUES (
-            #{g_category}, #{g_name}, #{g_brand}, #{g_discription}, #{g_qty}, #{g_price},
-            #{g_sale_price}, NOW(), #{g_manufactured_date}, #{g_expiration_date},
-            #{g_delivery_price}, #{g_delivery_date}, #{g_status}, #{g_stock}
-        )
+            g_category, g_name, g_brand, g_discription, g_price, g_manufactured_date, g_expiration_date, g_delivery_price, g_stock)
+            values(
+	#{g_category}, #{g_name}, #{g_brand}, #{g_discription}, #{g_price}, #{g_manufactured_date}, #{g_expiration_date}, #{g_delivery_price}, #{g_stock})     
     </insert>
 
     <!-- 상품 수정 -->

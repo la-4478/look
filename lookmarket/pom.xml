@@ -142,6 +142,17 @@
             <artifactId>jakarta.inject-api</artifactId>
             <version>2.0.1</version>
         </dependency>
+        <!-- 파일 업로드용 -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.5</version>
+		</dependency>
+  	 	<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.15.1</version>
+  	 	</dependency>
 
         <!-- Logging: SLF4J & Log4j2 -->
         <dependency>
@@ -191,7 +202,8 @@
 		    <artifactId>json</artifactId>
 		    <version>20230227</version>
 		</dependency>
-    </dependencies>
+	</dependencies>
+
 
     <!-- 5. 빌드 설정 -->
     <build>
