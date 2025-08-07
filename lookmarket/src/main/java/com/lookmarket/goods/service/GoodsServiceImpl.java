@@ -1,6 +1,7 @@
 package com.lookmarket.goods.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,11 @@ public class GoodsServiceImpl implements GoodsService {
 	@Override
 	public GoodsVO getGoodsDetail(int g_id) throws Exception{
 		return goodsDAO.selectGoodsDetail(g_id);
+	}
+
+	@Override
+	public int addNewGoods(Map<String, Object> newGoodsMap) throws Exception {
+		return goodsDAO.addNewGoods(newGoodsMap);
 	}
 
 }
