@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.community">
+	<resultMap id="blackBoardResult" type="BlackBoardVO">
+		<result property="b_id" column="b_id" />
+		<result property="m_id" column="m_id" />
+		<result property="b_title" column="b_title" />
+		<result property="b_content" column="b_content" />
+		<result property="b_date" column="b_date" />
+		<result property="b_secret" column="b_secret" />
+		<result property="b_hit" column="b_hit" />
+	</resultMap>
+	<resultMap id="reviewResult" type="ReviewVO">
+		<result property="r_id" column="r_id" />
+		<result property="m_id" column="m_id" />
+		<result property="r_title" column="r_title" />
+		<result property="g_id" column="g_id" />
+		<result property="r_star" column="r_star" />
+		<result property="r_content" column="r_content" />
+		<result property="r_filename" column="r_filename" />
+		<result property="r_filetype" column="r_filetype" />
+		<result property="r_secret" column="r_secret" />
+		<result property="r_date" column="r_date" />
+		<result property="r_hit" column="r_hit" />
+	</resultMap>
+	
+	<select id="blackBoardList" resultMap="blackBoardResult">
+		<![CDATA[
+			SELECT * FROM blackboard
+		]]>
+	</select>
+
+	<select id="communityList" resultMap="reviewResult">
+		<![CDATA[
+			SELECT * FROM review
+		]]>
+	</select>
+	
+	<select id="communityDetail" parameterType="int" resultType="reviewVO">
+		<![CDATA[
+			SELECT * FROM review WHERE r_id=#{r_id}
+		]]>
+	</select>
+	
+	<update id="upHit" parameterType="reviewVO">
+		<![CDATA[
+			UPDATE review
+			SET
+			r_hit = #{r_hit}
+			WHERE r_id = #{r_id}
+		]]>
+	</update>
+</mapper>
