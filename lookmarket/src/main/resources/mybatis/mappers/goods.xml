@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.goods">
+
+    <!-- resultMap 정의 -->
+    <resultMap id="goodsResultMap" type="GoodsVO">
+        <result property="g_id" column="g_id"/>
+        <result property="g_category" column="g_category"/>
+        <result property="g_name" column="g_name"/>
+        <result property="g_brand" column="g_brand"/>
+        <result property="g_discription" column="g_discription"/>
+        <result property="g_qty" column="g_qty"/>
+        <result property="g_price" column="g_price"/>
+        <result property="g_sale_price" column="g_sale_price"/>
+        <result property="g_credate" column="g_credate"/>
+        <result property="g_manufactured_date" column="g_manufactured_date"/>
+        <result property="g_expiration_date" column="g_expiration_date"/>
+        <result property="g_delivery_price" column="g_delivery_price"/>
+        <result property="g_delivery_date" column="g_delivery_date"/>
+        <result property="g_status" column="g_status"/>
+        <result property="g_stock" column="g_stock"/>
+    </resultMap>
+
+    <!-- 전체 상품 조회 -->
+    <select id="selectAllGoodsList" resultMap="goodsResultMap">
+        SELECT * FROM goods ORDER BY g_id DESC
+    </select>
+
+    <!-- 상세 조회 -->
+    <select id="selectGoodsDetail" parameterType="int" resultMap="goodsResultMap">
+        SELECT * FROM goods WHERE g_id = #{g_id}
+    </select>
+    
+    <!-- 상품 등록 -->
+    <insert id="insertGoods" parameterType="GoodsVO">
+        INSERT INTO goods (
+            g_category, g_name, g_brand, g_discription, g_qty, g_price,
+            g_sale_price, g_credate, g_manufactured_date, g_expiration_date,
+            g_delivery_price, g_delivery_date, g_status, g_stock
+        ) VALUES (
+            #{g_category}, #{g_name}, #{g_brand}, #{g_discription}, #{g_qty}, #{g_price},
+            #{g_sale_price}, NOW(), #{g_manufactured_date}, #{g_expiration_date},
+            #{g_delivery_price}, #{g_delivery_date}, #{g_status}, #{g_stock}
+        )
+    </insert>
+
+    <!-- 상품 수정 -->
+    <update id="updateGoods" parameterType="GoodsVO">
+        UPDATE goods SET
+            g_category = #{g_category},
+            g_name = #{g_name},
+            g_brand = #{g_brand},
+            g_discription = #{g_discription},
+            g_qty = #{g_qty},
+            g_price = #{g_price},
+            g_sale_price = #{g_sale_price},
+            g_manufactured_date = #{g_manufactured_date},
+            g_expiration_date = #{g_expiration_date},
+            g_delivery_price = #{g_delivery_price},
+            g_delivery_date = #{g_delivery_date},
+            g_status = #{g_status},
+            g_stock = #{g_stock}
+        WHERE g_id = #{g_id}
+    </update>
+
+    <!-- 상품 삭제 -->
+    <delete id="deleteGoods" parameterType="int">
+        DELETE FROM goods WHERE g_id = #{g_id}
+    </delete>
+
+</mapper>

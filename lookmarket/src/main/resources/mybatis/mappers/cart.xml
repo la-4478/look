@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.cart">
+	<resultMap id="cartResult" type="CartVO">
+		<result property="c_id" column="c_id" />
+		<result property="g_id" column="g_id" />
+		<result property="m_id" column="m_id" />
+		<result property="c_qty" column="c_qty" />
+		
+		<result property="g_name" column="g_name" />
+		<result property="g_price" column="g_price" />
+		<result property="g_sale_price" column="g_sale_price" />
+		<result property="g_delivery_price" column="g_delivery_price" />
+		<result property="g_stock" column="g_stock" />
+		
+		<result property="i_filename" column="i_filename" />
+	</resultMap>
+	
+	<select id="myCartList" parameterType="String" resultMap="cartResult">
+		<![CDATA[
+			SELECT cart.c_id,
+				    cart.g_id,
+				    cart.m_id,
+				    cart.c_qty,
+				    goods.g_name,
+				    goods.g_price,
+				    goods.g_sale_price,
+				    goods.g_delivery_price,
+				    goods.g_stock,
+				    goods_image.i_filename
+			FROM cart
+			JOIN goods ON cart.g_id = goods.g_id
+			LEFT JOIN goods_image ON goods.g_id = goods_image.g_id
+			WHERE cart.m_id = #{current_id}
+		]]>
+	</select>
+	
+	<update id="updateQty" parameterType="cartVO">
+		<![CDATA[
+		    UPDATE cart
+		    SET c_qty = #{c_qty}
+		    WHERE c_id = #{c_id}
+		]]>
+	</update>
+	
+	<delete id="deleteCartItem" parameterType="int">
+		<![CDATA[
+		    DELETE FROM cart
+		    WHERE c_id = #{c_id}
+	    ]]>
+	</delete>
+</mapper>
