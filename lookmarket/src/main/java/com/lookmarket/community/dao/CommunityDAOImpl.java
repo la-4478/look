@@ -1,19 +1,17 @@
 package com.lookmarket.community.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.community.vo.ReviewVO;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Repository("community")
 public class CommunityDAOImpl implements CommunityDAO{
@@ -29,7 +27,7 @@ public class CommunityDAOImpl implements CommunityDAO{
 	
 	@Override
 	public List<ReviewVO> communityList() throws DataAccessException{
-		return (ArrayList)sqlSession.selectList("mapper.community.communityList");
+		return sqlSession.selectList("mapper.community.communityList");
 	}
 	
 	@Override
@@ -38,10 +36,15 @@ public class CommunityDAOImpl implements CommunityDAO{
 	}
 	
 	@Override
-	public void upHit(int r_id, int hit) throws DataAccessException{
-		reviewVO.setR_id(r_id);
-		reviewVO.setR_hit(hit);
-		
-		sqlSession.update("mapper.community.upHit", reviewVO);
+	public void upHit(int r_id, int hit) throws DataAccessException {
+	    Map<String, Object> paramMap = new HashMap<>();
+	    paramMap.put("r_id", r_id);
+	    paramMap.put("r_hit", hit);
+	    sqlSession.update("mapper.community.upHit", paramMap);
+	}
+
+	@Override
+	public void insertReview(ReviewVO reviewVO) throws DataAccessException{
+		sqlSession.insert("mapper.community.insertReview", reviewVO);
 	}
 }
