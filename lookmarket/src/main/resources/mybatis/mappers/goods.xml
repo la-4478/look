@@ -23,6 +23,8 @@
         <result property="g_status" column="g_status"/>
         <result property="g_stock" column="g_stock"/>
     </resultMap>
+    
+
 
     <!-- 전체 상품 조회 -->
     <select id="selectAllGoodsList" resultMap="goodsResultMap">
@@ -65,5 +67,22 @@
     <delete id="deleteGoods" parameterType="int">
         DELETE FROM goods WHERE g_id = #{g_id}
     </delete>
+    
+    <resultMap id="imageResult" type="imageFileVO">
+    	<result property="i_id" column="i_id"/>
+    	<result property="g_id" column="g_id"/>
+    	<result property="i_filename" column="i_filename"/>
+    	<result property="i_filetype" column="i_filetype"/>
+    	<result property="i_credate" column="i_credate"/>
+    </resultMap>
+    
+    <insert id="insertGoodsImageFile" parameterType="imageFileVO">
+    	insert into goods_image(
+    		g_id, i_filename, i_filetype) values(#{g_id}, #{i_filename}, #{i_filetype})
+    </insert>
+    
+    <select id="selectMainimagefile" parameterType="int" resultType="imageFileVO">
+    	select * from goods_image where g_id=#{g_id}
+    </select>
 
 </mapper>

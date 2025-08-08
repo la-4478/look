@@ -17,8 +17,8 @@ public class GoodsVO {
 	int g_status;
 	int g_stock;
 	int i_id;
-	String i_file_name;
-	String i_file_type;
+	String i_filename;
+	String i_filetype;
 	
 	
 	public int getG_id() {
@@ -100,16 +100,16 @@ public class GoodsVO {
 		this.i_id = i_id;
 	}
 	public String getI_file_name() {
-		return i_file_name;
+		return i_filename;
 	}
 	public void setI_file_name(String i_file_name) {
-		this.i_file_name = i_file_name;
+		this.i_filename = i_file_name;
 	}
 	public String getI_file_type() {
-		return i_file_type;
+		return i_filetype;
 	}
 	public void setI_file_type(String i_file_type) {
-		this.i_file_type = i_file_type;
+		this.i_filetype = i_file_type;
 	}
 	
 	 

@@ -200,7 +200,7 @@ public class CommunityControllerImpl implements CommunityController{
 	}
 	@RequestMapping(value="/insertReview.do", method = RequestMethod.POST)
 	public ModelAndView insertReview(
-	    @RequestParam("r_filename") MultipartFile uploadFile,
+	    @RequestParam("r_filename1") MultipartFile uploadFile,
 	    @ModelAttribute ReviewVO reviewVO,
 	    HttpServletRequest request
 	) throws Exception {
@@ -231,6 +231,7 @@ public class CommunityControllerImpl implements CommunityController{
 	    reviewVO.setR_secret("private".equals(secretValue) ? "0" : "1");
 
 	    String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
+	    reviewVO.setM_id(m_id);
 	    reviewVO.setR_date(currentDate);
 	    reviewVO.setR_hit("0");
 
