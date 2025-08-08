@@ -104,7 +104,7 @@
                         
                         <div class="col-md-3 col-sm-6 mb-4">
                             <div class="product-card">
-                                <img src="${contextPath}/resources/image/${fn:escapeXml(firstImage)}" alt="${goods.g_name}" class="product-image" />
+                                <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${requestScope.Mainimage.i_filename}" alt="${goods.g_name}" class="product-image" />
                                 
                                 <div class="product-name">${goods.g_name}</div>
                                 <div class="product-price">

@@ -123,7 +123,7 @@
         <!-- 이미지 업로드 -->
         <div class="form-group">
             <label for="r_filename">이미지 업로드</label>
-            <input type="file" id="r_filename" name="r_filename1" />
+            <input type="file" id="r_filename1" name="r_filename1" />
         </div>
 
         <!-- 공개 여부 -->

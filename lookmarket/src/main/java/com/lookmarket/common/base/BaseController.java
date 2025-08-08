@@ -20,11 +20,11 @@ public class BaseController {
 		while(fileNames.hasNext()) {
 			ImageFileVO imageFileVO = new ImageFileVO();
 			String i_file_name = fileNames.next();
-			imageFileVO.setI_file_type(i_file_name);
+			imageFileVO.setI_filetype(i_file_name);
 			MultipartFile mFile = multipartRequest.getFile(i_file_name);
 			
 			String originalFileName = mFile.getOriginalFilename();
-			imageFileVO.setI_file_name(originalFileName);
+			imageFileVO.setI_filename(originalFileName);
 			fileList.add(imageFileVO);
 			
 			File file = new File(CURR_IMAGE_REPO_PATH + "\\" + i_file_name);

@@ -2,6 +2,8 @@ package com.lookmarket.goods.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +63,8 @@ public class GoodsControllerImpl implements GoodsController{
 			} else if(category.equals("local")) {
 				goodsList = goodsService.getLocal();			
 		}
-		
+		List<GoodsVO> goods = goodsService.getAllGoods();
+//		ImageFileVO mainimage = goodsService.goodsMainImage();
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
@@ -71,28 +76,45 @@ public class GoodsControllerImpl implements GoodsController{
 	}
 	
 	@Override
-	@RequestMapping(value="/goodsDetail.do", method=RequestMethod.GET)
-	public ModelAndView goodsDetail(@RequestParam("g_id") int g_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    GoodsVO goods = goodsService.getGoodsDetail(g_id);
-	    //이미지 리스트
-	    List<String> detailImageList = new ArrayList<>();
-		if (goods.getI_file_name() != null && !goods.getI_file_name().isEmpty()) {
-			String[] files = goods.getI_file_name().split(",");
-			for (int i = 1; i < files.length; i++) {
-			    detailImageList.add(files[i].trim()); // 첫 번째는 대표 이미지니까 제외
-			}
+	@GetMapping("/goodsDetail.do")
+	public ModelAndView goodsDetail(@RequestParam("g_id") int gId,
+	                                HttpServletRequest request,
+	                                HttpServletResponse response) throws Exception {
+
+	    // 1) 상품 로드 & 존재 체크
+	    GoodsVO goods = goodsService.getGoodsDetail(gId);
+	    if (goods == null) {
+	        // 필요에 따라 404 페이지로 보내거나 목록으로 리다이렉트
+	        return new ModelAndView("redirect:/goods/list.do");
+	        // 혹은: return new ModelAndView("/error/404");
+	    }
+	    // 상품 메인이미지 불러오기
+	    ImageFileVO mainimage = goodsService.goodsMainImage(gId);
+
+	    // 2) 상세 이미지 목록 파싱 (첫 번째는 대표 이미지이므로 skip)
+	    List<String> detailImageList = Collections.emptyList();
+	    String filenames = goods.getI_file_name();
+	    if (filenames != null && !filenames.isBlank()) {
+	        detailImageList = Arrays.stream(filenames.split(",", -1)) // 빈 토큰 보존
+	                .map(String::trim)
+	                .filter(s -> !s.isEmpty())
+	                .skip(1) // 대표 이미지 제외
+	                .collect(Collectors.toList());
 	    }
 
-	    ModelAndView mav = new ModelAndView();
-	    String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
+	    // 3) 레이아웃 + 바디 뷰 세팅 (request attribute에 의존 X)
+	    ModelAndView mav = new ModelAndView("/common/layout"); // ← 슬래시 붙이자
+	    // 타일즈 안 쓰고 include 방식이면 보통 이런 식으로 body 경로 내려줌
+	    mav.addObject("body", "/WEB-INF/views/goods/goodsDetail.jsp");
 
+	    // 4) 모델
 	    mav.addObject("goods", goods);
 	    mav.addObject("detailImageList", detailImageList);
+	    mav.addObject("Mainimage", mainimage);
+
 	    return mav;
 	}
+
 	
 	@Override
 	@RequestMapping(value="/goodsAddForm.do", method=RequestMethod.GET)
@@ -163,13 +185,13 @@ public class GoodsControllerImpl implements GoodsController{
 	            multipartFile.transferTo(destFile); // ✅ 실제 파일 저장
 
 	            ImageFileVO imageFileVO = new ImageFileVO();
-	            imageFileVO.setI_file_name(newFileName);
+	            imageFileVO.setI_filename(newFileName);
 
 	            String extension = ext.toLowerCase();
 	            if (extension.matches(".jpg|.jpeg|.png|.gif")) {
-	                imageFileVO.setI_file_type("image");
+	                imageFileVO.setI_filetype("image");
 	            } else {
-	                imageFileVO.setI_file_type("etc");
+	                imageFileVO.setI_filetype("etc");
 	            }
 
 	            imageFileList.add(imageFileVO);
@@ -177,7 +199,7 @@ public class GoodsControllerImpl implements GoodsController{
 	    }
 
 	    if (!imageFileList.isEmpty()) {
-	        String mainImageFileName = imageFileList.get(0).getI_file_name();
+	        String mainImageFileName = imageFileList.get(0).getI_filename();
 	        newGoodsMap.put("goods_fileName", mainImageFileName);
 	        newGoodsMap.put("imageFileList", imageFileList);
 	    }
@@ -192,7 +214,7 @@ public class GoodsControllerImpl implements GoodsController{
 
 	        if (!imageFileList.isEmpty()) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
-	                imageFileName = imageFileVO.getI_file_name();
+	                imageFileName = imageFileVO.getI_filename();
 	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
 	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
 	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
@@ -207,7 +229,7 @@ public class GoodsControllerImpl implements GoodsController{
 	    } catch (Exception e) {
 	        if (!imageFileList.isEmpty()) {
 	            for (ImageFileVO imageFileVO : imageFileList) {
-	                imageFileName = imageFileVO.getI_file_name();
+	                imageFileName = imageFileVO.getI_filename();
 	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
 	                if (srcFile.exists()) srcFile.delete();
 	            }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.order">
+
+    <!-- ==============================
+         주문 저장 (OrderVO)
+         ============================== -->
+    <insert id="addNewOrder" parameterType="OrderVO" useGeneratedKeys="true" keyProperty="oId">
+        INSERT INTO orders (
+            m_id,
+            oi_delivery_price,
+            oi_total_goods_price,
+            oi_sale_price,
+            oi_name,
+            oi_receiver_name,
+            oi_receiver_phone,
+            oi_delivery_address,
+            oi_delivery_message,
+            oi_date
+        ) VALUES (
+            #{mId},
+            #{oiDeliveryPrice},
+            #{oiTotalGoodsPrice},
+            #{oiSalePrice},
+            #{oiName},
+            #{oiReceiverName},
+            #{oiReceiverPhone},
+            #{oiDeliveryAddress},
+            #{oiDeliveryMessage},
+            NOW()
+        )
+    </insert>
+
+    <!-- ==============================
+         주문 아이템 저장 (OrderItemVO)
+         ============================== -->
+    <insert id="addOrderItem" parameterType="OrderItemVO">
+        INSERT INTO order_item (
+            o_id,
+            ot_g_id,
+            ot_goods_price,
+            ot_sale_price,
+            ot_goods_name,
+            ot_goods_qty
+        ) VALUES (
+            #{oId},
+            #{otGId},
+            #{otGoodsPrice},
+            #{otSalePrice},
+            #{otGoodsName},
+            #{otGoodsQty}
+        )
+    </insert>
+
+    <!-- ==============================
+         결제 저장 (PayVO)
+         ============================== -->
+    <insert id="addNewpay" parameterType="PayVO">
+        INSERT INTO pay (
+            o_id,
+            p_method,
+            p_card_name,
+            p_pay_month,
+            p_orderer_phone,
+            p_order_time,
+            p_final_total_price,
+            p_transaction_id
+        ) VALUES (
+            #{oId},
+            #{pMethod},
+            #{pCardName},
+            #{pPayMonth},
+            #{pOrdererPhone},
+            #{pOrderTime},
+            #{pFinalTotalPrice},
+            #{pTransactionId}
+        )
+    </insert>
+
+    <!-- ==============================
+         주문 상세 조회 (OrderVO + OrderItemVO JOIN)
+         ============================== -->
+    <select id="selectOrderDetail" parameterType="int" resultMap="orderDetailResult">
+        SELECT 
+            o.o_id, o.m_id, o.oi_delivery_price, o.oi_total_goods_price, o.oi_sale_price,
+            o.oi_name, o.oi_receiver_name, o.oi_receiver_phone,
+            o.oi_date, o.oi_delivery_address, o.oi_delivery_message,
+            i.ot_g_id, i.ot_goods_price, i.ot_sale_price,
+            i.ot_goods_name, i.ot_goods_qty
+        FROM orders o
+        JOIN order_item i ON o.o_id = i.o_id
+        WHERE o.o_id = #{oId}
+    </select>
+
+    <resultMap id="orderDetailResult" type="OrderVO">
+        <id property="oId" column="o_id" />
+        <result property="mId" column="m_id" />
+        <result property="oiDeliveryPrice" column="oi_delivery_price" />
+        <result property="oiTotalGoodsPrice" column="oi_total_goods_price" />
+        <result property="oiSalePrice" column="oi_sale_price" />
+        <result property="oiName" column="oi_name" />
+        <result property="oiReceiverName" column="oi_receiver_name" />
+        <result property="oiReceiverPhone" column="oi_receiver_phone" />
+        <result property="oiDate" column="oi_date" />
+        <result property="oiDeliveryAddress" column="oi_delivery_address" />
+        <result property="oiDeliveryMessage" column="oi_delivery_message" />
+        
+        <collection property="orderItems" ofType="OrderItemVO" javaType="java.util.ArrayList">
+            <result property="otGId" column="ot_g_id" />
+            <result property="otGoodsPrice" column="ot_goods_price" />
+            <result property="otSalePrice" column="ot_sale_price" />
+            <result property="otGoodsName" column="ot_goods_name" />
+            <result property="otGoodsQty" column="ot_goods_qty" />
+        </collection>
+    </resultMap>
+
+    <!-- ==============================
+         카트에서 상품 삭제
+         ============================== -->
+    <delete id="removeCartItem">
+        DELETE FROM cart
+        WHERE m_id = #{memberId}
+          AND goods_id = #{goodsId}
+    </delete>
+
+</mapper>
