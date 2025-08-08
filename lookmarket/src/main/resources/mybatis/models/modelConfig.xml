@@ -11,5 +11,8 @@
     	<typeAlias type="com.lookmarket.community.vo.BlackBoardVO" alias="blackBoardVO" />
     	<typeAlias type="com.lookmarket.community.vo.ReviewVO" alias="reviewVO" />
     	<typeAlias type="com.lookmarket.mypage.vo.MyPageVO" alias="myPageVO" />
+    	<typeAlias type="com.lookmarket.order.vo.OrderVO" alias="OrderVO" />
+    	<typeAlias type="com.lookmarket.order.vo.OrderItemVO" alias="OrderItemVO" />
+    	<typeAlias type="com.lookmarket.order.vo.PayVO" alias="PayVO" />
   	</typeAliases>
 </configuration>
