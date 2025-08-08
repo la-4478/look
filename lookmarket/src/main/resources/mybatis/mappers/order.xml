@@ -108,7 +108,7 @@
         <result property="oiDeliveryAddress" column="oi_delivery_address" />
         <result property="oiDeliveryMessage" column="oi_delivery_message" />
         
-        <collection property="orderItems" ofType="OrderItemVO">
+        <collection property="orderItems" ofType="OrderItemVO" javaType="java.util.ArrayList">
             <result property="otGId" column="ot_g_id" />
             <result property="otGoodsPrice" column="ot_goods_price" />
             <result property="otSalePrice" column="ot_sale_price" />
