@@ -34,7 +34,7 @@
             </c:if>
 
             <article style="flex: 1;">
-                <jsp:include page="/WEB-INF/views${viewName}.jsp" />
+                <jsp:include page="/WEB-INF/views/${viewName}.jsp" />
             </article>
         </div>
 
