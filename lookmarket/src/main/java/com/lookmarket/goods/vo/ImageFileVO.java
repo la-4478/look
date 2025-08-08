@@ -3,8 +3,8 @@ package com.lookmarket.goods.vo;
 public class ImageFileVO {
 	int i_id;
 	int g_id;
-	String i_file_name;
-	String i_file_type;
+	String i_filename;
+	String i_filetype;
 	String i_credate;
 	public int getI_id() {
 		return i_id;
@@ -18,17 +18,17 @@ public class ImageFileVO {
 	public void setG_id(int g_id) {
 		this.g_id = g_id;
 	}
-	public String getI_file_name() {
-		return i_file_name;
+	public String getI_filename() {
+		return i_filename;
 	}
-	public void setI_file_name(String i_file_name) {
-		this.i_file_name = i_file_name;
+	public void setI_filename(String i_filename) {
+		this.i_filename = i_filename;
 	}
-	public String getI_file_type() {
-		return i_file_type;
+	public String getI_filetype() {
+		return i_filetype;
 	}
-	public void setI_file_type(String i_file_type) {
-		this.i_file_type = i_file_type;
+	public void setI_filetype(String i_filetype) {
+		this.i_filetype = i_filetype;
 	}
 	public String getI_credate() {
 		return i_credate;

@@ -95,7 +95,7 @@
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="${contextPath}/resources/image/${goods.i_file_name}" alt="${goods.g_name}" />
+        <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${requestScope.Mainimage.i_filename}" alt="${goods.g_name}" />
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
@@ -115,7 +115,6 @@
 
             <div class="price">
                 <del><fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩" /></del>
-                <strong style="color: #d9534f;"><fmt:formatNumber value="${goods.g_sale_price}" type="currency" currencySymbol="₩" /></strong>
             </div>
 
             <form action="${contextPath}/cart/addCart.do" method="post">
@@ -130,7 +129,7 @@
                 <p><strong>재고:</strong> ${goods.g_stock} 개</p>
                 <p><strong>입고일:</strong> ${goods.g_credate}</p>
                 <p><strong>제조일자:</strong> ${goods.g_manufactured_date}</p>
-                <p><strong>유통기한:</strong> ${goods.g_expiration_date}</p>
+                <p><strong>유통기한:</strong> ${goods.g_expiration_date}</p>	
                 <p><strong>배송비:</strong>
                     <c:choose>
                         <c:when test="${goods.g_delivery_price == 0}">무료배송</c:when>
