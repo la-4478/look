@@ -10,7 +10,7 @@ public class ReviewVO {
 	String g_id;
 	String r_star;
 	String r_content;
-	String r_filename;
+	String r_filename1;
 	String r_filetype;
 	String r_secret;
 	String r_date;
@@ -51,11 +51,11 @@ public class ReviewVO {
 	public void setR_content(String r_content) {
 		this.r_content = r_content;
 	}
-	public String getR_filename() {
-		return r_filename;
+	public String getR_filename1() {
+		return r_filename1;
 	}
-	public void setR_filename(String r_filename) {
-		this.r_filename = r_filename;
+	public void setR_filename1(String r_filename1) {
+		this.r_filename1 = r_filename1;
 	}
 	public String getR_filetype() {
 		return r_filetype;
