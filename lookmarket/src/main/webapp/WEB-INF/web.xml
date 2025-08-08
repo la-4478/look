@@ -5,46 +5,87 @@
                              https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF-8</param-value>
-		</init-param>
-		<init-param>
-			<param-name>forceEncoding</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
-	
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
-	</context-param>
+    <!-- 
+        [1] CharacterEncodingFilter: 
+        - 모든 요청/응답의 인코딩을 UTF-8로 강제 적용
+        - 한글 깨짐 방지 필터
+    -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    
+    <!-- 
+        [2] 필터 매핑: 
+        - 위 인코딩 필터를 모든 요청에 적용 
+    -->
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- 
+        [3] Spring Root Context 설정: 
+        - 전체 애플리케이션 컨텍스트(root-context.xml) 위치 지정 
+        - DB, 서비스, 공통 빈 등 전체적으로 적용되는 설정 등록 
+    -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/spring/root-context.xml</param-value>
+    </context-param>
 
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+    <!-- 
+        [4] ContextLoaderListener: 
+        - Spring Root ApplicationContext를 서버 시작 시 자동 생성
+    -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
-	<servlet>
-		<servlet-name>appServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>appServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-</web-app>						
+    <!-- 
+        [5] DispatcherServlet (Spring MVC Front Controller): 
+        - 모든 웹 요청을 이 서블릿이 받아서 처리 (컨트롤러, 뷰 연결 등)
+        - appServlet 이름의 DispatcherServlet 등록
+        - contextConfigLocation: 이 서블릿 전용(서블릿 컨텍스트) 설정(xml) 위치
+    -->
+    <servlet>
+        <servlet-name>appServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <!-- 
+            [★파일 업로드 주의★]
+            - 파일 업로드(StandardServletMultipartResolver 사용 시)는 
+              <multipart-config> 세팅이 필요!
+            - 아래처럼 추가해야 파일 업로드 제대로 작동함! 
+            -->
+            
+            <multipart-config>
+                <max-file-size>52428800</max-file-size>        <!-- 파일 하나 최대 50MB -->
+                <max-request-size>52428800</max-request-size>  <!-- 전체 요청 최대 50MB -->
+                <file-size-threshold>0</file-size-threshold>   <!-- 0: 파일 바로 디스크 저장 -->
+            </multipart-config>
+    </servlet>
+    
+    <!-- 
+        [6] DispatcherServlet 매핑: 
+        - 모든 경로(/)로 들어오는 웹 요청을 appServlet(DispatcherServlet)이 처리 
+        - ex) /, /foo, /bar 등 모두 스프링 컨트롤러로 전달 
+    -->
+    <servlet-mapping>
+        <servlet-name>appServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

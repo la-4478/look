@@ -11,20 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link href="${contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" media="screen">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-3gJwYpMe3Qm2LF6XnKsKuQv5JFNfEXiDAYTujMAeBAs=" crossorigin="anonymous"></script>
-
-    <!-- 챗봇 관련 CSS -->
-    <style>
-        #chatbot-button {position: fixed;right: 20px;bottom: 20px;width: 60px;height: 60px;cursor: pointer;z-index: 9999;}
-        #chatbot-button img {width: 100%;height: 100%;border-radius: 50%;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);transition: transform 0.3s;}
-        #chatbot-button img:hover {transform: scale(1.1);}
-        #chatbot-popup {position: fixed;right: -350px;bottom: 80px;width: 300px;height: 400px;background-color: #fff;border: 1px solid #ddd;box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);transition: right 0.4s ease;z-index: 9998;display: flex;flex-direction: column;}
-        #chatbot-header {background-color: #4CAF50;color: #fff;padding: 10px;font-weight: bold;display: flex;justify-content: space-between;align-items: center;}
-        #chatbot-body {padding: 10px;flex: 1;overflow-y: auto;}
-        #chatbot-close {background: none;border: none;color: #fff;font-size: 16px;cursor: pointer;}
-        #scroll-buttons{position:fixed; right:20px;bottom:100px;display:flex;flex-direction:column;gap:10px;z-index:9999;}
-        .scroll-btn{width:45px;height:45px;border-radius:50%;background-color:#f5f5f5;border:none;box-shadow:0 4px 8px rgba(0,0,0,0.2);font-size:18px;cursor:pointer;}
-        .scroll-btn:hover{background-color:#ddd;}
-    </style>
+    <link href="${contextPath}/resources/css/chatbot.css" rel="stylesheet" type="text/css"><!-- 챗봇 CSS 파일 -->
 </head>
 
 <body>

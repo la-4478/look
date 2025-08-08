@@ -74,10 +74,11 @@
 <body>
 <div class="container mt-4">
     <h2>상품 목록</h2>
-    
+    <c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
     <div class="top-right">
         <a href="${contextPath}/jangbogo/goodsAddForm.do" class="btn btn-primary">상품 등록</a>
     </div>
+    </c:if>
 
     <c:choose>
         <c:when test="${not empty goodsMap}">
