@@ -8,7 +8,6 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 목록</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .table th, .table td {
             vertical-align: middle;
