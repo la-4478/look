@@ -49,8 +49,19 @@
 		<![CDATA[
 			UPDATE review
 			SET
-			r_hit = #{r_hit}
+			r_hit = r_hit + 1
 			WHERE r_id = #{r_id}
 		]]>
 	</update>
+	<insert id="insertReview" parameterType="reviewVO">
+		<![CDATA[
+			INSERT INTO review(
+				m_id, r_title, g_id, r_star, r_content,
+				r_filename, r_filetype, r_secret, r_date, r_hit
+			) VALUES(
+				#{m_id}, #{r_title}, #{g_id}, #{r_star}, #{r_content},
+				#{r_filename}, #{r_filetype}, #{r_secret}, #{r_date}, #{r_hit}
+			)	
+		]]>
+	</insert>
 </mapper>

@@ -16,4 +16,5 @@ public interface CommunityDAO {
 	public List<ReviewVO> communityList() throws DataAccessException;
 	public ReviewVO communityDetail(int r_id) throws DataAccessException;
 	public void upHit(int r_id, int hit) throws DataAccessException;
+	public void insertReview(ReviewVO reviewVO) throws DataAccessException;
 }

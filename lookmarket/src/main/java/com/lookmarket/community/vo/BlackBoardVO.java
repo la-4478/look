@@ -4,18 +4,17 @@ import org.springframework.stereotype.Component;
 
 @Component("blackBoardVO")
 public class BlackBoardVO {
-	int b_id;
+	String b_id;
 	String m_id;
 	String b_title;
 	String b_content;
 	String b_date;
 	String b_secret;
-	int b_hit;
-	
-	public int getB_id() {
+	String b_hit;
+	public String getB_id() {
 		return b_id;
 	}
-	public void setB_id(int b_id) {
+	public void setB_id(String b_id) {
 		this.b_id = b_id;
 	}
 	public String getM_id() {
@@ -48,11 +47,10 @@ public class BlackBoardVO {
 	public void setB_secret(String b_secret) {
 		this.b_secret = b_secret;
 	}
-	public int getB_hit() {
+	public String getB_hit() {
 		return b_hit;
 	}
-	public void setB_hit(int b_hit) {
+	public void setB_hit(String b_hit) {
 		this.b_hit = b_hit;
 	}
-
 }

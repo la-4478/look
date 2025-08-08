@@ -88,13 +88,8 @@
 <body>
 <div class="form-container">
     <h2>리뷰 등록</h2>
-    <form action="insertReview.do" method="post" enctype="multipart/form-data">
-        <!-- 작성자 -->
-        <div class="form-group">
-            <label for="m_id">작성자 ID</label>
-            <input type="text" id="m_id" name="m_id" value="${sessionScope.memberInfo.m_id}" readonly />
-        </div>
-
+    <form action="${contextPath}/community/insertReview.do" method="post" enctype="multipart/form-data">
+    	<p><strong>작성자:</strong> ${sessionScope.memberInfo.m_id}</p>
         <!-- 리뷰 제목 -->
         <div class="form-group">
             <label for="r_title">리뷰 제목</label>
@@ -128,7 +123,7 @@
         <!-- 이미지 업로드 -->
         <div class="form-group">
             <label for="r_filename">이미지 업로드</label>
-            <input type="file" id="r_filename" name="r_filename" accept="image/*" />
+            <input type="file" id="r_filename" name="r_filename" />
         </div>
 
         <!-- 공개 여부 -->
