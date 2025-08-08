@@ -92,7 +92,7 @@
         <!-- 작성자 -->
         <div class="form-group">
             <label for="m_id">작성자 ID</label>
-            <input type="text" id="m_id" name="m_id" value="${sessionScope.userId}" readonly />
+            <input type="text" id="m_id" name="m_id" value="${sessionScope.memberInfo.m_id}" readonly />
         </div>
 
         <!-- 리뷰 제목 -->

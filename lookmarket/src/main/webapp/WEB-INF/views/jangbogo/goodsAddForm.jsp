@@ -32,15 +32,24 @@
 
 <div class="form-card">
     <h2>상품 등록</h2>
-    <form action="${contextPath}/goodsAdd.do" method="post" enctype="multipart/form-data">
+    <form action="${contextPath}/jangbogo/goodsAdd.do" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="g_name" class="form-label">상품명</label>
             <input type="text" class="form-control" name="g_name" id="g_name" required>
+        </div>
+        <div class="mb-3">
+            <label for="g_brand" class="form-label">제조사</label>
+            <input type="text" class="form-control" name="g_brand" id="g_brand" required>
         </div>
 
         <div class="mb-3">
             <label for="g_price" class="form-label">가격</label>
             <input type="number" class="form-control" name="g_price" id="g_price" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="g_stock" class="form-label">재고</label>
+            <input type="number" class="form-control" name="g_stock" id="g_stock" required>
         </div>
 
         <div class="mb-3">
@@ -56,8 +65,20 @@
         </div>
 
         <div class="mb-3">
-            <label for="g_description" class="form-label">설명</label>
-            <textarea class="form-control" name="g_description" id="g_description" rows="4" required></textarea>
+            <label for="g_discription" class="form-label">설명</label>
+            <textarea class="form-control" name="g_discription" id="g_discription" rows="4" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="g_description" class="form-label">배송비</label>
+            <input type="text" class="form-control" name="g_delivery_price" id="g_delivery_price" rows="4" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="g_manufactured_date" class="form-label">상품 제조일자</label>
+            <input type="text" class="form-control" name="g_manufactured_date" id="g_manufactured_date" value="제조일자는 배송받은 제품 포장지 상단에 적혀있습니다" rows="4" readonly></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="g_expiration_date" class="form-label">상품 소비기한</label>
+            <input type="text" class="form-control" name=g_expiration_date id="g_expiration_date" value="소비기한은 배송받은 제품 포장지 상단에 적혀있습니다" rows="4" readonly></textarea>
         </div>
 
         <div class="mb-3">
