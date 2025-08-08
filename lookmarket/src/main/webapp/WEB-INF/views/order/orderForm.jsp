@@ -7,7 +7,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>결제하기</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       background: #f1f1f1;
