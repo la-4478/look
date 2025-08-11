@@ -7,79 +7,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>커뮤니티 리뷰 목록</title>
-    <style>
-        body {
-            font-family: '맑은 고딕', sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
-        }
-        .news-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .news-item {
-            background-color: #fff;
-            width: 260px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 5px #ccc;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .news-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            background-color: #3366cc;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        .news-content {
-            padding: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .news-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            height: 48px; /* 약 3줄 */
-            overflow: hidden;
-            line-height: 1.4em;
-        }
-        .news-date {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        .btn-view {
-            background-color: #0077cc;
-            color: white;
-            text-align: center;
-            padding: 8px 0;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-        }
-        .btn-view:hover {
-            background-color: #005fa3;
-        }
-        /* 별점 금색 */
-        .star-rating {
-            color: gold;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-    </style>
+    <link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -91,7 +19,7 @@
             <a href="${contextPath}/community/communityDetail.do?r_id=${review.r_id}" style="text-decoration:none; color: inherit;">
                 <c:choose>
                     <c:when test="${not empty review.r_filename}">
-                        <img src="/upload/${review.r_filename}" alt="리뷰 이미지" class="news-image" />
+                        <img src="${contextPath}/resources/image/${review.r_filename}" alt="리뷰 이미지" class="news-image" />
                     </c:when>
                     <c:otherwise>
                         <div class="news-image">이미지 없음</div>

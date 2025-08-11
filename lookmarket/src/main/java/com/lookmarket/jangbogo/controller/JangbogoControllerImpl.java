@@ -24,6 +24,7 @@ public class JangbogoControllerImpl implements JangbogoController {
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
+		
 		session = request.getSession();
 		session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "category");

@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입창</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
         $(document).ready(function(){
@@ -177,8 +177,8 @@
 </head>
 <body>
     <h3>회원가입</h3>
-    <form action="${contextPath}/member/addMember.do" method="POST" id="form">
-        <input type="hidden" name="m_role" value="<%= m_role %>" />
+    <form action="${contextPath}/member/addBusiness.do" method="POST" id="form">
+        <input type="hidden" name="m_role" value="3" />
 
         <table>
             <tbody>
@@ -202,12 +202,30 @@
                     <td class="fixed_join">이름</td>
                     <td><input type="text" name="m_name" size="20" /></td>
                 </tr>
-
-                
-                    <!-- 개인 회원 폼 -->
-                    <tr class="dot_line">
+                <tr class="dot_line">
                         <td class="fixed_join">주민등록번호</td>
                         <td><input type="text" name="m_birth" size="20" /> - <input type="text" name="m_gender" size="1" />******</td>
+                    </tr>
+                    <tr class="dot_line">
+                        <td class="fixed_join">상호명</td>
+                        <td><input type="text" name="bm_name" size="20" /></td>
+                    </tr>
+                    <tr class="dot_line">
+                        <td class="fixed_join">사업자등록번호</td>
+                        <td><input type="text" name="bm_reg_num" size="20" placeholder="000-00-00000 형식" /></td>
+                    </tr>
+                    <tr class="dot_line">
+                        <td class="fixed_join">업종</td>
+                        <td>
+                            <select name="bm_type" id="bm_type">
+                                <option value="">선택하세요</option>
+                                <option value="신선식품">신선식품</option>
+                                <option value="가공식품">가공식품</option>
+                                <option value="생활용품">생활용품</option>
+                                <option value="패션잡화">패션잡화</option>
+                                <option value="지역특산물">지역특산물</option>
+                            </select>
+                        </td>
                     </tr>
 
                 <tr class="dot_line">

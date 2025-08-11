@@ -47,9 +47,9 @@
 							<li><a href="${contextPath}/admin/order/allOrderList.do">주문관리</a></li>
 							<li><a href="${contextPath}/admin/member/allMemberList.do">회원관리</a></li>
 							<li><a href="${contextPath}/admin/mypage/allCommunityList.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/admin/ApprovalList.do">사업자 승인 요청</a></li>
 							<li><a href="${contextPath}/admin/mypage/allBlackBoardList.do">사장님고충방</a></li>
 							<li><a href="${contextPath}/admin/accountList.do">회계관리</a></li>
-							
 						</ul>
 					</li>
 				</c:when>

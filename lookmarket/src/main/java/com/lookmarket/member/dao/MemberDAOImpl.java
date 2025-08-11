@@ -1,10 +1,13 @@
 package com.lookmarket.member.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 
 @Repository("memberDAO")
@@ -64,5 +67,37 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void reSignUp(String m_id) throws DataAccessException{
 		sqlSession.update("mapper.member.reSignUp", m_id);
+	}
+
+	@Override
+	public Integer selectRoleById(String mId) throws DataAccessException {
+		return sqlSession.selectOne("mapper.member.selectRoleById", mId);
+	}
+
+	@Override
+	public void addbusinessMember(BusinessVO businessVO) throws DataAccessException {
+		sqlSession.insert("mapper.member.insertbusinessMember", businessVO);
+	}
+
+	@Override
+	public List<MemberVO> findbusinessMember(int role) throws DataAccessException {
+		return sqlSession.selectList("mapper.member.findbusinessMember" , role);
+	}
+
+	@Override
+	public List<BusinessVO> findbusinessMember2(String memberId) {
+		return sqlSession.selectList("mapper.member.findbusinessMember2", memberId);
+	}
+
+	@Override
+	public void approve(String m_id) throws DataAccessException {
+		sqlSession.update("mapper.admin.approve", m_id);
+		
+	}
+
+	@Override
+	public void reject(String m_id) throws DataAccessException {
+		sqlSession.update("mapper.admin.reject", m_id);
+		
 	}
 }

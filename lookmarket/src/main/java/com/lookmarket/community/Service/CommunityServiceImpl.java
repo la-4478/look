@@ -30,11 +30,24 @@ public class CommunityServiceImpl implements CommunityService{
 	}
 	
 	@Override
-	public void upHit(String r_id, String hit) throws Exception{
-		communityDAO.upHit(Integer.parseInt(r_id), Integer.parseInt(hit));
+	public void upHit(int r_id, int hit) throws Exception{
+		communityDAO.upHit(r_id, hit);
 	}
 	@Override
-	public void insertReview(ReviewVO reviewVO) throws Exception{
-		communityDAO.insertReview(reviewVO);
+	public void insertReview(ReviewVO reviewVO) throws Exception {
+	    communityDAO.insertReview(reviewVO);
+	}
+
+	@Override
+	public void updateReview(ReviewVO reviewVO) throws Exception {
+	    communityDAO.updateReview(reviewVO);
+	}
+	@Override
+	public void deleteReview(String r_id) throws Exception {
+	    communityDAO.deleteReview(Integer.parseInt(r_id));
+	}
+	@Override
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception {
+	    communityDAO.insertBlackBoard(blackBoardVO);
 	}
 }

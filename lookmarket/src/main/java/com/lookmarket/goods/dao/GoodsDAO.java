@@ -12,5 +12,8 @@ public interface GoodsDAO {
 	public GoodsVO selectGoodsDetail(int g_id) throws Exception;
 	public int addNewGoods(Map<String, Object> newGoodsMap);
 	public void insertGoodsImageFile(ArrayList<ImageFileVO> imageFileList);
-	public ImageFileVO selectGoodsmainImage(int g_id) throws Exception;
+	List<ImageFileVO> selectGoodsImages(int g_id) throws Exception;
+	public int updateGoods(GoodsVO goods);
+	public int deleteGoodsImages(int g_id);
+	public int deleteGoods(int g_id);
 }

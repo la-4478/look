@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.lookmarket.mail.service.MailService;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.service.NaverLoginService;
+import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,49 +40,55 @@ public class MemberControllerImpl implements MemberController {
 	
 	@Override
 	@RequestMapping(value="/login.do", method=RequestMethod.POST)
-	public ModelAndView login(@RequestParam("m_id") String m_id, @RequestParam("m_pw") String m_pw, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception{
-		//로그인
-		ModelAndView mav = new ModelAndView();
-		String check_id = memberService.overlapped(m_id);
-		
-		if(check_id.equals("true")) {
-			memberVO = memberService.login(m_id, m_pw);		
-			
-			if(memberVO != null && memberVO.getM_outdate() != null) {
-				//탈퇴회원일 경우
+	public ModelAndView login(@RequestParam("m_id") String m_id,
+	                          @RequestParam("m_pw") String m_pw,
+	                          HttpServletRequest request,
+	                          HttpServletResponse response,
+	                          RedirectAttributes redirectAttributes) throws Exception {
+
+	    ModelAndView mav = new ModelAndView();
+	    String check_id = memberService.overlapped(m_id);
+
+	    if (check_id.equals("true")) {
+	        memberVO = memberService.login(m_id, m_pw);
+
+	        // 탈퇴회원 복구 처리
+	        if (memberVO != null && memberVO.getM_outdate() != null) {
 	            redirectAttributes.addFlashAttribute("message", "계정을 복구합니다.");
-	            
 	            memberService.reSignUp(m_id);
-				mav.setViewName("redirect:/member/loginForm.do");
-				return mav;
-			}			
-			
-			if(memberVO != null && memberVO.getM_id() != null) {
-				HttpSession session = request.getSession();
-				session = request.getSession();
-				session.setAttribute("current_id", m_id);
-				session.setAttribute("isLogOn", true);
-				session.setAttribute("memberInfo",memberVO);
-				
-				String action = (String)session.getAttribute("action");
-				if(action != null && action.equals("/order/orderEachGoods.do")) {
-					//추가 필요
-					mav.setViewName("forward:" + action);
-				}else {
-					mav.setViewName("redirect:/main/sijangbajoMain.do");
-				}
-				
-			}else {
+	            mav.setViewName("redirect:/member/loginForm.do");
+	            return mav;
+	        }
+
+	        // 정상 로그인
+	        if (memberVO != null && memberVO.getM_id() != null) {
+	            HttpSession session = request.getSession();
+	            session.setAttribute("current_id", m_id);
+	            session.setAttribute("isLogOn", true);
+	            session.setAttribute("memberInfo", memberVO);
+
+	            // 🔹 로그인 전 원래 가려던 페이지로 리다이렉트
+	            String redirectUrl = (String) session.getAttribute("redirectAfterLogin");
+	            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+	            	System.out.println("저장된 페이지 url : " + redirectUrl);
+	                session.removeAttribute("redirectAfterLogin");
+	                mav.setViewName("redirect:" + redirectUrl);
+	            } else {
+	            	System.out.println("페이지 저장되지 않음");
+	                mav.setViewName("redirect:/main/sijangbajoMain.do"); // 기본 페이지
+	            }
+
+	        } else {
 	            redirectAttributes.addFlashAttribute("message", "비밀번호가 틀렸습니다. 다시 로그인해주세요.");
-				mav.setViewName("redirect:/member/loginForm.do");
-			}
-	
-		}else {
+	            mav.setViewName("redirect:/member/loginForm.do");
+	        }
+
+	    } else {
 	        redirectAttributes.addFlashAttribute("message", "존재하지 않는 아이디 입니다. 다시 로그인해주세요.");
-			mav.setViewName("redirect:/member/loginForm.do");
-		}
-		
-		return mav;
+	        mav.setViewName("redirect:/member/loginForm.do");
+	    }
+
+	    return mav;
 	}
 	
 	@Override
@@ -219,6 +226,7 @@ public class MemberControllerImpl implements MemberController {
 		}
 	}
 	
+	
 	@Override
 	@RequestMapping(value="/memberList.do", method=RequestMethod.POST)
 	public ModelAndView memberList(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -268,7 +276,7 @@ public class MemberControllerImpl implements MemberController {
 	}
 	
 	@Override
-	@RequestMapping(value={"/memberForm.do", "/loginForm.do", "/findIdForm.do", "/findPwForm.do", "/memberSelect.do", "/memberList.do"}, method={RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value={"/memberForm.do", "/loginForm.do", "/findIdForm.do", "/findPwForm.do", "/memberSelect.do", "/memberList.do", "/businessForm.do" }, method={RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		//로그인창, 회원가입창 출력
 		HttpSession session;
@@ -282,5 +290,59 @@ public class MemberControllerImpl implements MemberController {
 		
 		return mav;
 		
+	}
+
+	@Override
+	@RequestMapping(value="/addBusiness.do", method={RequestMethod.POST,RequestMethod.GET})
+	public String addBusiness(@ModelAttribute("MemberVO") MemberVO memberVO, RedirectAttributes rd, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		//회원가입
+				response.setContentType("text/html; charset=UTF-8");
+				request.setCharacterEncoding("UTF-8");
+				
+				String message = null;
+				ResponseEntity resEntity = null;
+				HttpHeaders responseHeaders = new HttpHeaders();
+				responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
+				
+				//성별
+				int gender = memberVO.getM_gender();
+				if(gender == 1 || gender == 3) {
+					memberVO.setM_gender(1);
+				}else {
+					memberVO.setM_gender(2);
+				}
+				String m_id = request.getParameter("m_id");
+				String bm_name = request.getParameter("bm_name");
+				String bm_reg_num = request.getParameter("bm_reg_num");
+				String bm_type = request.getParameter("bm_type");
+				
+				
+				//회원등급
+				memberVO.setM_role(3);
+				
+				//가입일
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date now = new Date();
+				String m_joindate = sdf.format(now);
+				
+				memberVO.setM_joindate(m_joindate);
+				BusinessVO businessVO = new BusinessVO();				
+				businessVO.setM_id(m_id);
+				businessVO.setBm_name(bm_name);
+				businessVO.setBm_reg_num(bm_reg_num);
+				businessVO.setBm_type(bm_type);
+				
+				
+				try {
+					memberService.addMember(memberVO);
+					memberService.addbusinessMember(businessVO);
+					rd.addFlashAttribute("message", "회원가입이 완료되었습니다. 로그인해주세요.");
+					return "redirect:/member/loginForm.do";
+				}catch(Exception e) {
+					e.printStackTrace(); // 콘솔에 예외 클래스, 메시지, 발생 위치까지 전부
+				    rd.addFlashAttribute("message", "오류 발생: " + e.getMessage());
+					return "redirect:/member/businessForm.do";
+	}
 	}
 }

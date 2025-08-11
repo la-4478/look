@@ -10,6 +10,10 @@
     <title>lookmarket</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link href="${contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" media="screen">
+<<<<<<< HEAD
+=======
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+>>>>>>> ca6943b4ab4b410953c942ba095fed95e4272ab4
     <link href="${contextPath}/resources/css/chatbot.css" rel="stylesheet" type="text/css"><!-- 챗봇 CSS 파일 -->
 </head>
 

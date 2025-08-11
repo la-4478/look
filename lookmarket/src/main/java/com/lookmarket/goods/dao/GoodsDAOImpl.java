@@ -42,9 +42,24 @@ public class GoodsDAOImpl implements GoodsDAO{
 	    }
 	}
 	
+    @Override
+    public List<ImageFileVO> selectGoodsImages(int g_id) throws Exception {
+        return sqlSession.selectList("mapper.goods.selectMainimagefile", g_id);
+    }
+
 	@Override
-	public ImageFileVO selectGoodsmainImage(int g_id) throws Exception {
-	    return sqlSession.selectOne("mapper.goods.selectMainimagefile", g_id);
+	public int updateGoods(GoodsVO goods) {
+		return sqlSession.update("mapper.goods.updateGoods", goods);
+	}
+	
+	@Override
+	public int deleteGoodsImages(int g_id) {
+	    return sqlSession.delete("mapper.goods.deleteGoodsImages", g_id);
+	}
+	
+	@Override
+	public int deleteGoods(int g_id) {
+	    return sqlSession.delete("mapper.goods.deleteGoods", g_id);
 	}
 }
 

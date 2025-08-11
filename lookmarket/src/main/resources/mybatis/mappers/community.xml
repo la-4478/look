@@ -10,7 +10,6 @@
 		<result property="b_title" column="b_title" />
 		<result property="b_content" column="b_content" />
 		<result property="b_date" column="b_date" />
-		<result property="b_secret" column="b_secret" />
 		<result property="b_hit" column="b_hit" />
 	</resultMap>
 	<resultMap id="reviewResult" type="ReviewVO">
@@ -20,7 +19,7 @@
 		<result property="g_id" column="g_id" />
 		<result property="r_star" column="r_star" />
 		<result property="r_content" column="r_content" />
-		<result property="r_filename1" column="r_filename1" />
+		<result property="r_filename" column="r_filename" />
 		<result property="r_filetype" column="r_filetype" />
 		<result property="r_secret" column="r_secret" />
 		<result property="r_date" column="r_date" />
@@ -45,7 +44,7 @@
 		]]>
 	</select>
 	
-	<update id="upHit" parameterType="reviewVO">
+	<update id="upHit" parameterType="int">
 		<![CDATA[
 			UPDATE review
 			SET
@@ -53,15 +52,51 @@
 			WHERE r_id = #{r_id}
 		]]>
 	</update>
-	<insert id="insertReview" parameterType="reviewVO">
-		<![CDATA[
-			INSERT INTO review(
-				m_id, r_title, g_id, r_star, r_content,
-				r_filename1, r_filetype, r_secret, r_date, r_hit
-			) VALUES(
-				#{m_id}, #{r_title}, #{g_id}, #{r_star}, #{r_content},
-				#{r_filename1}, #{r_filetype}, #{r_secret}, #{r_date}, #{r_hit}
-			)	
-		]]>
+	<insert id="insertReview" parameterType="com.lookmarket.community.vo.ReviewVO">
+    INSERT INTO review (
+        m_id,
+        r_title,
+        g_id,
+        r_star,
+        r_content,
+        r_filename,
+        r_filetype,
+        r_secret,
+        r_date,
+        r_hit
+    ) VALUES (
+        #{m_id},
+        #{r_title},
+        #{g_id},
+        #{r_star},
+        #{r_content},
+        #{r_filename},
+        #{r_filetype},
+        #{r_secret},
+        NOW(),
+        #{r_hit}
+    )
 	</insert>
+	<update id="updateReview" parameterType="com.lookmarket.community.vo.ReviewVO">
+   		UPDATE review
+    	SET
+        	r_title = #{r_title},
+        	g_id = #{g_id},
+        	r_star = #{r_star},
+        	r_content = #{r_content},
+        	r_secret = #{r_secret},
+        	r_filename = COALESCE(#{r_filename}, ''),
+        	r_filetype = COALESCE(#{r_filetype}, '')
+    	WHERE r_id = #{r_id}
+	</update>
+	<delete id="deleteReview" parameterType="int">
+    	DELETE FROM review WHERE r_id = #{r_id}
+	</delete>
+	
+	<!-- mapper/blackboard-mapper.xml -->
+	<insert id="insertBlackBoard" parameterType="com.lookmarket.community.vo.BlackBoardVO">
+    	INSERT INTO blackboard (m_id, b_title, b_content, b_date, b_hit)
+    	VALUES (#{m_id}, #{b_title}, #{b_content}, NOW(), #{b_hit})
+	</insert>
+
 </mapper>

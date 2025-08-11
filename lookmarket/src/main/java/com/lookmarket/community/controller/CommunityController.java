@@ -20,6 +20,6 @@ public interface CommunityController {
 	public ModelAndView blackBoardUpdateForm(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView blackBoardAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
-//	public ModelAndView insertReview( MultipartFile uploadFile,  HttpServletRequest request, ReviewVO reviewVO) throws Exception;
-//	ModelAndView insertReview(MultipartFile uploadFile, ReviewVO reviewVO, HttpServletRequest request) throws Exception;
+	public ModelAndView insertReview(MultipartHttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;
+	public ModelAndView insertBlackBoard(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception;
 }
