@@ -9,47 +9,101 @@
 		<result property="g_id" column="g_id" />
 		<result property="m_id" column="m_id" />
 		<result property="c_qty" column="c_qty" />
-		
 		<result property="g_name" column="g_name" />
 		<result property="g_price" column="g_price" />
-		<result property="g_sale_price" column="g_sale_price" />
 		<result property="g_delivery_price" column="g_delivery_price" />
 		<result property="g_stock" column="g_stock" />
-		
 		<result property="i_filename" column="i_filename" />
 	</resultMap>
-	
-	<select id="myCartList" parameterType="String" resultMap="cartResult">
+
+	<select id="myCartList" parameterType="String"
+		resultMap="cartResult">
 		<![CDATA[
 			SELECT cart.c_id,
-				    cart.g_id,
-				    cart.m_id,
-				    cart.c_qty,
-				    goods.g_name,
-				    goods.g_price,
-				    goods.g_sale_price,
-				    goods.g_delivery_price,
-				    goods.g_stock,
-				    goods_image.i_filename
+				   cart.g_id,
+				   cart.m_id,
+				   cart.c_qty,
+				   goods.g_name,
+				   goods.g_price,
+				   goods.g_delivery_price,
+				   goods.g_stock,
+				   goods_image.i_filename
 			FROM cart
 			JOIN goods ON cart.g_id = goods.g_id
 			LEFT JOIN goods_image ON goods.g_id = goods_image.g_id
 			WHERE cart.m_id = #{current_id}
 		]]>
 	</select>
-	
-	<update id="updateQty" parameterType="cartVO">
+
+	<insert id="addCartItem" parameterType="CartVO">
+	<![CDATA[
+	    INSERT INTO cart (g_id, m_id, c_qty)
+	    VALUES (#{g_id}, #{m_id}, #{c_qty})
+	]]>
+	</insert>
+
+	<update id="updateQty" parameterType="map">
 		<![CDATA[
 		    UPDATE cart
 		    SET c_qty = #{c_qty}
 		    WHERE c_id = #{c_id}
 		]]>
 	</update>
-	
+
 	<delete id="deleteCartItem" parameterType="int">
 		<![CDATA[
 		    DELETE FROM cart
 		    WHERE c_id = #{c_id}
 	    ]]>
 	</delete>
+
+	<insert id="insertOrder" parameterType="String">
+		INSERT INTO orders (m_id, o_date)
+		VALUES (#{m_id}, NOW())
+	</insert>
+
+	<select id="selectLastOrderId" resultType="int">
+		SELECT
+		LAST_INSERT_ID()
+	</select>
+
+	<insert id="insertOrderItem" parameterType="map">
+		INSERT INTO
+		order_item (o_id, g_id, oi_qty, oi_price)
+		VALUES (#{o_id}, #{g_id},
+		#{c_qty}, #{g_price})
+	</insert>
+
+	<update id="updateGoodsStock" parameterType="map">
+		UPDATE goods
+		SET
+		g_stock = g_stock - #{c_qty}
+		WHERE g_id = #{g_id}
+	</update>
+
+	<delete id="clearCart" parameterType="String">
+		DELETE FROM cart
+		WHERE m_id
+		= #{m_id}
+	</delete>
+
+	<select id="selectCartByMemberId" parameterType="String"
+		resultMap="cartResult">
+		SELECT
+		cart.c_id,
+		cart.g_id,
+		cart.m_id,
+		cart.c_qty,
+		goods.g_name,
+		goods.g_price,
+		goods.g_delivery_price,
+		goods.g_stock,
+		goods_image.i_filename
+		FROM cart
+		JOIN goods ON cart.g_id = goods.g_id
+		LEFT JOIN goods_image ON goods.g_id = goods_image.g_id
+		WHERE cart.m_id
+		= #{m_id}
+	</select>
+
 </mapper>

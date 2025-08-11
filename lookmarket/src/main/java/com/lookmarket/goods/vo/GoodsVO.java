@@ -4,21 +4,21 @@ import org.springframework.stereotype.Component;
 
 @Component("goodsVO")
 public class GoodsVO {
-	int g_id;
-	int g_category;
-	String g_name;
-	String g_brand;
-	String g_discription;
-	int g_price;
-	String g_credate;
-	String g_manufactured_date;
-	String g_expiration_date;
-	int g_delivery_price;
-	int g_status;
-	int g_stock;
-	int i_id;
-	String i_filename;
-	String i_filetype;
+	private int g_id;
+	private  int g_category;
+	private String g_name;
+	private String g_brand;
+	private String g_discription;
+	private int g_price;
+	private String g_credate;
+	private String g_manufactured_date;
+	private String g_expiration_date;
+	private int g_delivery_price;
+	private int g_status;
+	private int g_stock;
+	private int i_id;
+	private String i_filename;
+	private String i_filetype;
 	
 	
 	public int getG_id() {
@@ -99,18 +99,19 @@ public class GoodsVO {
 	public void setI_id(int i_id) {
 		this.i_id = i_id;
 	}
-	public String getI_file_name() {
+	public String getI_filename() {
 		return i_filename;
 	}
-	public void setI_file_name(String i_file_name) {
-		this.i_filename = i_file_name;
+	public void setI_filename(String i_filename) {
+		this.i_filename = i_filename;
 	}
-	public String getI_file_type() {
+	public String getI_filetype() {
 		return i_filetype;
 	}
-	public void setI_file_type(String i_file_type) {
-		this.i_filetype = i_file_type;
+	public void setI_filetype(String i_filetype) {
+		this.i_filetype = i_filetype;
 	}
+
 	
 	 
 }

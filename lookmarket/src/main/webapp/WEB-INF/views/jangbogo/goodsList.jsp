@@ -15,61 +15,7 @@
 <script src="${contextPath}/resources/js/jquery-3.7.0.min.js"></script>
     <meta charset="UTF-8">
     <title>상품 목록</title>
-    <style>
-        .product-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            transition: box-shadow 0.3s;
-            height: 100%;
-        }
-
-        .product-card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .product-image {
-            height: 160px;
-            object-fit: cover;
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .product-name {
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .product-price {
-            color: #d9534f;
-            margin-top: 5px;
-            font-size: 16px;
-        }
-
-        .btn-small {
-            padding: 4px 8px;
-            font-size: 12px;
-        }
-
-        .wish-btn {
-            border: none;
-            background: none;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .wish-btn.disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .top-right {
-            text-align: right;
-            margin-bottom: 15px;
-        }
-    </style>
+<link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container mt-4">
@@ -100,11 +46,11 @@
 
                 <div class="row">
                     <c:forEach var="goods" items="${goodsList}">
-                        <c:set var="firstImage" value="${fn:split(goods.i_file_name, ',')[0]}" />
+                        <c:set var="firstImage" value="${fn:split(goods.i_filename, ',')[0]}" />
                         
                         <div class="col-md-3 col-sm-6 mb-4">
                             <div class="product-card">
-                                <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${requestScope.Mainimage.i_filename}" alt="${goods.g_name}" class="product-image" />
+                                <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${goods_i_filename}" alt="${goods.g_name}" class="product-image" />
                                 
                                 <div class="product-name">${goods.g_name}</div>
                                 <div class="product-price">
@@ -154,11 +100,11 @@
             
             <div class="row">
                 <c:forEach var="goods" items="${goodsList}">
-                <c:set var="firstImage" value="${fn:split(goods.i_file_name, ',')[0]}" />
+                <c:set var="firstImage" value="${fn:split(goods.i_filename, ',')[0]}" />
                 
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
-                            <img src="${contextPath}/resources/image/${fn:escapeXml(firstImage)}" alt="${goods.g_name}" class="product-image" />
+                            <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${goods.i_filename}" alt="${goods.g_name}" class="product-image" />
                             
                             <div class="product-name">${goods.g_name}</div>
                             <div class="product-price">
@@ -181,10 +127,10 @@
 									</button>
                             </div>
 
-                            <c:if test="<%= \"admin\".equals(role) %>">
+                            <c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
                                 <div class="mt-2">
-                                    <a href="${contextPath}/goodsUpdateForm.do?g_id=${goods.g_id}" class="btn btn-warning btn-small">수정</a>
-                                    <a href="${contextPath}/goodsDelete.do?g_id=${goods.g_id}" class="btn btn-danger btn-small" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                                    <a href="${contextPath}/jangbogo/goodsUpdateForm.do?g_id=${goods.g_id}" class="btn btn-warning btn-small">수정</a>
+                                    <a href="${contextPath}/jangbogo/goodsDelete.do?g_id=${goods.g_id}" class="btn btn-danger btn-small" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
                                 </div>
                             </c:if>
                         </div>

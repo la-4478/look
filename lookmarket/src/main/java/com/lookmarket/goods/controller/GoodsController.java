@@ -14,5 +14,5 @@ public interface GoodsController {
 	public ModelAndView goodsAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView goodsUpdateForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ResponseEntity goodsAdd(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
-
+	public ResponseEntity goodsUpdate(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 }

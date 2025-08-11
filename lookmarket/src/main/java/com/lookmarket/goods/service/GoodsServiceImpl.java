@@ -53,13 +53,17 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Override
 	public int addNewGoods(Map<String, Object> newGoodsMap) throws Exception {
-		int goods_num = goodsDAO.addNewGoods(newGoodsMap);
-		ArrayList<ImageFileVO> imageFileList = (ArrayList)newGoodsMap.get("imageFileList");
-		for(ImageFileVO imageFileVO : imageFileList) {
-			imageFileVO.setG_id(goods_num);
-		}
-		goodsDAO.insertGoodsImageFile(imageFileList);
-		return goods_num;
+	    int goodsId = goodsDAO.addNewGoods(newGoodsMap); // ✅ 이제 7 같은 실제 PK
+
+	    @SuppressWarnings("unchecked")
+	    ArrayList<ImageFileVO> imageFileList = (ArrayList<ImageFileVO>) newGoodsMap.get("imageFileList");
+	    if (imageFileList != null && !imageFileList.isEmpty()) {
+	        for (ImageFileVO imageFileVO : imageFileList) {
+	            imageFileVO.setG_id(goodsId); // FK 세팅
+	        }
+	        goodsDAO.insertGoodsImageFile(imageFileList);
+	    }
+	    return goodsId;
 	}
 
 	@Override

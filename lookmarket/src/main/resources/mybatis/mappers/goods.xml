@@ -22,6 +22,7 @@
         <result property="g_delivery_date" column="g_delivery_date"/>
         <result property="g_status" column="g_status"/>
         <result property="g_stock" column="g_stock"/>
+        <result property="i_filename" column="i_filename"/>
     </resultMap>
     
 
@@ -37,11 +38,11 @@
     </select>
     
     <!-- 상품 등록 -->
-    <insert id="insertGoods" parameterType="GoodsVO">
+    <insert id="insertGoods" parameterType="GoodsVO" useGeneratedKeys="true" keyProperty="g_id" keyColumn="g_id">
         INSERT INTO goods (
-            g_category, g_name, g_brand, g_discription, g_price, g_manufactured_date, g_expiration_date, g_delivery_price, g_stock)
+            g_category, g_name, g_brand, g_discription, g_price, g_manufactured_date, g_expiration_date, g_delivery_price, g_stock, i_filename)
             values(
-	#{g_category}, #{g_name}, #{g_brand}, #{g_discription}, #{g_price}, #{g_manufactured_date}, #{g_expiration_date}, #{g_delivery_price}, #{g_stock})     
+	#{g_category}, #{g_name}, #{g_brand}, #{g_discription}, #{g_price}, #{g_manufactured_date}, #{g_expiration_date}, #{g_delivery_price}, #{g_stock}, #{i_filename})     
     </insert>
 
     <!-- 상품 수정 -->
