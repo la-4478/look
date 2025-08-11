@@ -12,90 +12,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>${goods.g_name} - 상품 상세</title>
-
-    <style>
-        .detail-container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .top-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        }
-
-        .top-section img {
-            width: 400px;
-            height: auto;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .product-info {
-            flex: 1;
-            position: relative;
-        }
-
-        .product-info h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        #wishBtn {
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 28px;
-            color: #d9534f;
-            padding: 0 10px;
-            vertical-align: middle;
-            margin-left: 15px;
-        }
-        #wishBtn.disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-
-        .price {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-
-        .price del {
-            color: gray;
-            margin-right: 10px;
-        }
-
-        .form-control {
-            max-width: 100px;
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        .bottom-section {
-            margin-top: 50px;
-        }
-
-        .bottom-section img {
-            width: 100%;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
-    </style>
+<link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="detail-container">
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="${contextPath}/resources/image/${goods.i_file_name}" alt="${goods.g_name}" />
+        <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${goods.i_filename}" alt="${goods.g_name}" />
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
@@ -115,7 +39,6 @@
 
             <div class="price">
                 <del><fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩" /></del>
-                <strong style="color: #d9534f;"><fmt:formatNumber value="${goods.g_sale_price}" type="currency" currencySymbol="₩" /></strong>
             </div>
 
             <form action="${contextPath}/cart/addCart.do" method="post">
@@ -130,7 +53,7 @@
                 <p><strong>재고:</strong> ${goods.g_stock} 개</p>
                 <p><strong>입고일:</strong> ${goods.g_credate}</p>
                 <p><strong>제조일자:</strong> ${goods.g_manufactured_date}</p>
-                <p><strong>유통기한:</strong> ${goods.g_expiration_date}</p>
+                <p><strong>유통기한:</strong> ${goods.g_expiration_date}</p>	
                 <p><strong>배송비:</strong>
                     <c:choose>
                         <c:when test="${goods.g_delivery_price == 0}">무료배송</c:when>

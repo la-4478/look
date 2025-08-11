@@ -20,7 +20,7 @@
 		<result property="g_id" column="g_id" />
 		<result property="r_star" column="r_star" />
 		<result property="r_content" column="r_content" />
-		<result property="r_filename" column="r_filename" />
+		<result property="r_filename1" column="r_filename1" />
 		<result property="r_filetype" column="r_filetype" />
 		<result property="r_secret" column="r_secret" />
 		<result property="r_date" column="r_date" />
@@ -49,8 +49,19 @@
 		<![CDATA[
 			UPDATE review
 			SET
-			r_hit = #{r_hit}
+			r_hit = r_hit + 1
 			WHERE r_id = #{r_id}
 		]]>
 	</update>
+	<insert id="insertReview" parameterType="reviewVO">
+		<![CDATA[
+			INSERT INTO review(
+				m_id, r_title, g_id, r_star, r_content,
+				r_filename1, r_filetype, r_secret, r_date, r_hit
+			) VALUES(
+				#{m_id}, #{r_title}, #{g_id}, #{r_star}, #{r_content},
+				#{r_filename1}, #{r_filetype}, #{r_secret}, #{r_date}, #{r_hit}
+			)	
+		]]>
+	</insert>
 </mapper>
