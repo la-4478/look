@@ -147,7 +147,7 @@ public class AdminControllerImpl implements AdminController{
 	@Override
 	@RequestMapping(value="/ApprovalList.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView approvalForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HttpSession session;
+		HttpSession session = request.getSession();
 		String viewName = (String)request.getAttribute("viewName");
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName(layout);
