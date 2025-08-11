@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lookmarket.cart.service.CartService;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.common.base.BaseController;
-import com.lookmarket.member.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,23 +25,21 @@ import jakarta.servlet.http.HttpSession;
 public class CartControllerImpl extends BaseController implements CartController{
 	@Autowired
 	private CartService cartService;
-	@Autowired
-	private CartVO cartVO;
-	@Autowired
-	private MemberVO memberVO;
-	
+    
 	@Override
 	@RequestMapping(value="/myCartList.do", method=RequestMethod.GET)
 	public ModelAndView myCartList(HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
+		HttpSession session = request.getSession();
 		String viewName = (String)request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("common/layout");
 		mav.addObject("viewName", viewName);
 		
-		HttpSession session = request.getSession();
+		
 		String current_id = (String)session.getAttribute("current_id");
+		
 		List<CartVO> cartList = cartService.myCartList(current_id);
+		mav.addObject("cartList", cartList);
 		session.setAttribute("cartList", cartList);
 		
 		session.setAttribute("sideMenu", "reveal");
@@ -54,7 +51,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	@Override
 	@RequestMapping(value="/updateCartQty.do", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> updateCartQty(@RequestParam("c_id") int c_id, @RequestParam("c_qty") int c_qty, HttpServletRequest request, HttpServletResponse response)  throws Exception {
+	public ResponseEntity<String> updateCartQty(@RequestParam("c_id") int c_id, @RequestParam("c_qty") int c_qty) {
 	    try {
 	        cartService.updateQty(c_id, c_qty); // cart 테이블 수량 변경
 	        return ResponseEntity.ok("success");
@@ -63,6 +60,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	    }
 	}
 	
+	@Override
 	@RequestMapping(value="/deleteCartItem.do", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> deleteCartItem(@RequestParam("c_id") int c_id) {
@@ -73,4 +71,35 @@ public class CartControllerImpl extends BaseController implements CartController
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
 	    }
 	}
+	
+	@Override
+	@RequestMapping(value="/addCartItem.do", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity<String> addCartItem(CartVO cartVO, HttpServletRequest request) {
+	    try {
+	        String current_id = (String) request.getSession().getAttribute("current_id");
+	        cartVO.setM_id(current_id); // 세션에서 회원 ID 설정
+	        cartService.addCartItem(cartVO);
+	        return ResponseEntity.ok("success");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+	    }
+	}
+	
+	@Override
+	@RequestMapping(value="/placeOrder.do", method=RequestMethod.POST)
+	@ResponseBody
+	//장바구니 상품 주문하기
+	public ResponseEntity<String> placeOrder(HttpServletRequest request) {
+	    try {
+	        String current_id = (String) request.getSession().getAttribute("current_id");
+	        cartService.placeOrder(current_id);
+	        return ResponseEntity.ok("success");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+	    }
+	}
+
+
 }
