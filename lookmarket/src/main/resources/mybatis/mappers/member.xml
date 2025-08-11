@@ -80,39 +80,11 @@
 	<insert id="insertNewMember" parameterType="memberVO">
 		<![CDATA[
 			INSERT INTO member(m_id,
-							m_pw,
-							m_name,
-							m_gender,
-							m_birth,
-							m_phone_telecom,
-							m_phone,
-							m_phone_yn,
-							m_email,
-							m_email_yn,
-							m_zipcode,
-							m_road_address,
-							m_jibun_address,
-							m_namuji_address,
-							m_level,
-							m_role,
-							m_joindate)
+m_pw, m_name, m_gender, m_birth, m_phone_telecom, m_phone, m_phone_yn, m_email, m_email_yn, m_zipcode, m_road_address,
+m_jibun_address, m_namuji_address, m_level, m_role, m_joindate)
 					VALUES(#{m_id},
-							#{m_pw},
-							#{m_name},
-							#{m_gender},
-							#{m_birth},
-							#{m_phone_telecom},
-							#{m_phone},
-							#{m_phone_yn},
-							#{m_email},
-							#{m_email_yn},
-							#{m_zipcode},
-							#{m_road_address},
-							#{m_jibun_address},
-							#{m_namuji_address},
-							#{m_level},
-							#{m_role},
-							#{m_joindate})
+#{m_pw}, #{m_name}, #{m_gender}, #{m_birth}, #{m_phone_telecom}, #{m_phone}, #{m_phone_yn}, #{m_email}, #{m_email_yn},
+#{m_zipcode}, #{m_road_address}, #{m_jibun_address}, #{m_namuji_address}, #{m_level}, #{m_role}, #{m_joindate})
 		]]>
 	</insert>
 	
@@ -122,5 +94,23 @@
 	        SET m_outdate = NULL
 	        WHERE m_id = #{m_id}
 	    ]]>
-	</update>
+	</update>	
+	  <select id="selectRoleById" parameterType="string" resultType="int">
+    SELECT m_role
+    FROM member
+    WHERE m_id = #{value}
+    LIMIT 1
+  		</select>
+  	<resultMap id="businessResult" type="businessVO">
+		<result property="m_id" column="m_id" />
+		<result property="bm_name" column="bm_name" />
+		<result property="bm_reg_num" column="bm_reg_num" />
+		<result property="bm_type" column="bm_type" />
+		<result property="bm_status" column="bm_status" />
+	</resultMap>
+	
+  <insert id="insertbusinessMember" parameterType="businessVO">
+  	insert into business_member (m_id, bm_name, bm_reg_num, bm_type)
+  	values (#{m_id}, #{bm_name}, #{bm_reg_num}, #{bm_type})
+  </insert>
 </mapper>

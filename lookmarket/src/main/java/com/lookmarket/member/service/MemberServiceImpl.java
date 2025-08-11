@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lookmarket.member.dao.MemberDAO;
+import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 
 @Service("memberService")
@@ -47,5 +48,16 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public void reSignUp(String m_id) throws Exception{
 		memberDAO.reSignUp(m_id);
+	}
+
+	@Override
+	public Integer getRoleById(String mId) {
+        return memberDAO.selectRoleById(mId);
+	}
+
+	@Override
+	public void addbusinessMember(BusinessVO businessVO) {
+		memberDAO.addbusinessMember(businessVO);
+		
 	}
 }

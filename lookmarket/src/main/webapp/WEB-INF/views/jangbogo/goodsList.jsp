@@ -9,6 +9,7 @@
     String m_id = (String) session.getAttribute("loginUserId");
 %>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +19,9 @@
 <link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<c:if test="${not empty msg}">
+    <div class="alert alert-info">${msg}</div>
+</c:if>
 <div class="container mt-4">
     <h2>상품 목록</h2>
     <c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
@@ -74,7 +78,10 @@
                                 <c:if test="<%= \"admin\".equals(role) %>">
                                     <div class="mt-2">
                                         <a href="${contextPath}/goodsUpdateForm.do?g_id=${goods.g_id}" class="btn btn-warning btn-small">수정</a>
-                                        <a href="${contextPath}/goodsDelete.do?g_id=${goods.g_id}" class="btn btn-danger btn-small" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                                         <form action="${contextPath}/jangbogo/goodsDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말 영구 삭제하시겠습니까? 복구 불가입니다.');">
+						                    <input type="hidden" name="g_id" value="${goods.g_id}">
+						                    <button type="submit" class="btn btn-danger btn-small">삭제</button>
+						                  </form>
                                     </div>
                                 </c:if>
                             </div>
@@ -123,14 +130,16 @@
 												<c:otherwise>🤍</c:otherwise>
 											</c:choose>
 										</span>
-
 									</button>
                             </div>
 
                             <c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
                                 <div class="mt-2">
                                     <a href="${contextPath}/jangbogo/goodsUpdateForm.do?g_id=${goods.g_id}" class="btn btn-warning btn-small">수정</a>
-                                    <a href="${contextPath}/jangbogo/goodsDelete.do?g_id=${goods.g_id}" class="btn btn-danger btn-small" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                                     <form action="${contextPath}/jangbogo/goodsDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말 영구 삭제하시겠습니까? 복구 불가입니다.');">
+					                    <input type="hidden" name="g_id" value="${goods.g_id}">
+					                    <button type="submit" class="btn btn-danger btn-small">삭제</button>
+					                  </form>
                                 </div>
                             </c:if>
                         </div>
@@ -144,7 +153,6 @@
         </c:otherwise>
     </c:choose>
 </div>
-
 <script>
 $(document).ready(function () {
     $('.wish-btn').click(function () {
@@ -171,6 +179,8 @@ $(document).ready(function () {
         });
     });
 });
+
 </script>
+
 </body>
 </html>

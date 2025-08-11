@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.lookmarket.mail.service.MailService;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.service.NaverLoginService;
+import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -219,6 +220,7 @@ public class MemberControllerImpl implements MemberController {
 		}
 	}
 	
+	
 	@Override
 	@RequestMapping(value="/memberList.do", method=RequestMethod.POST)
 	public ModelAndView memberList(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -268,7 +270,7 @@ public class MemberControllerImpl implements MemberController {
 	}
 	
 	@Override
-	@RequestMapping(value={"/memberForm.do", "/loginForm.do", "/findIdForm.do", "/findPwForm.do", "/memberSelect.do", "/memberList.do"}, method={RequestMethod.POST, RequestMethod.GET})
+	@RequestMapping(value={"/memberForm.do", "/loginForm.do", "/findIdForm.do", "/findPwForm.do", "/memberSelect.do", "/memberList.do", "/businessForm.do" }, method={RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		//로그인창, 회원가입창 출력
 		HttpSession session;
@@ -282,5 +284,59 @@ public class MemberControllerImpl implements MemberController {
 		
 		return mav;
 		
+	}
+
+	@Override
+	@RequestMapping(value="/addBusiness.do", method={RequestMethod.POST,RequestMethod.GET})
+	public String addBusiness(@ModelAttribute("MemberVO") MemberVO memberVO, RedirectAttributes rd, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		//회원가입
+				response.setContentType("text/html; charset=UTF-8");
+				request.setCharacterEncoding("UTF-8");
+				
+				String message = null;
+				ResponseEntity resEntity = null;
+				HttpHeaders responseHeaders = new HttpHeaders();
+				responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
+				
+				//성별
+				int gender = memberVO.getM_gender();
+				if(gender == 1 || gender == 3) {
+					memberVO.setM_gender(1);
+				}else {
+					memberVO.setM_gender(2);
+				}
+				String m_id = request.getParameter("m_id");
+				String bm_name = request.getParameter("bm_name");
+				String bm_reg_num = request.getParameter("bm_reg_num");
+				String bm_type = request.getParameter("bm_type");
+				
+				
+				//회원등급
+				memberVO.setM_role(3);
+				
+				//가입일
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				Date now = new Date();
+				String m_joindate = sdf.format(now);
+				
+				memberVO.setM_joindate(m_joindate);
+				BusinessVO businessVO = new BusinessVO();				
+				businessVO.setM_id(m_id);
+				businessVO.setBm_name(bm_name);
+				businessVO.setBm_reg_num(bm_reg_num);
+				businessVO.setBm_type(bm_type);
+				
+				
+				try {
+					memberService.addMember(memberVO);
+					memberService.addbusinessMember(businessVO);
+					rd.addFlashAttribute("message", "회원가입이 완료되었습니다. 로그인해주세요.");
+					return "redirect:/member/loginForm.do";
+				}catch(Exception e) {
+					e.printStackTrace(); // 콘솔에 예외 클래스, 메시지, 발생 위치까지 전부
+				    rd.addFlashAttribute("message", "오류 발생: " + e.getMessage());
+					return "redirect:/member/businessForm.do";
+	}
 	}
 }

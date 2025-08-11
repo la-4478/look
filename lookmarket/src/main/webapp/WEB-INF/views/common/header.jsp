@@ -174,10 +174,11 @@ header:hover {
 					<c:choose>
 						<c:when test="${isLogOn eq true}">
 							<li><a href="${contextPath}/member/logout.do">로그아웃</a></li>
-							<li><a href="${contextPath}/mypage/mypageInfo.do">마이페이지</a></li>
+
 
 							<c:choose>
 								<c:when test="${memberInfo.m_role == 1}">
+									<li><a href="${contextPath}/mypage/mypageInfo.do">마이페이지</a></li>
 									<li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
 									<li><a href="#">주문내역</a></li>
 									<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
@@ -188,6 +189,7 @@ header:hover {
 									<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
+									<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
 									<li><a href="#">상품관리</a></li>
 									<li><a href="#">회원관리</a></li>
 									<li><a href="${contextPath}/chatbot/chatbot.do">회계관리</a></li>

@@ -26,4 +26,5 @@ public interface MemberController {
 	public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String findId(@RequestParam("m_name") String m_name, @RequestParam("m_email") String m_email, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String findPw(@RequestParam("m_id") String m_id, @RequestParam("m_name") String m_name, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String addBusiness(@ModelAttribute("memberVO")MemberVO memberVO, RedirectAttributes rd, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

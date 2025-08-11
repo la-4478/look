@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 
 @Repository("memberDAO")
@@ -13,6 +14,8 @@ public class MemberDAOImpl implements MemberDAO{
 	private SqlSession sqlSession;
 	@Autowired
 	private MemberVO memberVO;
+	@Autowired
+	private BusinessVO businessVO;
 	
 	@Override
 	public String findId(String m_name, String m_email) throws DataAccessException{
@@ -64,5 +67,15 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void reSignUp(String m_id) throws DataAccessException{
 		sqlSession.update("mapper.member.reSignUp", m_id);
+	}
+
+	@Override
+	public Integer selectRoleById(String mId) throws DataAccessException {
+		return sqlSession.selectOne("mapper.member.selectRoleById", mId);
+	}
+
+	@Override
+	public void addbusinessMember(BusinessVO businessVO) throws DataAccessException {
+		sqlSession.insert("mapper.member.insertbusinessMember", businessVO);
 	}
 }

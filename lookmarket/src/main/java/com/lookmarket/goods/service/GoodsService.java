@@ -15,5 +15,7 @@ public interface GoodsService {
 	public List<GoodsVO> getLocal() throws Exception;
 	public GoodsVO getGoodsDetail(int g_id) throws Exception;
 	public int addNewGoods(Map<String, Object> newGoodsMap) throws Exception;
-	public ImageFileVO goodsMainImage(int g_id) throws Exception;
+	public int updateGoods(Map<String, Object> goodsMap) throws Exception;
+	public List<ImageFileVO> goodsMainImage(int g_id) throws Exception;
+	public int deleteGoods(int gId);
 }

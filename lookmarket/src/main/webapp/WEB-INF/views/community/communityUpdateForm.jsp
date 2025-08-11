@@ -5,75 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>리뷰 수정하기</title>
-    <style>
-        .edit-container {
-            width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fefefe;
-        }
-        .edit-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        textarea {
-            height: 150px;
-            resize: vertical;
-        }
-        .star-select {
-            margin-top: 5px;
-            font-size: 20px;
-        }
-        .star-select input[type="radio"] {
-            display: none;
-        }
-        .star-select label {
-            color: #ccc;
-            cursor: pointer;
-        }
-        .star-select input[type="radio"]:checked ~ label {
-            color: gold;
-        }
-        .review-image {
-            max-width: 100%;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-        .btn-group {
-            margin-top: 30px;
-            text-align: center;
-        }
-        button, .back-btn a {
-            padding: 10px 20px;
-            margin: 0 10px;
-            background-color: #3366cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-        }
-        button:hover, .back-btn a:hover {
-            background-color: #254a9a;
-        }
-    </style>
+    <link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="edit-container">

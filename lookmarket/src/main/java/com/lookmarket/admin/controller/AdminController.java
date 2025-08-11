@@ -13,4 +13,5 @@ public interface AdminController {
 	public ModelAndView allBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView accountList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView accountDetail(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView approvalForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

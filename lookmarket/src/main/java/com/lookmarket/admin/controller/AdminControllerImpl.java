@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.lookmarket.member.vo.BusinessVO;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller("adminController")
 @RequestMapping("/admin")
 public class AdminControllerImpl implements AdminController{
+	String layout ="common/layout";
 	
 	//viewName 수정 필요
 	@Override
@@ -140,4 +143,23 @@ public class AdminControllerImpl implements AdminController{
 		
 		return mav;
 	}
+
+	@Override
+	@RequestMapping(value="/ApprovalList.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView approvalForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session;
+		String viewName = (String)request.getAttribute("viewName");
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName(layout);
+		mav.addObject("viewName", viewName);
+		
+		BusinessVO BusinessInfo = (BusinessVO) session.getAttribute("");
+		session = request.getSession();
+		session.setAttribute("sideMenu", "reavel");
+		session.setAttribute("sideMenu_option", "myPage_admin");
+		return mav;
+		
+	}
+	
+	
 }
