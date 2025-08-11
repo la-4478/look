@@ -6,25 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>상품 수정</title>
-    <style>
-        .form-card {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .form-card h2 {
-            margin-bottom: 25px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-        .form-label {
-            font-weight: bold;
-        }
-    </style>
+<link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 
