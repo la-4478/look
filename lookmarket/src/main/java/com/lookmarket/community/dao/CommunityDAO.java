@@ -19,4 +19,5 @@ public interface CommunityDAO {
 	public void insertReview(ReviewVO reviewVO) throws DataAccessException;
 	public void updateReview(ReviewVO reviewVO) throws DataAccessException;
 	public void deleteReview(int r_id) throws DataAccessException;
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
 }

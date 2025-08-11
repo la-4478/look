@@ -18,4 +18,5 @@ public interface CommunityService {
 	public void insertReview(ReviewVO reviewVO) throws Exception;
 	public void updateReview(ReviewVO reviewVO) throws Exception;
 	public void deleteReview(String r_id) throws Exception;
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
 }

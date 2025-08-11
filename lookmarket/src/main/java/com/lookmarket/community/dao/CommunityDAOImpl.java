@@ -54,6 +54,9 @@ public class CommunityDAOImpl implements CommunityDAO{
 	public void deleteReview(int r_id) throws DataAccessException {
 	    sqlSession.delete("mapper.community.deleteReview", r_id);
 	}
-
+	@Override
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception {
+	    sqlSession.insert("mapper.community.insertBlackBoard", blackBoardVO);
+	}
 
 }

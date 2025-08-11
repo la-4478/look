@@ -264,6 +264,34 @@ import jakarta.servlet.http.HttpSession;
 		    redirectAttributes.addFlashAttribute("message", "리뷰가 등록되었습니다.");
 		    return new ModelAndView("redirect:/community/communityList.do");
 		}
+		@RequestMapping(value="/insertBlackBoard.do", method=RequestMethod.POST)
+		public ModelAndView insertBlackBoard(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		    HttpSession session = request.getSession();
+		    String current_id = (String) session.getAttribute("current_id");
+		    
+		    if (current_id == null) {
+		        redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
+		        return new ModelAndView("redirect:/member/loginForm.do");
+		    }
+		    
+		    // 파라미터 받아오기
+		    String b_title = request.getParameter("b_title");
+		    String b_content = request.getParameter("b_content");
+		    
+		    // VO 세팅
+		    blackBoardVO.setM_id(current_id);
+		    blackBoardVO.setB_title(b_title);
+		    blackBoardVO.setB_content(b_content);
+		    blackBoardVO.setB_hit("0"); // 초기 조회수 0
+		    // b_date는 DB에서 now() 처리하거나 별도로 세팅
+		    
+		    // 서비스 호출
+		    communityService.insertBlackBoard(blackBoardVO);
+		    
+		    redirectAttributes.addFlashAttribute("message", "고충방 글이 등록되었습니다.");
+		    return new ModelAndView("redirect:/community/blackBoardList.do");
+		}
+
 		@Override
 		public ModelAndView communityUpdateForm(HttpServletRequest request, HttpServletResponse response)
 				throws Exception {

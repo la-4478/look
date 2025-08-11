@@ -21,5 +21,5 @@ public interface CommunityController {
 	public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView blackBoardAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView insertReview(MultipartHttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;
-
+	public ModelAndView insertBlackBoard(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception;
 }

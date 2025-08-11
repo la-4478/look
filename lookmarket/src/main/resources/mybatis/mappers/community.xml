@@ -76,21 +76,27 @@
         NOW(),
         #{r_hit}
     )
-</insert>
-<update id="updateReview" parameterType="com.lookmarket.community.vo.ReviewVO">
-    UPDATE review
-    SET
-        r_title = #{r_title},
-        g_id = #{g_id},
-        r_star = #{r_star},
-        r_content = #{r_content},
-        r_secret = #{r_secret},
-        r_filename = COALESCE(#{r_filename}, ''),
-        r_filetype = COALESCE(#{r_filetype}, '')
-    WHERE r_id = #{r_id}
-</update>
-<delete id="deleteReview" parameterType="int">
-    DELETE FROM review WHERE r_id = #{r_id}
-</delete>
+	</insert>
+	<update id="updateReview" parameterType="com.lookmarket.community.vo.ReviewVO">
+   		UPDATE review
+    	SET
+        	r_title = #{r_title},
+        	g_id = #{g_id},
+        	r_star = #{r_star},
+        	r_content = #{r_content},
+        	r_secret = #{r_secret},
+        	r_filename = COALESCE(#{r_filename}, ''),
+        	r_filetype = COALESCE(#{r_filetype}, '')
+    	WHERE r_id = #{r_id}
+	</update>
+	<delete id="deleteReview" parameterType="int">
+    	DELETE FROM review WHERE r_id = #{r_id}
+	</delete>
+	
+	<!-- mapper/blackboard-mapper.xml -->
+	<insert id="insertBlackBoard" parameterType="com.lookmarket.community.vo.BlackBoardVO">
+    	INSERT INTO blackboard (m_id, b_title, b_content, b_date, b_hit)
+    	VALUES (#{m_id}, #{b_title}, #{b_content}, NOW(), #{b_hit})
+	</insert>
 
 </mapper>
