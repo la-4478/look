@@ -1,6 +1,8 @@
 package com.lookmarket.goods.controller;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -64,13 +66,12 @@ public class GoodsControllerImpl implements GoodsController{
 				goodsList = goodsService.getLocal();			
 		}
 		List<GoodsVO> goods = goodsService.getAllGoods();
-//		ImageFileVO mainimage = goodsService.goodsMainImage();
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
-		
+		mav.addObject("goods", goods);
 		mav.addObject("goodsList", goodsList);
 		return mav;
 	}
@@ -93,7 +94,7 @@ public class GoodsControllerImpl implements GoodsController{
 
 	    // 2) 상세 이미지 목록 파싱 (첫 번째는 대표 이미지이므로 skip)
 	    List<String> detailImageList = Collections.emptyList();
-	    String filenames = goods.getI_file_name();
+	    String filenames = goods.getI_filename();
 	    if (filenames != null && !filenames.isBlank()) {
 	        detailImageList = Arrays.stream(filenames.split(",", -1)) // 빈 토큰 보존
 	                .map(String::trim)
@@ -137,115 +138,128 @@ public class GoodsControllerImpl implements GoodsController{
 	    return mav;
 	}
 	
+	
 	//상품 등록 로직
 	@Override
 	@RequestMapping(value="/goodsAdd.do", method=RequestMethod.POST)
-	public ResponseEntity goodsAdd(MultipartHttpServletRequest multipartRequest, HttpServletResponse response)
-			throws Exception {
-		multipartRequest.setCharacterEncoding("utf-8");
+	public ResponseEntity<String> goodsAdd(MultipartHttpServletRequest multipartRequest,
+	                                       HttpServletResponse response) throws Exception {
+	    multipartRequest.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html; charset=UTF-8");
-	    String imageFileName = null;
+
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
 	    Map<String, Object> newGoodsMap = new HashMap<>();
+
+	    // 1) 파라미터 수집 (정수/문자 분리)
 	    Enumeration<?> enu = multipartRequest.getParameterNames();
-	    Set<String> intParams = Set.of("g_category", "g_price", "g_stock", "g_status", "g_delivery_price"); // 필요에 따라 추가
+	    // 매퍼/테이블과 일치하는 정수형 파라미터들만 여기 넣어줘
+	    Set<String> intParams = Set.of("g_category","g_price","g_stock","g_status","g_delivery_price");
 
 	    while (enu.hasMoreElements()) {
 	        String name = (String) enu.nextElement();
 	        String value = multipartRequest.getParameter(name);
-
-	        if (intParams.contains(name) && value != null && !value.equals("")) {
+	        if (value == null || value.isBlank()) {
+	            newGoodsMap.put(name, null);
+	            continue;
+	        }
+	        if (intParams.contains(name)) {
 	            newGoodsMap.put(name, Integer.parseInt(value));
 	        } else {
 	            newGoodsMap.put(name, value);
 	        }
 	    }
+
+	    // 2) 등록자 id
 	    HttpSession session = multipartRequest.getSession();
 	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+	    if (memberVO == null) {
+	        String msg = "<script>alert('로그인이 필요합니다.'); history.back();</script>";
+	        return new ResponseEntity<>(msg, responseHeaders, HttpStatus.OK);
+	    }
 	    String reg_id = memberVO.getM_id();
+	    newGoodsMap.put("reg_id", reg_id); // goods 테이블에 reg_id 컬럼이 있으면 매퍼에도 반영되어야 함
 
-	    // ✅ 이미지 업로드 처리
+	    // 3) 파일 임시 저장 (C:/upload/temp)
 	    List<ImageFileVO> imageFileList = new ArrayList<>();
 	    Iterator<String> fileNames = multipartRequest.getFileNames();
 
+	    Path tempDir = Paths.get(CURR_IMAGE_REPO_PATH, "temp");
+	    File tempDirFile = tempDir.toFile();
+	    if (!tempDirFile.exists()) tempDirFile.mkdirs();
+
 	    while (fileNames.hasNext()) {
 	        MultipartFile multipartFile = multipartRequest.getFile(fileNames.next());
+	        if (multipartFile == null || multipartFile.isEmpty()) continue;
 
-	        if (multipartFile != null && !multipartFile.isEmpty()) {
-	            String originalName = multipartFile.getOriginalFilename();
-	            String ext = originalName.substring(originalName.lastIndexOf("."));
-	            String newFileName = UUID.randomUUID().toString() + ext;
+	        String originalName = multipartFile.getOriginalFilename();
+	        if (originalName == null) continue;
 
-	            File tempDir = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp");
-	            if (!tempDir.exists()) {
-	                tempDir.mkdirs();
-	            }
+	        String ext = "";
+	        int dot = originalName.lastIndexOf(".");
+	        if (dot >= 0) ext = originalName.substring(dot).toLowerCase(); // .jpg …
 
-	            File destFile = new File(tempDir, newFileName);
-	            multipartFile.transferTo(destFile); // ✅ 실제 파일 저장
+	        String newFileName = UUID.randomUUID().toString() + ext;
+	        File destFile = new File(tempDirFile, newFileName);
+	        multipartFile.transferTo(destFile); // 실제 파일 저장
 
-	            ImageFileVO imageFileVO = new ImageFileVO();
-	            imageFileVO.setI_filename(newFileName);
-
-	            String extension = ext.toLowerCase();
-	            if (extension.matches(".jpg|.jpeg|.png|.gif")) {
-	                imageFileVO.setI_filetype("image");
-	            } else {
-	                imageFileVO.setI_filetype("etc");
-	            }
-
-	            imageFileList.add(imageFileVO);
-	        }
+	        ImageFileVO imageFileVO = new ImageFileVO();
+	        imageFileVO.setI_filename(newFileName);
+	        imageFileVO.setI_filetype(ext.matches("\\.(jpg|jpeg|png|gif|webp|bmp)") ? "image" : "etc");
+	        imageFileList.add(imageFileVO);
 	    }
 
 	    if (!imageFileList.isEmpty()) {
-	        String mainImageFileName = imageFileList.get(0).getI_filename();
-	        newGoodsMap.put("goods_fileName", mainImageFileName);
+	        // ✅ 매퍼가 goods.i_filename을 기대하므로 키 이름을 i_filename으로 맞춘다
+	        newGoodsMap.put("i_filename", imageFileList.get(0).getI_filename());
 	        newGoodsMap.put("imageFileList", imageFileList);
 	    }
 
-	    String message = null;
-	    ResponseEntity resEntity = null;
-	    HttpHeaders responseHeaders = new HttpHeaders();
-	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-
+	    // 4) 서비스 호출 → 생성된 PK로 폴더 이동
+	    String message;
 	    try {
-	        int goods_num = goodsService.addNewGoods(newGoodsMap);
+	        int goods_num = goodsService.addNewGoods(newGoodsMap); // ✅ 생성된 PK(g_id)
 
-	        if (!imageFileList.isEmpty()) {
-	            for (ImageFileVO imageFileVO : imageFileList) {
-	                imageFileName = imageFileVO.getI_filename();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
-	                File destDir = new File(CURR_IMAGE_REPO_PATH + File.separator + goods_num);
-	                FileUtils.moveFileToDirectory(srcFile, destDir, true);
+	        // 파일 이동: temp → C:/upload/{goods_num}/
+	        File goodsDir = Paths.get(CURR_IMAGE_REPO_PATH, String.valueOf(goods_num)).toFile();
+
+	        for (ImageFileVO img : imageFileList) {
+	            String fn = img.getI_filename();
+	            File src = new File(tempDirFile, fn);
+	            if (src.exists()) {
+	                FileUtils.moveFileToDirectory(src, goodsDir, true);
 	            }
 	        }
 
-	        message = "<script>";
-	        message += " alert('등록성공.');";
-	        message += " location.href='" + multipartRequest.getContextPath() + "/jangbogo/goodsList.do?category=all';";
+	        message  = "<script>";
+	        message += "alert('등록성공.');";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/jangbogo/goodsList.do?category=all';";
 	        message += "</script>";
 
 	    } catch (Exception e) {
-	        if (!imageFileList.isEmpty()) {
-	            for (ImageFileVO imageFileVO : imageFileList) {
-	                imageFileName = imageFileVO.getI_filename();
-	                File srcFile = new File(CURR_IMAGE_REPO_PATH + File.separator + "temp" + File.separator + imageFileName);
-	                if (srcFile.exists()) srcFile.delete();
-	            }
+	        // 실패 시 temp에 남은 파일들 삭제
+	        for (ImageFileVO img : imageFileList) {
+	            File f = new File(tempDirFile, img.getI_filename());
+	            if (f.exists()) f.delete();
 	        }
-
-	        message = "<script>";
-	        message += " alert('등록실패');";
-	        message += " location.href='" + multipartRequest.getContextPath() + "/jangbogo/goodsAddForm.do';";
-	        message += "</script>";
-
 	        e.printStackTrace();
+
+	        message  = "<script>";
+	        message += "alert('등록실패');";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/jangbogo/goodsAddForm.do';";
+	        message += "</script>";
 	    }
 
-	    resEntity = new ResponseEntity(message, responseHeaders, HttpStatus.OK);
-	    return resEntity;
+	    return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
 	}
 
-
+	@Override
+	public ResponseEntity goodsUpdate(MultipartHttpServletRequest multipartRequest, HttpServletResponse response)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
+
+

@@ -28,18 +28,19 @@ public class GoodsDAOImpl implements GoodsDAO{
 
 	@Override
 	public int addNewGoods(Map<String, Object> newGoodsMap) {
-		return sqlSession.insert("mapper.goods.insertGoods", newGoodsMap);
+	    sqlSession.insert("mapper.goods.insertGoods", newGoodsMap);
+	    Object pk = newGoodsMap.get("g_id");
+	    if (pk == null) throw new IllegalStateException("생성된 g_id를 못 받았습니다. keyProperty/keyColumn/paramType 확인!");
+	    return ((Number) pk).intValue();
 	}
 	
 
 	@Override
 	public void insertGoodsImageFile(ArrayList<ImageFileVO> imageFileList) {
-		for(int i=0; i<imageFileList.size();i++){
-			ImageFileVO imageFileVO=(ImageFileVO)imageFileList.get(i);
-			sqlSession.insert("mapper.goods.insertGoodsImageFile",imageFileVO);
+	    for (ImageFileVO imageFileVO : imageFileList) {
+	        sqlSession.insert("mapper.goods.insertGoodsImageFile", imageFileVO);
+	    }
 	}
-
-}
 	
 	@Override
 	public ImageFileVO selectGoodsmainImage(int g_id) throws Exception {
