@@ -27,7 +27,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	private CartService cartService;
     
 	@Override
-	@RequestMapping(value="/myCartList.do", method=RequestMethod.GET)
+	@RequestMapping(value="/myCartList.do", method={RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView myCartList(HttpServletRequest request, HttpServletResponse response)  throws Exception {
 		HttpSession session = request.getSession();
 		String viewName = (String)request.getAttribute("viewName");

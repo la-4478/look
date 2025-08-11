@@ -1,7 +1,5 @@
 package com.lookmarket.order.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lookmarket.member.vo.MemberVO;
 import com.lookmarket.order.service.OrderService;
 import com.lookmarket.order.vo.ApiResponse;
@@ -33,19 +29,32 @@ import jakarta.servlet.http.HttpSession;
 public class OrderControllerImpl implements OrderController{
 	@Autowired
 	private OrderService orderService;
+	
 	@Override
 	@RequestMapping(value="/orderResult.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView orderResult(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		//주문완료
-		HttpSession session;
+		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
+		
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
-		session = request.getSession();
+        // 세션에서 주문정보와 주문상품 리스트 가져오기
+        OrderVO orderInfo = (OrderVO) session.getAttribute("orderInfo");
+        List<OrderItemVO> orderProductList = (List<OrderItemVO>) session.getAttribute("orderProductList");
+        MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
+        PayVO payVO = (PayVO) session.getAttribute("PayVO");
+		
 		session.setAttribute("sideMenu", "reveal");
+		
+        // Model에 데이터 전달
+        mav.addObject("orderInfo", orderInfo);
+        mav.addObject("orderProductList", orderProductList);
+        mav.addObject("memberInfo", memberInfo);
+        mav.addObject("payInfo", payVO);
 		
 		return mav;
 	}
@@ -54,18 +63,50 @@ public class OrderControllerImpl implements OrderController{
 	@RequestMapping(value="/orderForm.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		//배송정보
-		HttpSession session;
+		HttpSession session = request.getSession();
+	    // 로그인 체크
+	    if (session.getAttribute("isLogOn") == null && session.getAttribute("memberInfo") == null) {
+	        // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+		
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
-		session = request.getSession();
 		session.setAttribute("sideMenu", "reveal");
-		
+	
 		return mav;
 	}
+	
+	@Override
+	@RequestMapping(value="/placeOrder.do", method=RequestMethod.POST)
+	public ModelAndView placeOrder(HttpServletRequest request) {
+		// 주문 처리 (장바구니 -> 주문)
+	    ModelAndView mav = new ModelAndView();
+	    HttpSession session = request.getSession();
+	    String currentId = (String) session.getAttribute("current_id");
+	    if (currentId == null) {
+	        mav.setViewName("redirect:/member/login.do"); // 로그인 페이지로 강제 이동
+	        return mav;
+	    }
+
+	    try {
+	        orderService.processOrder(currentId);
+	        // 주문 성공 시 주문 완료 페이지로 이동
+	        mav.setViewName("redirect:/order/orderResult.do");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        // 에러 시 오류 페이지 또는 주문 페이지로 이동
+	        mav.setViewName("order/orderForm"); 
+	        mav.addObject("errorMessage", "주문 처리 중 오류가 발생했습니다.");
+	    }
+	    return mav;
+	}
+
+	// 결제 및 주문 저장 API
 	@RequestMapping(value="/payToOrderGoods.do", method=RequestMethod.POST)
 	@ResponseBody
 	public ApiResponse payToOrderGoods(@RequestBody Map<String, Object> payData, HttpServletRequest request) throws Exception {
