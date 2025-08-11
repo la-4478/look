@@ -1,5 +1,7 @@
 package com.lookmarket.member.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,8 +16,6 @@ public class MemberDAOImpl implements MemberDAO{
 	private SqlSession sqlSession;
 	@Autowired
 	private MemberVO memberVO;
-	@Autowired
-	private BusinessVO businessVO;
 	
 	@Override
 	public String findId(String m_name, String m_email) throws DataAccessException{
@@ -77,5 +77,27 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public void addbusinessMember(BusinessVO businessVO) throws DataAccessException {
 		sqlSession.insert("mapper.member.insertbusinessMember", businessVO);
+	}
+
+	@Override
+	public List<MemberVO> findbusinessMember(int role) throws DataAccessException {
+		return sqlSession.selectList("mapper.member.findbusinessMember" , role);
+	}
+
+	@Override
+	public List<BusinessVO> findbusinessMember2(String memberId) {
+		return sqlSession.selectList("mapper.member.findbusinessMember2", memberId);
+	}
+
+	@Override
+	public void approve(String m_id) throws DataAccessException {
+		sqlSession.update("mapper.admin.approve", m_id);
+		
+	}
+
+	@Override
+	public void reject(String m_id) throws DataAccessException {
+		sqlSession.update("mapper.admin.reject", m_id);
+		
 	}
 }

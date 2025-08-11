@@ -1,5 +1,7 @@
 package com.lookmarket.member.dao;
 
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 
 import com.lookmarket.member.vo.BusinessVO;
@@ -16,4 +18,8 @@ public interface MemberDAO {
 	public void reSignUp(String r_id) throws DataAccessException;
 	public Integer selectRoleById(String mId)throws DataAccessException;
 	public void addbusinessMember(BusinessVO businessVO)throws DataAccessException;
+	public List<MemberVO> findbusinessMember(int role) throws DataAccessException;
+	public List<BusinessVO> findbusinessMember2(String memberId) throws DataAccessException;
+	public void approve(String m_id) throws DataAccessException;
+	public void reject(String m_id) throws DataAccessException;
 }

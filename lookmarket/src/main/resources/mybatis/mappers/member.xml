@@ -113,4 +113,10 @@ m_jibun_address, m_namuji_address, m_level, m_role, m_joindate)
   	insert into business_member (m_id, bm_name, bm_reg_num, bm_type)
   	values (#{m_id}, #{bm_name}, #{bm_reg_num}, #{bm_type})
   </insert>
+  <select id="findbusinessMember" parameterType="memberVO" resultType="memberVO">
+  	select * from member where m_role = #{m_role}
+  </select>
+  <select id="findbusinessMember2" parameterType="String" resultType="businessVO">
+  	select * from business_member where m_id = #{m_id}
+  </select>
 </mapper>
