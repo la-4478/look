@@ -19,7 +19,7 @@
             <a href="${contextPath}/community/communityDetail.do?r_id=${review.r_id}" style="text-decoration:none; color: inherit;">
                 <c:choose>
                     <c:when test="${not empty review.r_filename}">
-                        <img src="/upload/${review.r_filename}" alt="리뷰 이미지" class="news-image" />
+                        <img src="${contextPath}/resources/image/${review.r_filename}" alt="리뷰 이미지" class="news-image" />
                     </c:when>
                     <c:otherwise>
                         <div class="news-image">이미지 없음</div>

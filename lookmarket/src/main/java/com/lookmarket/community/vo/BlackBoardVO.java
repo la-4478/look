@@ -9,7 +9,6 @@ public class BlackBoardVO {
 	String b_title;
 	String b_content;
 	String b_date;
-	String b_secret;
 	String b_hit;
 	public String getB_id() {
 		return b_id;
@@ -41,16 +40,12 @@ public class BlackBoardVO {
 	public void setB_date(String b_date) {
 		this.b_date = b_date;
 	}
-	public String getB_secret() {
-		return b_secret;
-	}
-	public void setB_secret(String b_secret) {
-		this.b_secret = b_secret;
-	}
 	public String getB_hit() {
 		return b_hit;
 	}
 	public void setB_hit(String b_hit) {
 		this.b_hit = b_hit;
 	}
+	
+	
 }

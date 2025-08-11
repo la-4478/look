@@ -7,7 +7,79 @@
 <head>
     <meta charset="UTF-8">
     <title>리뷰 상세보기</title>
-   	<link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
+    <style>
+        .detail-container {
+            width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fefefe;
+            
+        }
+
+        .detail-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .meta-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .star-display {
+            color: gold;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .review-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .review-content {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .back-btn a {
+            padding: 8px 16px;
+            background-color: #3366cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back-btn a:hover {
+            background-color: #254a9a;
+        }
+        .delete-btn {
+   			padding: 8px 16px;
+    		background-color: #cc3333; /* 빨간색 */
+    		color: white;
+    		border: none;
+   	 		border-radius: 5px;
+    		cursor: pointer;
+    		font-size: 14px;
+    		margin-left: 10px;
+    		transition: background-color 0.3s ease;
+		}
+
+		.delete-btn:hover {
+    		background-color: #992222;
+		}
+        
+    </style>
 </head>
 
 <body>
@@ -38,9 +110,18 @@
         ${review.r_content}
     </div>
 
-    <div class="back-btn">
-        <a href="${contextPath}/community/communityList.do">← 목록으로</a>
-    </div>
-</div>
+	<div class="back-btn">
+    	<a href="${contextPath}/community/communityList.do">← 목록으로</a>
+
+    	<c:if test="${sessionScope.userId == review.m_id}">
+        	<a href="${contextPath}/community/communityUpdateForm.do?r_id=${review.r_id}" style="margin-left: 10px;">수정하기</a>
+
+        	<form action="${contextPath}/community/communityDelete.do" method="post" style="display:inline;">
+           		<input type="hidden" name="r_id" value="${review.r_id}" />
+            	<button type="submit" class="delete-btn" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+        	</form>
+    	</c:if>
+	</div>
+	</div>
 </body>
 </html>
