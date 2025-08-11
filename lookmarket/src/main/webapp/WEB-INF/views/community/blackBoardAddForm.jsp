@@ -88,14 +88,6 @@
             <textarea id="b_content" name="b_content" required></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="b_secret">공개 여부</label>
-            <select id="b_secret" name="b_secret">
-                <option value="1">공개</option>
-                <option value="2">비공개</option>
-            </select>
-        </div>
-
         <div class="form-buttons">
             <input type="submit" value="등록">
             <a href="blackBoardList.jsp">목록으로</a>

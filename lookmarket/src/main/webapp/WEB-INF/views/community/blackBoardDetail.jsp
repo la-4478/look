@@ -61,15 +61,6 @@
         👤작성자: ${board.m_id} | 📅작성일: ${board.b_date} | 👁조회수: ${board.b_hit}
     </div>
 
-    <!-- 공개 여부 -->
-    <div class="meta-info">
-        <c:choose>
-            <c:when test="${board.b_secret eq 1}">🔓공개</c:when>
-            <c:when test="${board.b_secret eq 2}">🔓비공개</c:when>
-            <c:otherwise>❓알 수 없음</c:otherwise>
-        </c:choose>
-    </div>
-
     <!--건의 내용 -->
     <div class="board-content">${board.b_content}</div>
 

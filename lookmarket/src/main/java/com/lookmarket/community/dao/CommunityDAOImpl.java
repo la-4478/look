@@ -42,9 +42,18 @@ public class CommunityDAOImpl implements CommunityDAO{
 	    paramMap.put("r_hit", hit);
 	    sqlSession.update("mapper.community.upHit", paramMap);
 	}
-
 	@Override
-	public void insertReview(ReviewVO reviewVO) throws DataAccessException{
-		sqlSession.insert("mapper.community.insertReview", reviewVO);
+	public void insertReview(ReviewVO reviewVO) throws DataAccessException {
+	    sqlSession.insert("mapper.community.insertReview", reviewVO);
 	}
+	@Override
+	public void updateReview(ReviewVO reviewVO) throws DataAccessException {
+	    sqlSession.update("mapper.community.updateReview", reviewVO);
+	}
+	@Override
+	public void deleteReview(int r_id) throws DataAccessException {
+	    sqlSession.delete("mapper.community.deleteReview", r_id);
+	}
+
+
 }

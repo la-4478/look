@@ -63,6 +63,22 @@
         .back-btn a:hover {
             background-color: #254a9a;
         }
+        .delete-btn {
+   			padding: 8px 16px;
+    		background-color: #cc3333; /* 빨간색 */
+    		color: white;
+    		border: none;
+   	 		border-radius: 5px;
+    		cursor: pointer;
+    		font-size: 14px;
+    		margin-left: 10px;
+    		transition: background-color 0.3s ease;
+		}
+
+		.delete-btn:hover {
+    		background-color: #992222;
+		}
+        
     </style>
 </head>
 
@@ -94,9 +110,18 @@
         ${review.r_content}
     </div>
 
-    <div class="back-btn">
-        <a href="${contextPath}/community/communityList.do">← 목록으로</a>
-    </div>
-</div>
+	<div class="back-btn">
+    	<a href="${contextPath}/community/communityList.do">← 목록으로</a>
+
+    	<c:if test="${sessionScope.userId == review.m_id}">
+        	<a href="${contextPath}/community/communityUpdateForm.do?r_id=${review.r_id}" style="margin-left: 10px;">수정하기</a>
+
+        	<form action="${contextPath}/community/communityDelete.do" method="post" style="display:inline;">
+           		<input type="hidden" name="r_id" value="${review.r_id}" />
+            	<button type="submit" class="delete-btn" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+        	</form>
+    	</c:if>
+	</div>
+	</div>
 </body>
 </html>

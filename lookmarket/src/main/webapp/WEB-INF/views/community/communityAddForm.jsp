@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -123,7 +124,7 @@
         <!-- 이미지 업로드 -->
         <div class="form-group">
             <label for="r_filename">이미지 업로드</label>
-            <input type="file" id="r_filename1" name="r_filename1" />
+            <input type="file" id="r_filename" name="r_filename" />
         </div>
 
         <!-- 공개 여부 -->

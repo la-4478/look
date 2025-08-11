@@ -14,6 +14,8 @@ public interface CommunityService {
 	public List<BlackBoardVO> blackBoardList() throws Exception;
 	public List<ReviewVO> communityList() throws Exception;
 	public ReviewVO communityDetail(String r_id) throws Exception;
-	public void upHit(String r_id, String hit) throws Exception;
+	public void upHit(int r_id, int hit) throws Exception;
 	public void insertReview(ReviewVO reviewVO) throws Exception;
+	public void updateReview(ReviewVO reviewVO) throws Exception;
+	public void deleteReview(String r_id) throws Exception;
 }
