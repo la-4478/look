@@ -204,12 +204,15 @@ public class CommunityControllerImpl implements CommunityController{
 	    @ModelAttribute ReviewVO reviewVO,
 	    HttpServletRequest request
 	) throws Exception {
-	    request.setCharacterEncoding("utf-8");
 
 	    HttpSession session = request.getSession();
 	    String m_id = (String) session.getAttribute("current_id");
+	    
+	    if(m_id == null) {
+	    	throw new IllegalStateException("로그인 세션이 만료되었거나 로그인 정보가 없습니다");
+	    }
 	    reviewVO.setM_id(m_id);
-
+	    
 	    if (uploadFile != null && !uploadFile.isEmpty()) {
 	        String fileName = uploadFile.getOriginalFilename();
 	        String fileType = uploadFile.getContentType();
@@ -223,7 +226,7 @@ public class CommunityControllerImpl implements CommunityController{
 	        File file = new File(uploadDir, fileName);
 	        uploadFile.transferTo(file);
 
-	        reviewVO.setR_filename(fileName);
+	        reviewVO.setR_filename1(fileName);
 	        reviewVO.setR_filetype(fileType);
 	    }
 
@@ -231,7 +234,7 @@ public class CommunityControllerImpl implements CommunityController{
 	    reviewVO.setR_secret("private".equals(secretValue) ? "0" : "1");
 
 	    String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
-	    reviewVO.setM_id(m_id);
+	   //reviewVO.setM_id(m_id);
 	    reviewVO.setR_date(currentDate);
 	    reviewVO.setR_hit("0");
 

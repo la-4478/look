@@ -31,5 +31,6 @@
         </interceptor>
     </interceptors>
     <!--  파일 업로드를 위한 멀티파트 리졸버  -->
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
+
 </beans:beans>
