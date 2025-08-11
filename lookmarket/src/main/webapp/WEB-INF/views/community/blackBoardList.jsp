@@ -5,44 +5,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>사장님 고충방</title>
-    <style>
-        body {
-            font-family: '맑은 고딕', sans-serif;
-            margin: 30px;
-            background-color: #f9f9f9;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-        }
-        th, td {
-            padding: 12px 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        th {
-            background-color: #0077cc;
-            color: white;
-        }
-        td.title-cell {
-            text-align: left;
-        }
-        .lock-icon {
-            color: #888;
-            margin-right: 5px;
-        }
-        a {
-            color: #333;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+<link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 

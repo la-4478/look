@@ -5,61 +5,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>event add Form</title>
-    <style>
-        .form-container {
-            width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fafafa;
-        }
-
-        .form-container h2 {
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"], textarea, select {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        input[type="file"] {
-            margin-top: 5px;
-        }
-
-        .submit-btn {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .submit-btn button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #3366cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .submit-btn button:hover {
-            background-color: #254a9a;
-        }
-    </style>
+    <title>이벤트 등록</title>
+    <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="form-container">

@@ -4,6 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>사장님 고충방 글쓰기</title>
     <style>
         body {
@@ -71,6 +72,10 @@
             background-color: #254a9a;
         }
     </style>
+=======
+    <title>고충방 글쓰기</title>
+    <link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
+>>>>>>> dfce9b6b5d1e5937e77ea0307917fdbccce95d76
 </head>
 <body>
 

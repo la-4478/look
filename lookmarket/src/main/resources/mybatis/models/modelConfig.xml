@@ -7,6 +7,7 @@
     	<typeAlias type="com.lookmarket.goods.vo.GoodsVO" alias="goodsVO" />
     	<typeAlias type="com.lookmarket.goods.vo.ImageFileVO" alias="imageFileVO" />
     	<typeAlias type="com.lookmarket.member.vo.MemberVO" alias="memberVO" />
+    	<typeAlias type="com.lookmarket.member.vo.BusinessVO" alias="businessVO" />
     	<typeAlias type="com.lookmarket.cart.vo.CartVO" alias="cartVO" />
     	<typeAlias type="com.lookmarket.community.vo.BlackBoardVO" alias="blackBoardVO" />
     	<typeAlias type="com.lookmarket.community.vo.ReviewVO" alias="reviewVO" />

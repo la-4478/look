@@ -44,30 +44,34 @@
             values(
 	#{g_category}, #{g_name}, #{g_brand}, #{g_discription}, #{g_price}, #{g_manufactured_date}, #{g_expiration_date}, #{g_delivery_price}, #{g_stock}, #{i_filename})     
     </insert>
-
-    <!-- 상품 수정 -->
+    
+    <!--  상품 수정 -->
     <update id="updateGoods" parameterType="GoodsVO">
-        UPDATE goods SET
-            g_category = #{g_category},
-            g_name = #{g_name},
-            g_brand = #{g_brand},
-            g_discription = #{g_discription},
-            g_qty = #{g_qty},
-            g_price = #{g_price},
-            g_sale_price = #{g_sale_price},
-            g_manufactured_date = #{g_manufactured_date},
-            g_expiration_date = #{g_expiration_date},
-            g_delivery_price = #{g_delivery_price},
-            g_delivery_date = #{g_delivery_date},
-            g_status = #{g_status},
-            g_stock = #{g_stock}
-        WHERE g_id = #{g_id}
-    </update>
+	  UPDATE goods SET
+	    g_category = #{g_category},
+	    g_name = #{g_name},
+	    g_brand = #{g_brand},
+	    g_discription = #{g_discription},
+	    g_price = #{g_price},
+	    g_manufactured_date = #{g_manufactured_date},
+	    g_expiration_date = #{g_expiration_date},
+	    g_delivery_price = #{g_delivery_price},
+	    g_status = #{g_status},
+	    g_stock = #{g_stock},
+	    i_filename = #{i_filename}     <!-- ✅ 이 줄 추가 -->
+	  WHERE g_id = #{g_id}
+	</update>
 
     <!-- 상품 삭제 -->
     <delete id="deleteGoods" parameterType="int">
         DELETE FROM goods WHERE g_id = #{g_id}
     </delete>
+    
+    
+	<!-- 상품 이미지 삭제 -->
+	<delete id="deleteGoodsImages" parameterType="int">
+    	DELETE FROM goods_image WHERE g_id = #{g_id}
+	</delete>
     
     <resultMap id="imageResult" type="imageFileVO">
     	<result property="i_id" column="i_id"/>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.admin">
+  	<resultMap id="businessResult" type="businessVO">
+		<result property="m_id" column="m_id" />
+		<result property="bm_name" column="bm_name" />
+		<result property="bm_reg_num" column="bm_reg_num" />
+		<result property="bm_type" column="bm_type" />
+		<result property="bm_status" column="bm_status" />
+	</resultMap>
+	
+	<!-- 사업자 승인 -->
+	<update id="approve" parameterType="String">
+		update business_member set bm_status = 2 where m_id = #{m_id}
+	</update>
+
+	<!-- 사업자 승인 거부-->
+	<update id="reject" parameterType="String">
+		update business_member set bm_status = 3 where m_id = #{m_id}
+	</update>
+	
+	
+</mapper>
+
+
+
+
