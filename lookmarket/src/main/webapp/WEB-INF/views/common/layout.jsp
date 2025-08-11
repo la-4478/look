@@ -10,7 +10,6 @@
     <title>lookmarket</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link href="${contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" media="screen">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-3gJwYpMe3Qm2LF6XnKsKuQv5JFNfEXiDAYTujMAeBAs=" crossorigin="anonymous"></script>
     <link href="${contextPath}/resources/css/chatbot.css" rel="stylesheet" type="text/css"><!-- 챗봇 CSS 파일 -->
 </head>
 
@@ -63,9 +62,6 @@
     	<button id="scroll-up" class="scroll-btn">▲</button>
     	<button id="scroll-down" class="scroll-btn">▼</button>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <!-- 하나로 합쳐서 정리 -->
 <script>

@@ -12,7 +12,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="${contextPath}/resources/js/jquery-3.7.0.min.js"></script>
     <meta charset="UTF-8">
     <title>상품 목록</title>
 <link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
