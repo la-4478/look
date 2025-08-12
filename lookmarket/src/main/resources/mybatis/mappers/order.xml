@@ -9,7 +9,7 @@
          주문 저장 (OrderVO)
          ============================== -->
     <insert id="addNewOrder" parameterType="OrderVO" useGeneratedKeys="true" keyProperty="oId">
-        INSERT INTO orders (
+        INSERT INTO order_info (
             m_id,
             oi_delivery_price,
             oi_total_goods_price,
@@ -59,7 +59,7 @@
          결제 저장 (PayVO)
          ============================== -->
     <insert id="addNewpay" parameterType="PayVO">
-        INSERT INTO pay (
+        INSERT INTO payment (
             o_id,
             p_method,
             p_card_name,
@@ -90,7 +90,7 @@
             o.oi_date, o.oi_delivery_address, o.oi_delivery_message,
             i.ot_g_id, i.ot_goods_price, i.ot_sale_price,
             i.ot_goods_name, i.ot_goods_qty
-        FROM orders o
+        FROM order_info o
         JOIN order_item i ON o.o_id = i.o_id
         WHERE o.o_id = #{oId}
     </select>
@@ -118,12 +118,12 @@
     </resultMap>
 
     <!-- ==============================
-         카트에서 상품 삭제
+         장바구니에서 상품 삭제
          ============================== -->
-    <delete id="removeCartItem">
+    <delete id="removeCartItem" parameterType="map">
         DELETE FROM cart
-        WHERE m_id = #{memberId}
-          AND goods_id = #{goodsId}
+        WHERE m_id = #{m_id}
+          AND g_id = #{g_id}
     </delete>
 
 </mapper>

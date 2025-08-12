@@ -106,7 +106,7 @@ function fn_order_all_cart_goods() {
             success: function(response) {
                 if (response === "success") {
                     alert("주문이 완료되었습니다.");
-                    window.location.href = contextPath + "/order/orderResult.do";
+                    window.location.href = contextPath + "/order/orderForm.do";
                 } else {
                     alert("주문 처리에 실패했습니다.");
                 }

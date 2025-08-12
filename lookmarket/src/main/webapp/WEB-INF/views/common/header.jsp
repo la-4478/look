@@ -310,7 +310,7 @@ header:hover {
 							<c:when test="${pageType eq 'jangbogo'}">
 								<li class="menu">
 									<div>
-										<a href="${contextPath}/jangbogo/goodsList.do?category=fresh"
+										<a href="${contextPath}/jangbogo/goodsList.do?category=all"
 											class="menu__title">상품보기</a>
 
 									</div>
@@ -360,20 +360,21 @@ header:hover {
 
 								<li class="menu">
 									<div>
-										<a href="${contextPath}/community/communityList.do"
+										<a href="${contextPath}/order/orderForm.do"
 											class="menu__title">주문</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<a href="${contextPath}/order/orderForm.do"
-											class="menu__title">주문정보</a>
-										<a href="${contextPath}/order/orderResult.do"
-											class="menu__title">주문결과</a>
-										<a href="${contextPath}/member/memberList.do"
-											class="menu__title">회원관리</a>
-										<a href="${contextPath}/member/businessMemberList.do"
-											class="menu__title">사업자목록</a>
+										<li><a href="${contextPath}/order/orderForm.do"
+											class="menu__title">주문정보</a></li>
+										<li><a href="${contextPath}/order/orderResult.do"
+											class="menu__title">주문결과</a></li>
+										<li><a href="${contextPath}/member/memberList.do"
+											class="menu__title">회원관리</a></li>
+										<li><a href="${contextPath}/member/businessMemberList.do"
+											class="menu__title">사업자목록</a></li>
 									</ul>
 								</li>
+
 								<li class="menu">
 									<div>
 										<a href="${contextPath}/main/sijangbajoMain.do"

@@ -62,5 +62,28 @@ public class OrderDAOImpl implements OrderDAO {
 	public void addOrderItem(OrderItemVO itemVO) {
 		sqlSession.insert("mapper.order.addOrderItem", itemVO);
 	}
+	
+	@Override
+	public void insertOrder(String memberId, List<CartVO> cartList) throws DataAccessException {
+	    // 1. 주문 헤더 저장 (orders 테이블)
+	    OrderVO orderVO = new OrderVO();
+	    orderVO.setMId(memberId);
+	    // 주문 상세 정보는 필요에 따라 세팅
+	    sqlSession.insert("mapper.order.addNewOrder", orderVO);
+	    int orderId = orderVO.getOId(); // useGeneratedKeys로 생성된 주문번호 받기
+
+	    // 2. 주문 아이템 저장 (order_item 테이블)
+	    for (CartVO cart : cartList) {
+	        OrderItemVO itemVO = new OrderItemVO();
+	        itemVO.setOId(orderId);
+	        itemVO.setOtGId(cart.getG_id());
+	        itemVO.setOtGoodsName(cart.getG_name());
+	        itemVO.setOtGoodsPrice(cart.getG_price());
+	        itemVO.setOtGoodsQty(cart.getC_qty());
+	        // 할인 가격 등 필요한 값 세팅
+	        sqlSession.insert("mapper.order.addOrderItem", itemVO);
+	    }
+	}
+
 }
 
