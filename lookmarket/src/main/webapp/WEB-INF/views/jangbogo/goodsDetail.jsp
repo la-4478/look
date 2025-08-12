@@ -41,7 +41,7 @@
                 <del><fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩" /></del>
             </div>
 
-            <form action="${contextPath}/cart/addCart.do" method="post">
+            <form action="${contextPath}/cart/addCartItem.do" method="post">
                 <input type="hidden" name="g_id" value="${goods.g_id}" />
                 <label>수량:
                     <input type="number" name="qty" class="form-control" value="1" min="1" max="${goods.g_stock}" />

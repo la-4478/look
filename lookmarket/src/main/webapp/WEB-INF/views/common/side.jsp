@@ -84,15 +84,15 @@
 					<li>
 						<h3>커뮤니티</h3>
 						<ul>
-							<li><a href="${contextPath}/community/promotionList.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/community/communityList.do">커뮤니티</a></li>
 						</ul>
 				</c:when>
 				<c:when test="${sideMenu_option == 'community_admin'}">
 					<li>
 						<h3>커뮤니티</h3>
 						<ul>
-							<li><a href="${contextPath}/community/communityList.do">커뮤니티</a></li>
-							<li><a href="${contextPath}/community/blackBoardList.do">사장님고충방</a></li>
+							<li><a href="${contextPath}/community/blackBoardList.do">사장님 커뮤니티</a></li>
+							<li><a href="${contextPath}/community/blackBoardAddForm.do">사장님고충방 등록</a></li>
 						</ul>
 				</c:when>
 				<c:when test="${sideMenu_option == 'category'}">

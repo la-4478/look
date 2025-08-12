@@ -46,5 +46,22 @@ public class CommunityServiceImpl implements CommunityService{
 	public void deleteReview(String r_id) throws Exception {
 	    communityDAO.deleteReview(Integer.parseInt(r_id));
 	}
+	@Override
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception {
+	    communityDAO.insertBlackBoard(blackBoardVO);
+	}
+	@Override
+	public BlackBoardVO blackBoardDetail(String b_id) throws Exception {
+	    return communityDAO.blackBoardDetail(Integer.parseInt(b_id));
+	}
+
+	@Override
+	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws Exception {
+	    communityDAO.updateBlackBoard(blackBoardVO);
+	}
+	@Override
+	public void upBlackHit(String b_id) throws Exception {
+	    communityDAO.upBlackHit(b_id);
+	}
 
 }

@@ -114,24 +114,7 @@
 										<li><a href="#">지역축제</a></li>
 									</ul>
 								</li>
-								<li class="menu">
-									<div>
-										<a href="${contextPath}/event/promotionList.do"
-											class="menu__title">이벤트★</a>
-									</div>
-									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a
-											href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션
-												목록</a></li>
-									</ul> <c:if
-										test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
-										<ul id="tipSybm1" class="navbar__submenu">
-											<li><a
-												href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션
-													등록</a></li>
-										</ul>
-									</c:if>
-								</li>
+								
 								<li class="menu">
 									<div>
 
@@ -141,28 +124,63 @@
 								</li>
 
 								<li class="menu">
-									<div>
-										<a href="${contextPath}/community/communityList.do"
-											class="menu__title">커뮤니티</a>
-									</div>
+
+							<!-- 사용자 (m_role == 1) -->
+								<c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
+								<div>
+									<a href="${contextPath}/community/communityList.do" class="menu__title">커뮤니티</a>
+								</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/community/communityList.do">리뷰보기</a></li>
-										<li><a
-											href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
+										<li><a href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
 									</ul>
-								</li>
-								<li class="menu">
+								</c:if>
+
+							<!-- 사업자 (m_role == 2) -->
+								<c:if test="${isLogOn eq true and memberInfo.m_role == 2}">
+								<div>
+									<a href="${contextPath}/community/blackBoardList.do" class="menu__title">사장님 커뮤니티</a>
+								</div>
+									<ul id="tipSybm1" class="navbar__submenu">
+										<li><a href="${contextPath}/community/blackBoardAddForm.do">사장님 고충방 등록</a></li>
+									</ul>
+								</c:if>
+							<!-- 관리자 (m_role == 3) -->
+								<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+								<div>
+									<a href="${contextPath}/community/blackBoardList.do" class="menu__title">커뮤니티 관리</a>
+								</div>
+									<ul id="tipSybm1" class="navbar__submenu">
+										<li><a href="${contextPath}/community/communityList.do" class="menu__title">사용자 리뷰</a></li>
+										<li><a href="${contextPath}/community/blackBoardList.do" class="menu__title">사장님 고충방</a></li>
+									</ul>
+								</c:if>
+								
+							<!-- 비회원 또는 기타 -->
+							<c:if test="${not isLogOn or empty memberInfo}">
+								<div>
+									<a href="${contextPath}/community/communityList.do" class="menu__title">커뮤니티</a>
+								</div>
+							</c:if>
+							</li>
+								
+							<li class="menu">
 									<div>
 										<a href="${contextPath}/event/promotionList.do"
 											class="menu__title">이벤트★</a>
-
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
 										<li><a
 											href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션
 												목록</a></li>
-									</ul>
-								</li>
+									</ul> 
+									<c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
+										<ul id="tipSybm1" class="navbar__submenu">
+											<li><a
+												href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션
+													등록</a></li>
+										</ul>
+									</c:if>
+							</li>
 
 								<li class="menu">
 									<div>
@@ -176,7 +194,7 @@
 							<c:when test="${pageType eq 'jangbogo'}">
 								<li class="menu">
 									<div>
-										<a href="${contextPath}/jangbogo/goodsList.do?category=fresh"
+										<a href="${contextPath}/jangbogo/goodsList.do?category=all"
 											class="menu__title">상품보기</a>
 
 									</div>
@@ -226,20 +244,21 @@
 
 								<li class="menu">
 									<div>
-										<a href="${contextPath}/community/communityList.do"
+										<a href="${contextPath}/order/orderForm.do"
 											class="menu__title">주문</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<a href="${contextPath}/order/orderForm.do"
-											class="menu__title">주문정보</a>
-										<a href="${contextPath}/order/orderResult.do"
-											class="menu__title">주문결과</a>
-										<a href="${contextPath}/member/memberList.do"
-											class="menu__title">회원관리</a>
-										<a href="${contextPath}/member/businessMemberList.do"
-											class="menu__title">사업자목록</a>
+										<li><a href="${contextPath}/order/orderForm.do"
+											class="menu__title">주문정보</a></li>
+										<li><a href="${contextPath}/order/orderResult.do"
+											class="menu__title">주문결과</a></li>
+										<li><a href="${contextPath}/member/memberList.do"
+											class="menu__title">회원관리</a></li>
+										<li><a href="${contextPath}/member/businessMemberList.do"
+											class="menu__title">사업자목록</a></li>
 									</ul>
 								</li>
+
 								<li class="menu">
 									<div>
 										<a href="${contextPath}/main/sijangbajoMain.do"
