@@ -16,8 +16,8 @@ public interface CommunityController {
 	public ModelAndView communityDetail(@RequestParam("r_id") String r_id, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes)  throws Exception;
 	public ModelAndView communityUpdateForm(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView blackBoardList(HttpServletRequest request, HttpServletResponse response)  throws Exception;
-	public ModelAndView blackBoardDetail(HttpServletRequest request, HttpServletResponse response)  throws Exception;
-	public ModelAndView blackBoardUpdateForm(HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public ModelAndView blackBoardDetail(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView blackBoardUpdateForm(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView blackBoardAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView insertReview(MultipartHttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;

@@ -19,4 +19,7 @@ public interface CommunityService {
 	public void updateReview(ReviewVO reviewVO) throws Exception;
 	public void deleteReview(String r_id) throws Exception;
 	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
+	public BlackBoardVO blackBoardDetail(String b_id) throws Exception;
+	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
+	public void upBlackHit(String b_id) throws Exception;
 }
