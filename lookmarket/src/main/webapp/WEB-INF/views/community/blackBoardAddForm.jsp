@@ -1,104 +1,102 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-<<<<<<< HEAD
-    <title>사장님 고충방 글쓰기</title>
-    <style>
-        body {
-            font-family: '맑은 고딕', sans-serif;
-            background-color: #f9f9f9;
-            padding: 30px;
-        }
+<meta charset="UTF-8">
+<title>사장님 고충방 글쓰기</title>
+<style>
+body {
+	font-family: '맑은 고딕', sans-serif;
+	background-color: #f9f9f9;
+	padding: 30px;
+}
 
-        .write-container {
-            width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 30px;
-            border-radius: 10px;
-        }
+.write-container {
+	width: 800px;
+	margin: 0 auto;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	padding: 30px;
+	border-radius: 10px;
+}
 
-        h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
+h2 {
+	margin-bottom: 20px;
+	text-align: center;
+}
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+.form-group {
+	margin-bottom: 20px;
+}
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
 
-        input[type="text"], textarea, select {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+input[type="text"], textarea, select {
+	width: 100%;
+	padding: 10px;
+	font-size: 14px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
 
-        textarea {
-            height: 200px;
-            resize: vertical;
-        }
+textarea {
+	height: 200px;
+	resize: vertical;
+}
 
-        .form-buttons {
-            text-align: center;
-            margin-top: 30px;
-        }
+.form-buttons {
+	text-align: center;
+	margin-top: 30px;
+}
 
-        .form-buttons input[type="submit"],
-        .form-buttons a {
-            padding: 10px 20px;
-            background-color: #3366cc;
-            color: white;
-            text-decoration: none;
-            border: none;
-            border-radius: 5px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
+.form-buttons input[type="submit"], .form-buttons a {
+	padding: 10px 20px;
+	background-color: #3366cc;
+	color: white;
+	text-decoration: none;
+	border: none;
+	border-radius: 5px;
+	margin: 0 5px;
+	cursor: pointer;
+}
 
-        .form-buttons input[type="submit"]:hover,
-        .form-buttons a:hover {
-            background-color: #254a9a;
-        }
-    </style>
-=======
-    <title>고충방 글쓰기</title>
-    <link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
->>>>>>> dfce9b6b5d1e5937e77ea0307917fdbccce95d76
+.form-buttons input[type="submit"]:hover, .form-buttons a:hover {
+	background-color: #254a9a;
+}
+</style>
+<title>고충방 글쓰기</title>
+<link href="${contextPath}/resources/css/community.css" rel="stylesheet"
+	type="text/css">
 </head>
 <body>
 
-<div class="write-container">
-    <h2>사장님 고충방 글쓰기</h2>
+	<div class="write-container">
+		<h2>사장님 고충방 글쓰기</h2>
 
-    <form action="${pageContext.request.contextPath}/community/insertBlackBoard.do" method="post">
-        <div class="form-group">
-            <label for="b_title">제목</label>
-            <input type="text" id="b_title" name="b_title" required>
-        </div>
+		<form
+			action="${pageContext.request.contextPath}/community/insertBlackBoard.do"
+			method="post">
+			<div class="form-group">
+				<label for="b_title">제목</label> <input type="text" id="b_title"
+					name="b_title" required>
+			</div>
 
-        <div class="form-group">
-            <label for="b_content">내용</label>
-            <textarea id="b_content" name="b_content" required></textarea>
-        </div>
+			<div class="form-group">
+				<label for="b_content">내용</label>
+				<textarea id="b_content" name="b_content" required></textarea>
+			</div>
 
-        <div class="form-buttons">
-            <input type="submit" value="등록">
-            <a href="blackBoardList.jsp">목록으로</a>
-        </div>
-    </form>
-</div>
+			<div class="form-buttons">
+				<input type="submit" value="등록"> <a
+					href="blackBoardList.jsp">목록으로</a>
+			</div>
+		</form>
+	</div>
 
 </body>
 </html>

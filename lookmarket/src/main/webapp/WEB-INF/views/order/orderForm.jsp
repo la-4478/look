@@ -216,6 +216,45 @@ input, textarea, select {
 					rows="3" placeholder="배송 요청사항을 입력하세요."></textarea>
 			</div>
 
+			<!-- 주문상품 리스트 출력 -->
+			<div class="box">
+				<h2>주문 상품 목록</h2>
+				<table style="width: 100%; border-collapse: collapse;">
+					<thead>
+						<tr>
+							<th
+								style="border-bottom: 1px solid #ccc; padding: 8px; text-align: left;">상품명</th>
+							<th
+								style="border-bottom: 1px solid #ccc; padding: 8px; text-align: right;">가격</th>
+							<th
+								style="border-bottom: 1px solid #ccc; padding: 8px; text-align: right;">수량</th>
+							<th
+								style="border-bottom: 1px solid #ccc; padding: 8px; text-align: right;">합계</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="item" items="${orderProductList}">
+							<tr>
+								<td style="padding: 8px;">${item.otGoodsName}</td>
+								<td style="padding: 8px; text-align: right;"><fmt:formatNumber
+										value="${item.otGoodsPrice}" pattern="#,###" /> 원</td>
+								<td style="padding: 8px; text-align: right;">${item.otGoodsQty}</td>
+								<td style="padding: 8px; text-align: right;"><fmt:formatNumber
+										value="${item.otGoodsPrice * item.otGoodsQty}" pattern="#,###" />
+									원</td>
+							</tr>
+
+							<!-- 상품별 주문 정보를 숨김 필드로 같이 전달 -->
+							<input type="hidden" name="goodsId" value="${item.otGId}" />
+							<input type="hidden" name="goodsName" value="${item.otGoodsName}" />
+							<input type="hidden" name="goodsPrice"
+								value="${item.otGoodsPrice}" />
+							<input type="hidden" name="goodsQty" value="${item.otGoodsQty}" />
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
 			<!-- 결제 요약 + 결제 수단 -->
 			<div class="box">
 				<h2>결제 정보</h2>

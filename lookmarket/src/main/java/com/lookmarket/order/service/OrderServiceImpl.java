@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
         if (cart_id != null) {
             orderDAO.deleteCartGoods(cart_id);
         } else {
-            System.out.println("🟡 삭제할 장바구니 항목이 없습니다.");
+            System.out.println("삭제할 장바구니 항목이 없습니다.");
         }
     }
 
@@ -79,4 +79,9 @@ public class OrderServiceImpl implements OrderService {
         // 3. 장바구니 비우기
         cartDAO.clearCart(m_id);
     }
+	
+	@Override
+	public List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception {
+	    return orderDAO.getCartItemsByMemberId(m_id);
+	}
 }

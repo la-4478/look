@@ -28,7 +28,7 @@ public class OrderDAOImpl implements OrderDAO {
 		for(int i=0; i<myOrderList.size();i++){
 			OrderVO orderVO =(OrderVO)myOrderList.get(i);
 		//	orderVO.setOrder_id(order_id);
-			sqlSession.insert("mapper.order.insertNewOrder",orderVO);
+			sqlSession.insert("mapper.order.addNewOrder",orderVO);
 		}
 		
 	}	
@@ -55,7 +55,7 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public void deleteCartGoods(int cart_id) throws DataAccessException {
-        sqlSession.delete("mapper.cart.deleteCartGoods", cart_id);
+        sqlSession.delete("mapper.cart.removeCartItem", cart_id);
     }
 
 	@Override
@@ -77,12 +77,17 @@ public class OrderDAOImpl implements OrderDAO {
 	        OrderItemVO itemVO = new OrderItemVO();
 	        itemVO.setOId(orderId);
 	        itemVO.setOtGId(cart.getG_id());
-	        itemVO.setOtGoodsName(cart.getG_name());
 	        itemVO.setOtGoodsPrice(cart.getG_price());
+	        itemVO.setOtSalePrice(0);  // 할인 없으면 0 또는 적절한 값 설정
+	        itemVO.setOtGoodsName(cart.getG_name());  // 필수: 상품명 세팅
 	        itemVO.setOtGoodsQty(cart.getC_qty());
-	        // 할인 가격 등 필요한 값 세팅
 	        sqlSession.insert("mapper.order.addOrderItem", itemVO);
 	    }
+	}
+	
+	@Override
+	public List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception {
+	    return sqlSession.selectList("mapper.order.selectCartItemsByMemberId", m_id);
 	}
 
 }

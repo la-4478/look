@@ -27,4 +27,6 @@ public interface OrderService {
     
     // 장바구니 기반 주문 처리 (헤더+아이템 저장 및 장바구니 비우기)
     void processOrder(String m_id) throws Exception;
+    
+    List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception;
 }
