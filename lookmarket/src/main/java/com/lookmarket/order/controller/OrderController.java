@@ -8,6 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface OrderController {
 	public ModelAndView orderResult(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView form(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	ModelAndView payComplete(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView payComplete(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView placeOrder(HttpServletRequest request) throws Exception;
 }
