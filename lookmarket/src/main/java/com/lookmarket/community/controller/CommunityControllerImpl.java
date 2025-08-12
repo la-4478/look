@@ -126,7 +126,7 @@ import jakarta.servlet.http.HttpSession;
 			String layout = "common/layout";
 			mav.setViewName(layout);
 			String viewName = (String)request.getAttribute("viewName");
-			mav.addObject("viewName", viewName);
+			mav.addObject("viewName", "/community/blackBoardList");
 			
 			List<BlackBoardVO> blackBoardList = communityService.blackBoardList();
 			mav.addObject("blackBoardList", blackBoardList);
@@ -140,39 +140,48 @@ import jakarta.servlet.http.HttpSession;
 		
 		@Override
 		@RequestMapping(value="/blackBoardDetail.do", method=RequestMethod.GET)
-		public ModelAndView blackBoardDetail(HttpServletRequest request, HttpServletResponse response)  throws Exception{
-			//고충방 상세
-			HttpSession session;
-			ModelAndView mav = new ModelAndView();
-			String layout = "common/layout";
-			mav.setViewName(layout);
-			String viewName = (String)request.getAttribute("viewName");
-			mav.addObject("viewName", viewName);
-			
-			session = request.getSession();
-			session.setAttribute("sideMenu", "reveal");
-			session.setAttribute("sideMenu_option", "community_admin");
-			
-			return mav;
+		public ModelAndView blackBoardDetail(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		    HttpSession session = request.getSession();
+		    ModelAndView mav = new ModelAndView();
+		    
+		    String layout = "common/layout";
+		    mav.setViewName(layout);
+		    
+		    BlackBoardVO blackBoard = communityService.blackBoardDetail(b_id);
+		    if(blackBoard != null) {
+		    	communityService.upBlackHit(b_id);
+		    }
+		    mav.addObject("blackBoard", blackBoard);
+		    
+		    mav.addObject("viewName", "/community/blackBoardDetail");
+		    
+		    session.setAttribute("sideMenu", "reveal");
+		    session.setAttribute("sideMenu_option", "community_admin");
+		    
+		    return mav;
 		}
+
 		
-		@Override
 		@RequestMapping(value="/blackBoardUpdateForm.do", method=RequestMethod.GET)
-		public ModelAndView blackBoardUpdateForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
-			//고충방 수정
-			HttpSession session;
-			ModelAndView mav = new ModelAndView();
-			String layout = "common/layout";
-			mav.setViewName(layout);
-			String viewName = (String)request.getAttribute("viewName");
-			mav.addObject("viewName", viewName);
-			
-			session = request.getSession();
-			session.setAttribute("sideMenu", "reveal");
-			session.setAttribute("sideMenu_option", "community_admin");
-			
-			return mav;
+		public ModelAndView blackBoardUpdateForm(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		    HttpSession session = request.getSession();
+		    ModelAndView mav = new ModelAndView();
+		    
+		    String layout = "common/layout";
+		    mav.setViewName(layout);
+		    
+		    // 기존 글 정보 가져오기
+		    BlackBoardVO blackBoard = communityService.blackBoardDetail(b_id);
+		    mav.addObject("blackBoard", blackBoard);
+		    
+		    mav.addObject("viewName", "/community/blackBoardUpdateForm");
+		    
+		    session.setAttribute("sideMenu", "reveal");
+		    session.setAttribute("sideMenu_option", "community_admin");
+		    
+		    return mav;
 		}
+
 		
 		@Override
 		@RequestMapping(value="/communityAddForm.do", method=RequestMethod.GET)
@@ -292,12 +301,6 @@ import jakarta.servlet.http.HttpSession;
 		    return new ModelAndView("redirect:/community/blackBoardList.do");
 		}
 
-		@Override
-		public ModelAndView communityUpdateForm(HttpServletRequest request, HttpServletResponse response)
-				throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
 		
 		@RequestMapping(value="/communityUpdate.do", method=RequestMethod.POST)
 		public ModelAndView communityUpdate(MultipartHttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
@@ -355,6 +358,34 @@ import jakarta.servlet.http.HttpSession;
 		    redirectAttributes.addFlashAttribute("message", "리뷰가 수정되었습니다.");
 		    return new ModelAndView("redirect:/community/communityDetail.do?r_id=" + r_id);
 		}
+		
+		@RequestMapping(value="/blackBoardUpdate.do", method=RequestMethod.POST)
+		public ModelAndView blackBoardUpdate(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		    HttpSession session = request.getSession();
+		    String current_id = (String) session.getAttribute("current_id");
+		    
+		    if (current_id == null) {
+		        redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
+		        return new ModelAndView("redirect:/member/loginForm.do");
+		    }
+		    
+		    String b_id = request.getParameter("b_id");
+		    String b_title = request.getParameter("b_title");
+		    String b_content = request.getParameter("b_content");
+		    
+		    BlackBoardVO blackBoardVO = new BlackBoardVO();
+		    blackBoardVO.setB_id(b_id);
+		    blackBoardVO.setB_title(b_title);
+		    blackBoardVO.setB_content(b_content);
+		    blackBoardVO.setM_id(current_id);  // 작성자 id (필요시 검증용)
+		    
+		    // 수정 처리
+		    communityService.updateBlackBoard(blackBoardVO);
+		    
+		    redirectAttributes.addFlashAttribute("message", "고충방 글이 수정되었습니다.");
+		    return new ModelAndView("redirect:/community/blackBoardDetail.do?b_id=" + b_id);
+		}
+
 		@RequestMapping(value="/communityDelete.do", method=RequestMethod.POST)
 		public ModelAndView communityDelete(@RequestParam("r_id") String r_id, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
 		    HttpSession session = request.getSession();
@@ -375,6 +406,12 @@ import jakarta.servlet.http.HttpSession;
 		    communityService.deleteReview(r_id);
 		    redirectAttributes.addFlashAttribute("message", "리뷰가 삭제되었습니다.");
 		    return new ModelAndView("redirect:/community/communityList.do");
+		}
+		@Override
+		public ModelAndView communityUpdateForm(HttpServletRequest request, HttpServletResponse response)
+				throws Exception {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 

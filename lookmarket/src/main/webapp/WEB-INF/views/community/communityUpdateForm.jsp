@@ -7,6 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>리뷰 수정하기</title>
+    <link href="${contextPath}/resources/css/community.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="form-container">

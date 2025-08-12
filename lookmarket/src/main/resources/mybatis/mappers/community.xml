@@ -31,6 +31,12 @@
 			SELECT * FROM blackboard
 		]]>
 	</select>
+	
+	<select id="blackBoardDetail" parameterType="int" resultMap="blackBoardResult">
+	    <![CDATA[
+	    SELECT * FROM blackboard WHERE b_id = #{b_id}
+	    ]]>
+	</select>
 
 	<select id="communityList" resultMap="reviewResult">
 		<![CDATA[
@@ -38,12 +44,13 @@
 		]]>
 	</select>
 	
-	<select id="communityDetail" parameterType="int" resultType="reviewVO">
+	<select id="communityDetail" parameterType="int" resultMap="reviewResult">
 		<![CDATA[
 			SELECT * FROM review WHERE r_id=#{r_id}
 		]]>
 	</select>
 	
+	<!-- 조회수 증가 -->
 	<update id="upHit" parameterType="int">
 		<![CDATA[
 			UPDATE review
@@ -52,6 +59,13 @@
 			WHERE r_id = #{r_id}
 		]]>
 	</update>
+	
+	<update id="upBlackHit" parameterType="String">
+	    UPDATE blackboard
+	    SET b_hit = b_hit + 1
+	    WHERE b_id = #{b_id}
+	</update>
+	
 	<insert id="insertReview" parameterType="com.lookmarket.community.vo.ReviewVO">
     INSERT INTO review (
         m_id,
@@ -89,6 +103,15 @@
         	r_filetype = COALESCE(#{r_filetype}, '')
     	WHERE r_id = #{r_id}
 	</update>
+	
+	<update id="updateBlackBoard" parameterType="com.lookmarket.community.vo.BlackBoardVO">
+	    UPDATE blackboard
+	    SET
+	        b_title = #{b_title},
+	        b_content = #{b_content}
+	    WHERE b_id = #{b_id}
+	</update>
+	
 	<delete id="deleteReview" parameterType="int">
     	DELETE FROM review WHERE r_id = #{r_id}
 	</delete>

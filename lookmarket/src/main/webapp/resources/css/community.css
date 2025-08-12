@@ -11,13 +11,17 @@ textarea{height:200px;resize:vertical}
 .form-buttons input[type="submit"]:hover,.form-buttons a:hover{background-color:#254a9a}
 
 /* 고충방 상세 */
-.detail-container{width:800px;margin:50px auto;padding:30px;border:1px solid #ccc;border-radius:10px;background-color:#fefefe}
-.detail-title{font-size:24px;font-weight:bold;margin-bottom:10px}
-.meta-info{font-size:14px;color:#666;margin-bottom:15px}
-.board-content{font-size:16px;line-height:1.6;white-space:pre-wrap}
-.back-btn{margin-top:30px;text-align:center}
-.back-btn a{padding:8px 16px;background-color:#3366cc;color:#fff;text-decoration:none;border-radius:5px}
-.back-btn a:hover{background-color:#254a9a}
+.detail-container { width: 800px; margin: 50px auto; padding: 30px; border: 1px solid #ccc; border-radius: 10px; background-color: #fefefe; }
+.detail-title { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
+.meta-info { font-size: 14px; color: #666; margin-bottom: 15px; }
+.board-content { font-size: 16px; line-height: 1.6; white-space: pre-wrap; }
+.back-btn { margin-top: 30px; text-align: center; }
+.back-btn a { padding: 8px 16px; background-color: #3366cc; color: #fff; text-decoration: none; border-radius: 5px; }
+.back-btn a:hover { background-color: #254a9a; }
+.update-btn-wrap { text-align: right; margin-bottom: 20px; }
+.update-btn { text-decoration: none; background-color: #3366cc; color: white; padding: 10px 20px; border-radius: 6px; font-weight: 600; transition: background-color 0.3s ease; }
+.update-btn:hover { background-color: #254a9a; }
+
 
 /* 고충방 리스트*/
 body{font-family:'맑은 고딕',sans-serif;margin:30px;background-color:#f9f9f9}
@@ -31,14 +35,16 @@ a{color:#333;text-decoration:none}
 a:hover{text-decoration:underline}
 
 /* 고충방 수정*/
-.edit-container{width:800px;margin:50px auto;padding:30px;border:1px solid #ccc;border-radius:10px;background-color:#fefefe}
-.edit-title{font-size:24px;font-weight:bold;margin-bottom:20px}
-label{display:block;margin-top:15px;font-weight:bold}
-input[type="text"],textarea,select{width:100%;padding:8px;margin-top:5px;border-radius:5px;border:1px solid #ccc;font-size:16px;box-sizing:border-box}
-textarea{height:150px;resize:vertical}
-.btn-group{margin-top:30px;text-align:center}
-button,.back-btn a{padding:10px 20px;margin:0 10px;background-color:#3366cc;color:#fff;border:none;border-radius:5px;cursor:pointer;text-decoration:none;font-size:16px}
-button:hover,.back-btn a:hover{background-color:#254a9a}
+.edit-container { max-width: 600px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.edit-title { font-size: 1.8em; font-weight: 700; color: #3366cc; margin-bottom: 25px; border-bottom: 2px solid #3366cc; padding-bottom: 10px; }
+label { display: block; margin-top: 15px; font-weight: 600; color: #444; }
+input[type="text"], textarea, select { width: 100%; padding: 10px 12px; margin-top: 6px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em; box-sizing: border-box; font-family: inherit; resize: vertical; }
+textarea { min-height: 120px; }
+.btn-group { margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px; }
+.btn-group button, .btn-group a { background-color: #3366cc; color: white; padding: 12px 25px; border: none; border-radius: 6px; font-weight: 600; text-decoration: none; cursor: pointer; transition: background-color 0.3s ease; font-size: 1em; }
+.btn-group button:hover, .btn-group a:hover { background-color: #254a9a; }
+.btn-group a { display: inline-block; line-height: normal; }
+
 
 /* 리뷰 등록*/
 .form-container{width:600px;margin:50px auto;padding:30px;border:1px solid #ccc;border-radius:10px;background-color:#fafafa}
