@@ -8,12 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <title>회원 목록</title>
-    <style>
-        .table th, .table td {
-            vertical-align: middle;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="${contextPath}/resources/css/member.css"/>
+
 </head>
 <body>
     <div class="container mt-5">

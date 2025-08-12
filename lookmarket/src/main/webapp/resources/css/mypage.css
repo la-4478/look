@@ -1,0 +1,40 @@
+/* 위시리스트 */
+.product-card { border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 20px; text-align: center; transition: box-shadow 0.3s; height: 100%; }
+.product-card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); } 
+.product-image { height: 160px; object-fit: cover; width: 100%; border-radius: 5px; } 
+.product-name { font-weight: bold; margin-top: 10px; }
+.product-price { color: #d9534f; margin-top: 5px; font-size: 16px; }
+.btn-small { padding: 4px 8px; font-size: 12px; }
+.top-right { text-align: right; margin-bottom: 15px; } 
+    
+/* 주문 결과 */
+body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+.order-result { max-width: 600px; margin: auto; background: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 6px; }
+.order-result h2 { margin-top: 0; font-size: 20px; margin-bottom: 15px; text-align: center; font-weight: bold; color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+.order-result table { width: 100%; border-collapse: collapse; } 
+.order-result th, .order-result td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+.order-result th { background-color: #f9f9f9; width: 35%; font-weight: bold; color: #333; }
+
+/* 내가 쓴 리뷰 목록 */
+body { font-family: '맑은 고딕', sans-serif; margin: 20px; background-color: #f9f9f9; }
+.news-list { display: flex; flex-wrap: wrap; gap: 20px; }
+.news-item { background-color: #fff; width: 260px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 5px #ccc; overflow: hidden; display: flex; flex-direction: column; }
+.news-image { width: 100%; height: 150px; object-fit: cover; background-color: #3366cc; color: white; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.news-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.news-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; height: 48px; overflow: hidden; line-height: 1.4em; }
+.news-date { font-size: 12px; color: #666; margin-bottom: 10px; }
+.btn-view { background-color: #0077cc; color: white; text-align: center; padding: 8px 0; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; display: block; }
+.btn-view:hover { background-color: #005fa3; }
+.star-rating { color: gold; font-size: 18px; margin-bottom: 8px; }
+
+/* 내 주문 내역 */
+
+body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px;}
+.order-history { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+h2 { text-align: center; color: #333; margin-bottom: 20px;}
+table { width: 100%; border-collapse: collapse;}
+th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd;}
+th { background-color: #f1f1f1; font-weight: bold; color: #333;}
+a.detail-link { color: #007bff; text-decoration: none;}
+a.detail-link:hover { text-decoration: underline;}
+.no-orders { text-align: center; padding: 40px 0; color: #888;}

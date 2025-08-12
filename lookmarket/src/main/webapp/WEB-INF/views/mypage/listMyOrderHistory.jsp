@@ -7,52 +7,8 @@
 <head>
   <meta charset="UTF-8" />
   <title>나의 주문내역</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      padding: 20px;
-    }
-    .order-history {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #f1f1f1;
-      font-weight: bold;
-      color: #333;
-    }
-    a.detail-link {
-      color: #007bff;
-      text-decoration: none;
-    }
-    a.detail-link:hover {
-      text-decoration: underline;
-    }
-    .no-orders {
-      text-align: center;
-      padding: 40px 0;
-      color: #888;
-    }
-  </style>
+  <link rel="stylesheet" href="${contextPath}/resources/css/mypage.css"/>
+
 </head>
 <body>
 

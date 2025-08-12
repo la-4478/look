@@ -10,14 +10,8 @@
 <meta charset="UTF-8">
 <title>장바구니</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-.qty-btn {
-    padding: 2px 6px;
-    margin: 0 2px;
-    font-size: 14px;
-    cursor: pointer;
-}
-</style>
+<link rel="stylesheet" href="${contextPath}/resources/css/cartorder.css"/>
+
 <script>
 const contextPath = "${contextPath}";
 
@@ -151,7 +145,7 @@ function fn_order_all_cart_goods() {
                         <td>${item.g_stock}</td>
                         <td>
                             <button class="qty-btn" onclick="changeQty('${item.c_id}', -1, ${item.g_stock})">-</button>
-                            <input type="number" id="qty-${item.c_id}" class="qty-input" value="${item.c_qty}" min="1" max="${item.g_stock}" readonly style="width:40px; text-align:center;">
+                            <input class="qty-id" type="number" id="qty-${item.c_id}" class="qty-input" value="${item.c_qty}" min="1" max="${item.g_stock}" readonly >
                             <button class="qty-btn" onclick="changeQty('${item.c_id}', 1, ${item.g_stock})">+</button>
                         </td>
                         <td class="delivery" id="delivery-${item.c_id}" data-delivery="${item.g_delivery_price}">
@@ -161,7 +155,7 @@ function fn_order_all_cart_goods() {
                             <fmt:formatNumber value="${(item.g_price * item.c_qty) + item.g_delivery_price}" type="number" />원
                         </td>
                         <td>
-                            <button onclick="delete_cart_goods('${item.c_id}')" style="background-color:#f44336;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">삭제</button>
+                            <button class="c-button" onclick="delete_cart_goods('${item.c_id}')">삭제</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -195,7 +189,7 @@ function fn_order_all_cart_goods() {
 
 <br><br>
 
-<button type="button" onclick="fn_order_all_cart_goods()" style="width:100px;height:40px;background-color:#4CAF50;color:white;border:none;border-radius:5px;cursor:pointer;font-size:16px;">
+<button class="o-button" type="button" onclick="fn_order_all_cart_goods()">
     주문하기
 </button>
 

@@ -7,44 +7,12 @@
 <head>
     <meta charset="UTF-8">
     <title>주변상권 정보 검색</title>
+    <link rel="stylesheet" href="${contextPath}/resources/css/sijang.css"/>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
-        }
-        .form-container {
-            max-width: 700px;
-            margin: auto;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 15px;
-        }
-        select, input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-        }
-        .btn-search {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #2c7be5;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .btn-search:hover {
-            background-color: #1a5dc2;
-        }
+
     </style>
 </head>
-<body>
+<body  class="nearby">
 
 <div class="form-container">
     <h2>주변상권 정보 검색</h2>

@@ -7,15 +7,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>시장봐조 메인화면</title>
-  	<style>
-    	#carouselExampleAutoplaying .carousel-inner {
-      		height: 550px;
-    	}
-    	#carouselExampleAutoplaying .carousel-item img {
-      		object-fit: cover;
-      		height: 550px;
-    	}
-  	</style>
+	<link rel="stylesheet" href="${contextPath}/resources/css/main2.css"/>
 </head>
 <body>
 	<div class="container mt-4">

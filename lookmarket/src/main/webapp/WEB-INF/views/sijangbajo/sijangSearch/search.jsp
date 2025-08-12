@@ -9,20 +9,7 @@
 	<title>전통시장 찾기</title>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c5158108310c9846cda26b7ac500c0a2c5158108310c9846cda26b7ac500c0a2"></script>
-	<style>
-	    body {font-family: Arial, sans-serif;padding: 20px;}
-	    label {margin-right: 10px;}
-	    select, input[type="text"] {padding: 5px; margin-right: 20px;}
-	    body {font-family: Arial, sans-serif; padding: 20px; }
-	    label {margin-right: 10px;}
-	    select, input[type="text"] {padding: 5px; margin-right: 20px;}
-	    .market-item {display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #e0e0e0;}
-	    .market-name {width: 33%; font-weight: bold;}
-	    .market-name a {text-decoration: none; color: black;}
-	    .market-name a:hover {color: #007bff;}
-	    .market-address {width: 34%;}
-	    .market-empty {width: 33%;}
-	</style>
+	<link rel="stylesheet" href="${contextPath}/resources/css/sijang.css"/>
 <script>
     function changeSigungu() {
         var sido = document.getElementById("sido").value;
@@ -159,7 +146,7 @@
 	}
 </script>
 </head>
-<body>
+<body class="search">
 	<form id="searchForm">
     	<label for="sido">시도*</label>
     	<select name="sido" id="sido" onchange="changeSigungu()" required>

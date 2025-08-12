@@ -9,55 +9,9 @@
 <meta charset="UTF-8" />
 <title>주문 결과</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<style>
-body {
-	font-family: Arial, sans-serif;
-	background: #f9f9f9;
-	padding: 20px;
-}
-
-.order-result {
-	max-width: 600px;
-	margin: auto;
-	background: #fff;
-	border: 1px solid #ddd;
-	padding: 20px;
-	border-radius: 6px;
-}
-
-.order-result h2 {
-	margin-top: 0;
-	font-size: 20px;
-	margin-bottom: 15px;
-	text-align: center;
-	font-weight: bold;
-	color: #333;
-	border-bottom: 2px solid #007bff;
-	padding-bottom: 10px;
-}
-
-.order-result table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-.order-result th, .order-result td {
-	padding: 10px 8px;
-	text-align: left;
-	border-bottom: 1px solid #eee;
-	font-size: 14px;
-}
-
-.order-result th {
-	background-color: #f9f9f9;
-	width: 35%;
-	font-weight: bold;
-	color: #333;
-}
-</style>
+<link rel="stylesheet" href="${contextPath}/resources/css/cartorder.css"/>
 </head>
-<body>
+<body class="c">
 
 	<div class="order-result">
 		<h2>주문 결과</h2>

@@ -6,61 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <title>클린업체 검색</title>
-    <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            padding: 20px;
-        }
-        .search-form {
-            width: 80%;
-            margin: 0 auto 30px auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .search-form label {
-            margin-bottom: 10px;
-        }
-        .search-form select,
-        .search-form input[type="text"] {
-            padding: 8px;
-            font-size: 14px;
-        }
-        .search-form input[type="submit"] {
-            padding: 8px 16px;
-            background-color: #5c7cfa;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        table {
-            width: 80%;
-            margin: 0 auto;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #e0e7ff;
-        }
-
-        caption {
-            font-size: 1.4em;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="${contextPath}/resources/css/sijang.css"/>
 </head>
-<body>
+<body class="clean">
 
     <h2 style="text-align:center;">청결 우수 매장 검색</h2>
 

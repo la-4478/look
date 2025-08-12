@@ -178,7 +178,7 @@
 <body>
     <h3>회원가입</h3>
     <form action="${contextPath}/member/addBusiness.do" method="POST" id="form">
-        <input type="hidden" name="m_role" value="3" />
+        <input type="hidden" name="m_role" value="2" />
 
         <table>
             <tbody>

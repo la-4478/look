@@ -7,41 +7,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>장보고 메인</title>
-  <style>
-    .quick-menu img {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 8px;
-    }
-
-    .quick-menu .col {
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .product-card img {
-      height: 150px;
-      object-fit: cover;
-    }
-
-    .product-card {
-      border: 1px solid #eee;
-      padding: 10px;
-      border-radius: 8px;
-    }
-
-    .tab-button {
-      margin-right: 10px;
-    }
-    .carousel-item img {
-  	  height: 400px; /* 원하는 높이로 조절 */
-      object-fit: cover; /* 이미지가 잘리지 않고 꽉 차도록 */
-      width: 1200px; /* 가로는 꽉 채움 */
-    }
-    
-  </style>
+  <link rel="stylesheet" href="${contextPath}/resources/css/main2.css"/>
 </head>
 <body>
 
