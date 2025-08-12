@@ -1,11 +1,13 @@
 package com.lookmarket.goods.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.lookmarket.goods.vo.GoodsVO;
@@ -17,17 +19,18 @@ public class GoodsDAOImpl implements GoodsDAO{
 	private SqlSession sqlSession;
 	
 	@Override
-	public List<GoodsVO> selectAllGoodsList() throws Exception{
+	public List<GoodsVO> selectAllGoodsList() throws DataAccessException{
 		return sqlSession.selectList("mapper.goods.selectAllGoodsList");
 	}
 	
+	
 	@Override
-	public GoodsVO selectGoodsDetail(int g_id) throws Exception{
+	public GoodsVO selectGoodsDetail(int g_id) throws DataAccessException{
 		return sqlSession.selectOne("mapper.goods.selectGoodsDetail", g_id);
 	}
 
 	@Override
-	public int addNewGoods(Map<String, Object> newGoodsMap) {
+	public int addNewGoods(Map<String, Object> newGoodsMap) throws DataAccessException{
 	    sqlSession.insert("mapper.goods.insertGoods", newGoodsMap);
 	    Object pk = newGoodsMap.get("g_id");
 	    if (pk == null) throw new IllegalStateException("생성된 g_id를 못 받았습니다. keyProperty/keyColumn/paramType 확인!");
@@ -36,32 +39,63 @@ public class GoodsDAOImpl implements GoodsDAO{
 	
 
 	@Override
-	public void insertGoodsImageFile(ArrayList<ImageFileVO> imageFileList) {
+	public void insertGoodsImageFile(ArrayList<ImageFileVO> imageFileList) throws DataAccessException{
 	    for (ImageFileVO imageFileVO : imageFileList) {
 	        sqlSession.insert("mapper.goods.insertGoodsImageFile", imageFileVO);
 	    }
 	}
 	
     @Override
-    public List<ImageFileVO> selectGoodsImages(int g_id) throws Exception {
+    public List<ImageFileVO> selectGoodsImages(int g_id) throws DataAccessException {
         return sqlSession.selectList("mapper.goods.selectMainimagefile", g_id);
     }
 
 	@Override
-	public int updateGoods(GoodsVO goods) {
+	public int updateGoods(GoodsVO goods)throws DataAccessException {
 		return sqlSession.update("mapper.goods.updateGoods", goods);
 	}
 	
 	@Override
-	public int deleteGoodsImages(int g_id) {
+	public int deleteGoodsImages(int g_id)throws DataAccessException {
 	    return sqlSession.delete("mapper.goods.deleteGoodsImages", g_id);
 	}
 	
 	@Override
-	public int deleteGoods(int g_id) {
+	public int deleteGoods(int g_id)throws DataAccessException {
 	    return sqlSession.delete("mapper.goods.deleteGoods", g_id);
 	}
+
+	@Override
+	public List<GoodsVO> myGoodsList(String m_id) throws DataAccessException {
+		return sqlSession.selectList("mapper.goods.myGoodsList", m_id);
+	}
+
+	@Override
+	public List<GoodsVO> selectAllMyGoodsList(String category, String m_id) {
+	    System.out.println("DAO 진입");
+	    System.out.println("받아온 카테고리 값 : " + category);
+	    System.out.println("받아온 아이디 값 : " + m_id);
+
+	    Map<String,Object> params = new HashMap<>();
+	    params.put("mId", m_id);
+
+	    Integer catCode = toCategoryCode(category); // fresh→1, processed→2…
+	    params.put("category", catCode);            // null이면 전체
+
+	    return sqlSession.selectList("mapper.goods.selectAllMyGoodsList", params);
+	}
+
+	private Integer toCategoryCode(String category) {
+	    if (category == null || category.isBlank() || "all".equalsIgnoreCase(category)) return null;
+	    switch (category) {
+	    	case "all" : return 0; 
+	        case "fresh":     return 1;
+	        case "processed": return 2;
+	        case "living":    return 3;
+	        case "fashion":   return 4;
+	        case "local":     return 5;
+	        default:
+	            try { return Integer.valueOf(category); } catch (NumberFormatException e) { return null; }
+	    }
+	}
 }
-
-
-

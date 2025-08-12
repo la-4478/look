@@ -100,4 +100,25 @@ public class MemberDAOImpl implements MemberDAO{
 		sqlSession.update("mapper.admin.reject", m_id);
 		
 	}
+
+	@Override
+	public void revers(String m_id) throws DataAccessException {
+		sqlSession.update("mapper.admin.revers", m_id);
+		
+	}
+
+	@Override
+	public String status(String m_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.member.status", m_id);
+	}
+
+	@Override
+	public MemberVO findMemberById(String m_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.member.selectMemberById", m_id);
+	}
+
+	@Override
+	public BusinessVO findBusinessByMemberId(String m_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.member.selectBusinessByMemberId", m_id);
+	}
 }

@@ -15,6 +15,7 @@ public interface AdminController {
 	public ModelAndView accountList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView accountDetail(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView approvalForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	String approveBusiness(String m_id, RedirectAttributes ra) throws Exception;
-	String rejectBusiness(String m_id, RedirectAttributes ra) throws Exception;
+	public String approveBusiness(String m_id, RedirectAttributes ra) throws Exception;
+	public String rejectBusiness(String m_id, RedirectAttributes ra) throws Exception;
+	public String reversBusiness(String m_id, RedirectAttributes ra) throws Exception;
 }

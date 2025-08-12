@@ -48,8 +48,6 @@ public class GoodsControllerImpl implements GoodsController{
 	@Autowired
 	private GoodsService goodsService;
 	@Autowired
-	private GoodsVO goodsVO;
-	@Autowired
 	private MemberService memberService;
 	
 	@Override

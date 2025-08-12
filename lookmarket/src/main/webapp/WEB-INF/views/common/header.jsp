@@ -11,126 +11,7 @@
 <head>
 <meta charset="UTF-8">
 <title>header</title>
-<style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-body {
-	background-color: white;
-}
-
-ul {
-	list-style: none;
-	padding: 0;
-	text-align: center;
-}
-
-a {
-	text-decoration: none;
-	color: black;
-}
-
-header {
-	position: fixed;
-	top: 0;
-	background-color: #fff;
-	margin: 0 auto;
-	width: 1296px;
-	height: 220px;
-	overflow: hidden;
-	z-index: 1000;
-}
-
-.navbar__menu {
-	display: flex;
-	justify-content: space-evenly;
-	gap: 40px;
-}
-
-.navbar__submenu {
-	margin-top: 10px;
-}
-
-header:hover {
-	height: 400px;
-}
-
-.contents {
-	width: 100%;
-	height: 500px;
-	margin-top: 50px;
-}
-
-.navbar__div nav.navbar {
-	position: relative;
-	z-index: 1001;
-}
-
-.menu {
-	position: relative;
-	padding: 0px 10px;
-}
-
-.menu__title {
-	display: block;
-	padding: 4px 15px;
-	font-weight: bold;
-}
-
-.menu__title:hover {
-	border-radius: 5px;
-}
-
-#head_link {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0px 20px;
-	width: 100%;
-}
-
-#head_link form {
-	display: flex;
-	align-items: center;
-	height: 40px;
-}
-
-#head_link input[type="search"] {
-	height: 32px;
-	font-size: 14px;
-	padding: 0 10px;
-}
-
-#head_link button {
-	height: 32px;
-	padding: 0 10px;
-	font-size: 14px;
-	margin-left: 5px;
-}
-
-#head_link ul {
-	display: flex;
-	align-items: center;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-#head_link ul li {
-	font-size: 14px;
-}
-
-.bg-sijangbajo {
-	background-color: #f0eaff;
-}
-
-.bg-jangbogo {
-	background-color: #eaffea;
-}
-</style>
+<link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css"><!-- 해더 CSS 파일 -->
 </head>
 <body>
 	<header>
@@ -184,12 +65,15 @@ header:hover {
 									<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 2}">
+									<li><a href="${contextPath}/business/businessMain.do">사업자
+											페이지</a></li>
 									<li><a href="#">상품관리</a></li>
 									<li><a href="#">주문관리</a></li>
 									<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
-									<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
+									<li><a
+										href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
 									<li><a href="#">상품관리</a></li>
 									<li><a href="#">회원관리</a></li>
 									<li><a href="${contextPath}/chatbot/chatbot.do">회계관리</a></li>

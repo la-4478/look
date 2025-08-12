@@ -51,7 +51,7 @@ public class MemberControllerImpl implements MemberController {
 
 	    if (check_id.equals("true")) {
 	        memberVO = memberService.login(m_id, m_pw);
-
+	       BusinessVO businessVO = memberService.findBusinessByMemberId(m_id);
 	        // 탈퇴회원 복구 처리
 	        if (memberVO != null && memberVO.getM_outdate() != null) {
 	            redirectAttributes.addFlashAttribute("message", "계정을 복구합니다.");
@@ -65,11 +65,15 @@ public class MemberControllerImpl implements MemberController {
 	            HttpSession session = request.getSession();
 	            session.setAttribute("current_id", m_id);
 	            session.setAttribute("isLogOn", true);
+	            session.setAttribute("loginUserId", m_id);
+	            session.setAttribute("loginUserPw", m_pw);
 	            session.setAttribute("memberInfo", memberVO);
-
+	            if(businessVO != null && businessVO.getBm_status() != null) {
+	            session.setAttribute("busiInfo", businessVO);
+	            }
 	            // 🔹 로그인 전 원래 가려던 페이지로 리다이렉트
 	            String redirectUrl = (String) session.getAttribute("redirectAfterLogin");
-	            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+	            if (redirectUrl != null && !redirectUrl.isEmpty()) {	
 	            	System.out.println("저장된 페이지 url : " + redirectUrl);
 	                session.removeAttribute("redirectAfterLogin");
 	                mav.setViewName("redirect:" + redirectUrl);

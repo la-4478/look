@@ -22,6 +22,11 @@
 		update business_member set bm_status = 3 where m_id = #{m_id}
 	</update>
 	
+	<!-- 사업자 승인 되돌리기-->
+	<update id="revers" parameterType="String">
+		update business_member set bm_status = 1 where m_id = #{m_id}
+	</update>
+	
 	
 </mapper>
 

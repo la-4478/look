@@ -101,6 +101,10 @@ m_jibun_address, m_namuji_address, m_level, m_role, m_joindate)
     WHERE m_id = #{value}
     LIMIT 1
   		</select>
+  		
+	 <select id="selectMemberById" parameterType="string" resultType="MemberVO">
+	 	select * from member where m_id = #{mId}
+	 </select>
   	<resultMap id="businessResult" type="businessVO">
 		<result property="m_id" column="m_id" />
 		<result property="bm_name" column="bm_name" />
@@ -118,5 +122,13 @@ m_jibun_address, m_namuji_address, m_level, m_role, m_joindate)
   </select>
   <select id="findbusinessMember2" parameterType="String" resultType="businessVO">
   	select * from business_member where m_id = #{m_id}
+  </select>
+  <select id="status" parameterType="String" resultType="String">
+  	select bm_status from business_member where m_id = #{m_id}
+  </select>
+  <select id="selectBusinessByMemberId" parameterType="string" resultMap="businessResult">
+    SELECT m_id, bm_name, bm_reg_num, bm_type, bm_status
+    FROM business_member
+    WHERE m_id = #{m_id}
   </select>
 </mapper>

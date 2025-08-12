@@ -83,4 +83,25 @@ public class MemberServiceImpl implements MemberService{
 		memberDAO.reject(m_id);
 		
 	}
+
+	@Override
+	public void revers(String m_id) throws Exception {
+		memberDAO.revers(m_id);
+		
+	}
+
+	@Override
+	public String status(String m_id) throws Exception {
+		return memberDAO.status(m_id);
+	}
+
+	@Override
+	public MemberVO findMemberById(String m_id) throws Exception {
+		return memberDAO.findMemberById(m_id);
+	}
+
+	@Override
+	public BusinessVO findBusinessByMemberId(String m_id) throws Exception {
+		return memberDAO.findBusinessByMemberId(m_id);
+	}
 }

@@ -19,8 +19,15 @@ public class GoodsVO {
 	private int i_id;
 	private String i_filename;
 	private String i_filetype;
+	private String cre_m_id;
 	
 	
+	public String getCre_m_id() {
+		return cre_m_id;
+	}
+	public void setCre_m_id(String cre_m_id) {
+		this.cre_m_id = cre_m_id;
+	}
 	public int getG_id() {
 		return g_id;
 	}

@@ -49,6 +49,11 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 	
 	@Override
+	public List<GoodsVO> getMyGoodsByCategory(String category, String m_id) throws Exception {
+	    System.out.println("서비스 진입 / 카테고리: " + category + " / 아이디: " + m_id);
+	    return goodsDAO.selectAllMyGoodsList(category, m_id);
+	}
+	@Override
 	public GoodsVO getGoodsDetail(int g_id) throws Exception{
 		return goodsDAO.selectGoodsDetail(g_id);
 	}
@@ -128,7 +133,7 @@ public class GoodsServiceImpl implements GoodsService {
 
 	@Override
 	@Transactional
-	public int deleteGoods(int gId) {
+	public int deleteGoods(int gId) throws Exception {
 		try {
             GoodsVO found = goodsDAO.selectGoodsDetail(gId);
             if (found == null) return 0;
@@ -142,6 +147,12 @@ public class GoodsServiceImpl implements GoodsService {
 		int deleted = goodsDAO.deleteGoods(gId);
 		
 		return deleted;
+	}
+	
+	@Override
+	public List<GoodsVO>myGoodsList(String m_id) throws Exception{
+		return goodsDAO.myGoodsList(m_id);
+		
 	}
 }
 

@@ -27,20 +27,18 @@
 				</c:when>
 				<c:when test="${sideMenu_option == 'myPage_business'}">
 					<li>
-						<h3>마이페이지</h3>
+						<h3>사업자 메뉴</h3>
 						<ul>
 							<li><a href="${contextPath}/business/mypage/mypageBusinessInfo.do">내정보</a></li>
-							<li><a href="${contextPath}/business/jangbogo/businessGoodsList.do">상품관리</a></li>
-							<li><a href="${contextPath}/business/order/businessOrderList.do">주문관리</a></li>
-							<li><a href="${contextPath}/business/member/myMemberList.do">회원관리</a></li>
-							<li><a href="${contextPath}/business/mypage/myCommunityList.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
+							<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 							<li><a href="${contextPath}/business/mypage/myBlackBoardList.do">사장님고충방</a></li>
 						</ul>
 					</li>
 				</c:when>
 				<c:when test="${sideMenu_option == 'myPage_admin'}">
 					<li>
-						<h3>마이페이지</h3>
+						<h3>관리자 메뉴</h3>
 						<ul>
 							<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">내정보</a></li>
 							<li><a href="${contextPath}/admin/jangbogo/allGoodsList.do">상품관리</a></li>

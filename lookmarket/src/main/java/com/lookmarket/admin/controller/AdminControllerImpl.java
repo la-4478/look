@@ -198,4 +198,12 @@ public class AdminControllerImpl implements AdminController{
 	    return "redirect:/admin/ApprovalList.do";
 	}
 	
+	@Override
+	@RequestMapping(value="/reversBusiness.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String reversBusiness(@RequestParam("m_id") String m_id, RedirectAttributes ra)throws Exception{
+		memberService.revers(m_id);
+		ra.addFlashAttribute("msg", "사업자 승인 되돌리기 성공: " + m_id);
+		return "redirect:/admin/ApprovalList.do";
+	}
+	
 }

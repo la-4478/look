@@ -19,5 +19,9 @@ public interface MemberService {
 	public List<BusinessVO> findbusinessMember2(String memberId) throws Exception;
 	public void approve(String m_id) throws Exception;
 	public void reject(String m_id) throws Exception;
+	public void revers(String m_id) throws Exception;
+	public String status(String m_id) throws Exception;
+	public MemberVO findMemberById(String mId) throws Exception;
+	public BusinessVO findBusinessByMemberId(String mId) throws Exception;
 	
 }
