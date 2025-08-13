@@ -11,26 +11,26 @@
 <body>
 <div class="form-container">
     <h2>이벤트 등록</h2>
-    <form action="${contextPath}/admin/insertPromotionBoard.do" method="post" enctype="multipart/form-data">
+    <form action="${contextPath}/event/insertPromotionPost.do" method="post" enctype="multipart/form-data">
         
         <div class="form-group">
             <label for="title">이벤트 제목</label>
-            <input type="text" id="title" name="title" required />
+            <input type="text" id="promoTitle" name="promoTitle" required />
         </div>
 
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" name="content" rows="5" required></textarea>
+            <textarea id="promoContent" name="promoContent" rows="5" required></textarea>
         </div>
 
         <div class="form-group">
             <label for="start_date">이벤트 시작일</label>
-            <input type="date" id="start_date" name="start_date" required />
+            <input type="date" id="promoStartDate" name="promoStartDate" required />
         </div>
 
         <div class="form-group">
             <label for="end_date">이벤트 종료일</label>
-            <input type="date" id="end_date" name="end_date" required />
+            <input type="date" id="promoEndDate" name="promoEndDate" required />
         </div>
 
         <!-- 쿠폰 연동 -->
