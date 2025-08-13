@@ -11,23 +11,44 @@
 <body>
 <div class="form-container">
     <h2>이벤트 등록</h2>
-    <form action="insertReview.do" method="post" enctype="multipart/form-data">
-        <!-- 리뷰 제목 -->
+    <form action="${contextPath}/admin/insertPromotionBoard.do" method="post" enctype="multipart/form-data">
+        
         <div class="form-group">
-            <label for="r_title">이벤트 제목</label>
-            <input type="text" id="r_title" name="r_title" required />
+            <label for="title">이벤트 제목</label>
+            <input type="text" id="title" name="title" required />
         </div>
 
-        <!-- 내용 -->
         <div class="form-group">
-            <label for="r_content">내용</label>
-            <textarea id="r_content" name="r_content" rows="5" required></textarea>
+            <label for="content">내용</label>
+            <textarea id="content" name="content" rows="5" required></textarea>
         </div>
 
-        <!-- 이미지 업로드 -->
         <div class="form-group">
-            <label for="r_filename">이미지 업로드</label>
-            <input type="file" id="r_filename" name="r_filename" accept="image/*" />
+            <label for="start_date">이벤트 시작일</label>
+            <input type="date" id="start_date" name="start_date" required />
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">이벤트 종료일</label>
+            <input type="date" id="end_date" name="end_date" required />
+        </div>
+
+        <!-- 쿠폰 연동 -->
+        <div class="form-group">
+            <label for="promo_id">연동할 쿠폰 (선택)</label>
+            <select id="promo_id" name="promo_id">
+                <option value="">-- 선택 안 함 --</option>
+                <c:forEach var="promo" items="${couponList}">
+                    <option value="${promo.promo_id}">
+                        [${promo.promo_code}]
+                        ${promo.promo_discount_type == 1 ? '정액할인' : promo.promo_discount_type == 2 ? '퍼센트할인' : '무료배송'}
+                    </option>
+                </c:forEach>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="imageFile">이미지 업로드</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*" />
         </div>
 
         <div class="submit-btn">
