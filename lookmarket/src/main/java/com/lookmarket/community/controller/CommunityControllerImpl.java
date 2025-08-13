@@ -147,6 +147,12 @@ import jakarta.servlet.http.HttpSession;
 		    String layout = "common/layout";
 		    mav.setViewName(layout);
 		    
+		    // 현재 로그인 사용자 ID 가져오기
+		    String current_id = (String) session.getAttribute("current_id");
+
+		    // 세션에 저장 (JSP에서 EL로 ${currentUserId} 접근할 수 있도록)
+		    session.setAttribute("currentUserId", current_id);
+		    
 		    BlackBoardVO blackBoard = communityService.blackBoardDetail(b_id);
 		    if(blackBoard != null) {
 		    	communityService.upBlackHit(b_id);
@@ -407,12 +413,39 @@ import jakarta.servlet.http.HttpSession;
 		    redirectAttributes.addFlashAttribute("message", "리뷰가 삭제되었습니다.");
 		    return new ModelAndView("redirect:/community/communityList.do");
 		}
-		@Override
-		public ModelAndView communityUpdateForm(HttpServletRequest request, HttpServletResponse response)
-				throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
+		
+		@RequestMapping(value="/blackBoardDelete.do", method=RequestMethod.POST)
+		public ModelAndView blackBoardDelete(@RequestParam("b_id") String b_id, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+		    HttpSession session = request.getSession();
+		    String current_id = (String) session.getAttribute("current_id");
 
+		    if (current_id == null) {
+		        redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
+		        return new ModelAndView("redirect:/member/loginForm.do");
+		    }
+
+		    if (b_id == null || b_id.trim().isEmpty()) {
+		        redirectAttributes.addFlashAttribute("message", "잘못된 요청입니다.");
+		        return new ModelAndView("redirect:/community/blackBoardList.do");
+		    }
+
+		    int bIdInt;
+		    try {
+		        bIdInt = Integer.parseInt(b_id);
+		    } catch (NumberFormatException e) {
+		        redirectAttributes.addFlashAttribute("message", "잘못된 게시글 번호입니다.");
+		        return new ModelAndView("redirect:/community/blackBoardList.do");
+		    }
+
+		    BlackBoardVO blackBoard = communityService.blackBoardDetail(b_id);
+		    if (blackBoard == null || !current_id.equals(blackBoard.getM_id())) {
+		        redirectAttributes.addFlashAttribute("message", "삭제 권한이 없습니다.");
+		        return new ModelAndView("redirect:/community/blackBoardDetail.do?b_id=" + b_id);
+		    }
+
+		    communityService.deleteBlackBoard(bIdInt);
+		    redirectAttributes.addFlashAttribute("message", "고충방 글이 삭제되었습니다.");
+		    return new ModelAndView("redirect:/community/blackBoardList.do");
+		}
 
 }
