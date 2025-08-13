@@ -13,5 +13,5 @@ public interface CartService {
 	public void addCartItem(CartVO cartVO) throws Exception;
 	public void updateQty(int c_id, int c_qty) throws Exception;
 	public void deleteCartItem(int c_id) throws Exception;
-	public void placeOrder(String m_id) throws Exception;
+	public List<CartVO> placeOrder(String m_id) throws Exception;
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.order.vo.PayVO;
 
 @Repository("orderDAO")
 public class OrderDAOImpl implements OrderDAO {
@@ -50,7 +51,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}	
     @Override
     public Integer selectCartIdByMemberAndGoods(CartVO cartVO) throws DataAccessException {
-        return sqlSession.selectOne("mapper.cart.selectCartIdByMemberAndGoods", cartVO);
+        return sqlSession.selectOne("mapper.cart.removeCartItem", cartVO);
     }
 
     @Override
@@ -86,8 +87,19 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 	
 	@Override
-	public List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception {
+	public List<OrderItemVO> getCartItemsByMemberId(String m_id) throws DataAccessException {
 	    return sqlSession.selectList("mapper.order.selectCartItemsByMemberId", m_id);
+	}
+
+	@Override
+	public void insertPay(PayVO payVO) throws DataAccessException {
+		sqlSession.insert("mapper.order.addNewpay", payVO);
+		
+	}
+
+	@Override
+	public Integer removeCartItem(CartVO cartVO) throws DataAccessException {
+		return sqlSession.selectOne("mapper.order.removeCartItem", cartVO);
 	}
 
 }

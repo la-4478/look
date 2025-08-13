@@ -224,8 +224,9 @@ public class MemberControllerImpl implements MemberController {
 			redirectAttributes.addFlashAttribute("message", "회원가입이 완료되었습니다. 로그인해주세요.");
 			return "redirect:/member/loginForm.do";
 		}catch(Exception e) {
-			
-			redirectAttributes.addFlashAttribute("message", "작업 중 오류가 발생했습니다. 다시 시도해주세요.");
+			e.printStackTrace();
+			System.out.println("오류 내용 : " + e.getMessage());
+			redirectAttributes.addFlashAttribute("message", "작업 중 오류가 발생했습니다. 다시 시도해주세요." + e.getMessage());
 			return "redirect:/member/memberForm.do";
 		}
 	}

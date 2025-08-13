@@ -13,6 +13,59 @@
     <meta charset="UTF-8" />
     <title>${goods.g_name} - 상품 상세</title>
 <link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
+<script>
+  // 페이지 어디든 contextPath 쓰고 있으면 맞춰 사용
+  var ctx = "${contextPath}"; // 없으면 ""로 둬도 됨
+
+  // (선택) Spring Security CSRF 쓰면 메타태그에서 읽어 헤더 세팅
+  var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+  var csrfToken  = $('meta[name="_csrf"]').attr('content');
+
+  // 폼 submit 가로채서 AJAX로 전송
+  $(document).on('submit', 'form[action$="/cart/addCartItem.do"]', function (e) {
+    e.preventDefault();
+
+    const $form = $(this);
+    const gId   = $form.find('input[name="g_id"]').val();
+    const qty   = $form.find('input[name="qty"]').val() || 1; // 기본 1
+
+    // 유효성 체크 살짝
+    if (!gId) { alert("상품ID가 없습니다."); return; }
+    if (Number(qty) <= 0) { alert("수량은 1 이상이어야 합니다."); return; }
+
+    $.ajax({
+      url: ctx + "/cart/addCartItem.do",
+      method: "POST",
+      data: {
+        g_id: gId,
+        c_qty: qty // ★ qty → c_qty로 매핑해서 보냄 (CartVO 바인딩용)
+      },
+      beforeSend: function (xhr) {
+        if (csrfHeader && csrfToken) xhr.setRequestHeader(csrfHeader, csrfToken);
+      },
+      success: function (res) {
+        // 컨트롤러가 "success" 문자열을 리턴
+        if (typeof res === 'string' && res.trim() === 'success') {
+          alert("장바구니에 담겼습니다 🛒");
+          // 필요하면 장바구니 배지 갱신, 모달 열기 등 여기서 처리
+          // ex) $('#cartCount').text(parseInt($('#cartCount').text()) + Number(qty));
+        } else {
+          alert("담기 처리에 실패했습니다. 다시 시도해 주세요.");
+          console.warn("addCartItem response:", res);
+        }
+      },
+      error: function (xhr) {
+        if (xhr.status === 401) {
+          alert("로그인이 필요합니다.");
+          // location.href = ctx + "/member/loginForm.do";
+          return;
+        }
+        alert("서버 오류로 실패했습니다.");
+        console.error("addCartItem error:", xhr);
+      }
+    });
+  });
+</script>
 </head>
 <body>
 <div class="detail-container">

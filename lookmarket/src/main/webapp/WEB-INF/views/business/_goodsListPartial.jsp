@@ -47,6 +47,13 @@
         <td>판매종료</td>
         </c:if>
         <td>
+          <a href="${contextPath}/jangbogo/goodsUpdateForm.do?g_id=${goods.g_id}" class="btn btn-warning btn-small">수정</a>
+           <form action="${contextPath}/jangbogo/goodsDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말 영구 삭제하시겠습니까? 복구 불가입니다.');">
+			<input type="hidden" name="g_id" value="${goods.g_id}">
+			  <button type="submit" class="btn btn-danger btn-small">삭제</button>
+			</form>
+
+         </td>
       </tr>
     </c:forEach>
   </tbody>

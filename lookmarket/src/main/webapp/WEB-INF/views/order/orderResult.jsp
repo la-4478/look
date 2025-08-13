@@ -19,39 +19,43 @@
 		<table>
 			<tr>
 				<th>주문자 이름</th>
-				<td><c:out value="${orderInfo.oi_name}" /></td>
+				<td><c:out value="${orderInfo.oiName}" /></td>
 			</tr>
 			<tr>
 				<th>수령자 이름</th>
-				<td><c:out value="${orderInfo.oi_receiver_name}" /></td>
+				<td><c:out value="${orderInfo.oiReceiverName}" /></td>
 			</tr>
 			<tr>
 				<th>수령자 연락처</th>
-				<td><c:out value="${orderInfo.oi_receiver_phone}" /></td>
+				<td><c:out value="${orderInfo.oiReceiverPhone}" /></td>
 			</tr>
 			<tr>
 				<th>배송 주소</th>
-				<td><c:out value="${orderInfo.oi_delivery_address}" /></td>
+				<td><c:out value="${orderInfo.oiDeliveryAddress}" /></td>
+			</tr>
+			<tr>
+				<th>상세주소</th>
+				<td><c:out value="${orderInfo.oi_deli_namuji_address}"/></td>
 			</tr>
 			<tr>
 				<th>배송 메시지</th>
-				<td><c:out value="${orderInfo.oi_delivery_message}" /></td>
+				<td><c:out value="${orderInfo.oiDeliveryMessage}" /></td>
 			</tr>
 			<tr>
 				<th>배송비</th>
-				<td><c:out value="${orderInfo.oi_delivery_price}" /> 원</td>
+				<td><c:out value="${orderInfo.oiDeliveryPrice}" /> 원</td>
 			</tr>
 			<tr>
 				<th>상품 총액</th>
-				<td><c:out value="${orderInfo.oi_total_goods_price}" /> 원</td>
+				<td><c:out value="${orderInfo.oiTotalGoodsPrice}" /> 원</td>
 			</tr>
 			<tr>
 				<th>할인 금액</th>
-				<td><c:out value="${orderInfo.oi_sale_price}" /> 원</td>
+				<td><c:out value="${orderInfo.oiSalePrice}" /> 원</td>
 			</tr>
 			<tr>
 				<th>주문일자</th>
-				<td><c:out value="${orderInfo.oi_date}" /></td>
+				<td><c:out value="${orderInfo.oiDate}" /></td>
 			</tr>
 
 
@@ -63,11 +67,11 @@
 				<th>수량</th>
 				<th>가격</th>
 			</tr>
-			<c:forEach var="product" items="${orderProductList}">
+			<c:forEach var="item" items="${itemVO}">
 				<tr>
-					<td><c:out value="${product.ot_goods_name}" /></td>
-					<td><c:out value="${product.ot_goods_qty}" /></td>
-					<td><fmt:formatNumber value="${product.ot_goods_price}"
+					<td><c:out value="${item.otGoodsName}" /></td>
+					<td><c:out value="${item.otGoodsQty}" /></td>
+					<td><fmt:formatNumber value="${item.otGoodsPrice}"
 							pattern="#,###" /> 원</td>
 				</tr>
 			</c:forEach>

@@ -34,7 +34,8 @@
 			<div class="row row-cols-1 row-cols-md-3 g-4">
 				<div class="col">
 					<div class="card">
-						<img src="${contextPath}/resources/image/banner_onnuri.jpg" class="card-img-top" alt="banner_onnuri1" />
+						<a href="https://onnurigift.or.kr/">
+							<img src="${contextPath}/resources/image/banner_onnuri.jpg" class="card-img-top" alt="banner_onnuri1" /></a>
 					</div>
 				</div>
 				<div class="col">

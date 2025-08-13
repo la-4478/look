@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 	}	
     @Override
     public void addNewpay(PayVO payVO) throws Exception{
-        payDAO.insertPay(payVO);
+        orderDAO.insertPay(payVO);
         
     }
     
@@ -49,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
         cartVO.setM_id(m_id);
         cartVO.setG_id(G_id);
 
-        Integer cart_id = orderDAO.selectCartIdByMemberAndGoods(cartVO);
+        Integer cart_id = orderDAO.removeCartItem(cartVO);
         if (cart_id != null) {
             orderDAO.deleteCartGoods(cart_id);
         } else {

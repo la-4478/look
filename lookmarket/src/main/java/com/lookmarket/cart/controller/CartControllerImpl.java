@@ -79,6 +79,7 @@ public class CartControllerImpl extends BaseController implements CartController
 	    try {
 	        String current_id = (String) request.getSession().getAttribute("current_id");
 	        cartVO.setM_id(current_id); // 세션에서 회원 ID 설정
+	        cartVO.setC_qty(1);
 	        cartService.addCartItem(cartVO);
 	        return ResponseEntity.ok("success");
 	    } catch (Exception e) {

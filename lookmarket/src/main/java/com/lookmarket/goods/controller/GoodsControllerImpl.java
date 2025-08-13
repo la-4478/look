@@ -129,6 +129,16 @@ public class GoodsControllerImpl implements GoodsController{
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 	    return mav;
+	}	
+
+	@RequestMapping(value="/busigoodsAddForm.do", method=RequestMethod.GET)
+	public ModelAndView busigoodsAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		String layout = "common/layout";
+		mav.setViewName(layout);
+		String viewName = (String)request.getAttribute("viewName");
+		mav.addObject("viewName", viewName);
+	    return mav;
 	}
 	
 	@Override
@@ -256,6 +266,122 @@ public class GoodsControllerImpl implements GoodsController{
 
 	    return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
 	}
+	
+	//상품 등록 로직
+
+	@RequestMapping(value="/busigoodsAdd.do", method=RequestMethod.POST)
+	public ResponseEntity<String> buisgoodsAdd(MultipartHttpServletRequest multipartRequest,
+	                                       HttpServletResponse response) throws Exception {
+	    multipartRequest.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html; charset=UTF-8");
+
+	    HttpHeaders responseHeaders = new HttpHeaders();
+	    responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+
+	    Map<String, Object> newGoodsMap = new HashMap<>();
+
+	    // 1) 파라미터 수집 (정수/문자 분리)
+	    Enumeration<?> enu = multipartRequest.getParameterNames();
+	    // 매퍼/테이블과 일치하는 정수형 파라미터들만 여기 넣어줘
+	    Set<String> intParams = Set.of("g_category","g_price","g_stock","g_status","g_delivery_price");
+
+	    while (enu.hasMoreElements()) {
+	        String name = (String) enu.nextElement();
+	        String value = multipartRequest.getParameter(name);
+	        if (value == null || value.isBlank()) {
+	            newGoodsMap.put(name, null);
+	            continue;
+	        }
+	        if (intParams.contains(name)) {
+	            newGoodsMap.put(name, Integer.parseInt(value));
+	        } else {
+	            newGoodsMap.put(name, value);
+	        }
+	    }
+
+	    // 2) 등록자 id
+	    HttpSession session = multipartRequest.getSession();
+	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+	    if (memberVO == null) {
+	        String msg = "<script>alert('로그인이 필요합니다.'); history.back();</script>";
+	        return new ResponseEntity<>(msg, responseHeaders, HttpStatus.OK);
+	    }
+	    String reg_id = memberVO.getM_id();
+	    newGoodsMap.put("reg_id", reg_id); // goods 테이블에 reg_id 컬럼이 있으면 매퍼에도 반영되어야 함
+
+	    // 3) 파일 임시 저장 (C:/upload/temp)
+	    List<ImageFileVO> imageFileList = new ArrayList<>();
+	    Iterator<String> fileNames = multipartRequest.getFileNames();
+
+	    Path tempDir = Paths.get(CURR_IMAGE_REPO_PATH, "temp");
+	    File tempDirFile = tempDir.toFile();
+	    if (!tempDirFile.exists()) tempDirFile.mkdirs();
+
+	    while (fileNames.hasNext()) {
+	        MultipartFile multipartFile = multipartRequest.getFile(fileNames.next());
+	        if (multipartFile == null || multipartFile.isEmpty()) continue;
+
+	        String originalName = multipartFile.getOriginalFilename();
+	        if (originalName == null) continue;
+
+	        String ext = "";
+	        int dot = originalName.lastIndexOf(".");
+	        if (dot >= 0) ext = originalName.substring(dot).toLowerCase(); // .jpg …
+
+	        String newFileName = UUID.randomUUID().toString() + ext;
+	        File destFile = new File(tempDirFile, newFileName);
+	        multipartFile.transferTo(destFile); // 실제 파일 저장
+
+	        ImageFileVO imageFileVO = new ImageFileVO();
+	        imageFileVO.setI_filename(newFileName);
+	        imageFileVO.setI_filetype(ext.matches("\\.(jpg|jpeg|png|gif|webp|bmp)") ? "image" : "etc");
+	        imageFileList.add(imageFileVO);
+	    }
+
+	    if (!imageFileList.isEmpty()) {
+	        // ✅ 매퍼가 goods.i_filename을 기대하므로 키 이름을 i_filename으로 맞춘다
+	        newGoodsMap.put("i_filename", imageFileList.get(0).getI_filename());
+	        newGoodsMap.put("imageFileList", imageFileList);
+	    }
+
+	    // 4) 서비스 호출 → 생성된 PK로 폴더 이동
+	    String message;
+	    try {
+	        int goods_num = goodsService.addNewGoods(newGoodsMap); // ✅ 생성된 PK(g_id)
+
+	        // 파일 이동: temp → C:/upload/{goods_num}/
+	        File goodsDir = Paths.get(CURR_IMAGE_REPO_PATH, String.valueOf(goods_num)).toFile();
+
+	        for (ImageFileVO img : imageFileList) {
+	            String fn = img.getI_filename();
+	            File src = new File(tempDirFile, fn);
+	            if (src.exists()) {
+	                FileUtils.moveFileToDirectory(src, goodsDir, true);
+	            }
+	        }
+
+	        message  = "<script>";
+	        message += "alert('등록성공.');";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/business/busienssGoodsList.do?category=all';";
+	        message += "</script>";
+
+	    } catch (Exception e) {
+	        // 실패 시 temp에 남은 파일들 삭제
+	        for (ImageFileVO img : imageFileList) {
+	            File f = new File(tempDirFile, img.getI_filename());
+	            if (f.exists()) f.delete();
+	        }
+	        e.printStackTrace();
+
+	        message  = "<script>";
+	        message += "alert('등록실패');";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/jangbogo/goodsAddForm.do';";
+	        message += "</script>";
+	    }
+
+	    return new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+	}
+
 
 	@Override
 	@RequestMapping(value="/goodsUpdate.do", method=RequestMethod.POST)

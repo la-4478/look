@@ -22,7 +22,6 @@
     <div class="alert alert-info">${msg}</div>
 </c:if>
 <div class="container mt-4">
-    <h2>상품 목록</h2>
     <c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
     <div class="top-right">
         <a href="${contextPath}/jangbogo/goodsAddForm.do" class="btn btn-primary">상품 등록</a>
@@ -72,9 +71,12 @@
 										<button id="wishBtn_${goods.g_id}" data-gid="${goods.g_id}"
 											<c:if test="${empty m_id}">disabled class="disabled" title="로그인 후 이용 가능"</c:if>>
 											<c:choose>
-												<c:when
-													test="${myWishList != null && myWishList.contains(goods.g_id)}">❤️</c:when>
-												<c:otherwise>🤍</c:otherwise>
+												<c:when test="${myWishList != null && myWishList.contains(goods.g_id)}">
+												<img src="${contextPath}/resources/image/like.png" alt="찜목록 추가하기" >
+												</c:when>
+												<c:otherwise>
+												<img src="${contextPath}/resources/image/like_on.png" alt="찜목록 추가되있음" >
+												</c:otherwise>
 											</c:choose>
 										</button>
 
@@ -108,31 +110,33 @@
                 </c:choose>
             </c:set>
 
-            <h4>${categoryName} 상품 목록</h4>
-            
+            <h1>상품 목록</h1>
+            <h4>*이미지 클릭시 제품 상세 페이지로 이동합니다.</h4>
             <div class="row">
                 <c:forEach var="goods" items="${goodsList}">
                 <c:set var="firstImage" value="${fn:split(goods.i_filename, ',')[0]}" />
                 
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
-                            <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${goods.i_filename}" alt="${goods.g_name}" class="product-image" />
-                            
+                        <a href="${contextPath}/jangbogo/goodsDetail.do?g_id=${goods.g_id}">
+                            <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${goods.i_filename}" alt="${goods.g_name}" class="product-image" /></a>
                             <div class="product-name">${goods.g_name}</div>
                             <div class="product-price">
                                 <fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩"/>
                             </div>
 
                             <div class="mt-2 d-flex justify-content-center align-items-center gap-2">
-                                <a href="${contextPath}/jangbogo/goodsDetail.do?g_id=${goods.g_id}" class="btn btn-primary btn-small">상세보기</a>
-                                
                                 <button
                                     class="wish-btn"
                                     data-gid="${goods.g_id}"
                                     <c:if test="${empty m_id}">disabled class="disabled" title="로그인 후 이용 가능"</c:if>>
 										<span class="wish-icon"> <c:choose>
-												<c:when test="${fn:contains(myWishList, goods.g_id)}">❤️</c:when>
-												<c:otherwise>🤍</c:otherwise>
+												<c:when test="${fn:contains(myWishList, goods.g_id)}">
+													<img src="${contextPath}/resources/image/like.png" alt="찜목록 추가하기" >
+												</c:when>
+												<c:otherwise>
+													<img src="${contextPath}/resources/image/like_on.png" alt="찜목록 추가되있음" >
+												</c:otherwise>
 											</c:choose>
 										</span>
 									</button>
@@ -147,15 +151,7 @@
 					                  </form>
                                 </div>
                             </c:if>
-                            <c:if test="${businessStatus == '2' || businessStatus eq 'APPROVED'}">
-                                <div class="mt-2">
-                                    <a href="${contextPath}/jangbogo/goodsUpdateForm.do?g_id=${goods.g_id}" class="btn btn-warning btn-small">수정</a>
-                                     <form action="${contextPath}/jangbogo/goodsDelete.do" method="post" style="display:inline;" onsubmit="return confirm('정말 영구 삭제하시겠습니까? 복구 불가입니다.');">
-					                    <input type="hidden" name="g_id" value="${goods.g_id}">
-					                    <button type="submit" class="btn btn-danger btn-small">삭제</button>
-					                  </form>
-                                </div>
-                            </c:if>
+
                         </div>
                     </div>
                 </c:forEach>

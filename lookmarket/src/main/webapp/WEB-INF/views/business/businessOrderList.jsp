@@ -17,7 +17,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>내 상품 주문 목록</title>
-  <link rel="stylesheet" href="${contextPath}/resources/css/orders.css"/>
+  <link rel="stylesheet" href="${contextPath}/resources/css/business.css"/>
 </head>
 <body>
   <main class="wrap" id="content" role="main">

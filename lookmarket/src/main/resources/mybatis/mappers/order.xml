@@ -19,6 +19,7 @@
             oi_receiver_phone,
             oi_delivery_address,
             oi_delivery_message,
+            oi_deli_namuji_address,
             oi_date
         ) VALUES (
             #{mId},
@@ -29,6 +30,7 @@
             #{oiReceiverName},
             #{oiReceiverPhone},
             #{oiDeliveryAddress},
+            #{oi_deli_namuji_address},
             #{oiDeliveryMessage},
             NOW()
         )
@@ -125,17 +127,5 @@
         WHERE m_id = #{m_id}
           AND g_id = #{g_id}
     </delete>
-    
-    <select id="selectCartItemsByMemberId" parameterType="string" resultType="OrderItemVO">
-		SELECT
-		g.g_id AS ot_g_id,
-		g.g_price AS ot_goods_price,
-		NULL AS ot_sale_price,
-		g.g_name AS ot_goods_name,
-		c.c_qty AS ot_goods_qty
-		FROM cart c
-		JOIN goods g ON c.g_id = g.g_id
-		WHERE c.m_id = #{m_id}
-	</select>
-
+	
 </mapper>

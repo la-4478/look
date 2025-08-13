@@ -178,7 +178,7 @@
 <body>
     <h3>회원가입</h3>
     <form action="${contextPath}/member/addMember.do" method="POST" id="form">
-        <input type="hidden" name="m_role" value="<%= m_role %>" />
+        <input type="hidden" name="m_role" value="1" />
 
         <table>
             <tbody>

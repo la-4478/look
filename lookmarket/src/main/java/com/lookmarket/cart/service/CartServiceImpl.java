@@ -34,7 +34,7 @@ public class CartServiceImpl implements CartService{
 	}
 	
 	@Override
-	public void placeOrder(String m_id) throws Exception {
+	public List<CartVO> placeOrder(String m_id) throws Exception {
 	    // 1. 장바구니 내역 가져오기
 	    List<CartVO> cartList = cartDAO.selectCartByMemberId(m_id);
 	    
@@ -56,6 +56,7 @@ public class CartServiceImpl implements CartService{
 
 	    // 5. 장바구니 비우기
 	    cartDAO.clearCart(m_id);
+		return cartList;
 	}
 
 }

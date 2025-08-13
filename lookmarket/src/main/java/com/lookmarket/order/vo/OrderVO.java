@@ -14,6 +14,7 @@ public class OrderVO {
     private String oiReceiverPhone;       // 수령자 휴대폰번호
     private String oiDate;                // 주문 일자
     private String oiDeliveryAddress;     // 배송 주소
+    private String oi_deli_namuji_address; //나머지 주소
     private String oiDeliveryMessage;     // 배송 메시지
 
     // Getter & Setter
@@ -93,4 +94,23 @@ public class OrderVO {
     public void setOiDeliveryMessage(String oiDeliveryMessage) {
         this.oiDeliveryMessage = oiDeliveryMessage;
     }
+	public int getoId() {
+		return oId;
+	}
+	public void setoId(int oId) {
+		this.oId = oId;
+	}
+	public String getmId() {
+		return mId;
+	}
+	public void setmId(String mId) {
+		this.mId = mId;
+	}
+	public String getOi_deli_namuji_address() {
+		return oi_deli_namuji_address;
+	}
+	public void setOi_deli_namuji_address(String oi_deli_namuji_address) {
+		this.oi_deli_namuji_address = oi_deli_namuji_address;
+	}
+    
 }

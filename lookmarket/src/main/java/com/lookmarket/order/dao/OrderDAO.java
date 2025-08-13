@@ -7,6 +7,7 @@ import org.springframework.dao.DataAccessException;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.order.vo.PayVO;
 
 public interface OrderDAO {
 	public List<OrderVO> listMyOrderGoods(OrderVO orderBean) throws DataAccessException;
@@ -17,6 +18,8 @@ public interface OrderDAO {
     public void deleteCartGoods(int cart_id) throws DataAccessException;
 	public void addOrderItem(OrderItemVO itemVO);
 	public void insertOrder(String memberId, List<CartVO> cartList) throws DataAccessException;
-	List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception;
+	List<OrderItemVO> getCartItemsByMemberId(String m_id) throws DataAccessException;
+	public void insertPay(PayVO payVO) throws DataAccessException;
+	public Integer removeCartItem(CartVO cartVO) throws DataAccessException;
 
 }

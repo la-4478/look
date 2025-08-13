@@ -93,24 +93,59 @@ function delete_cart_goods(c_id) {
 }
 
 function fn_order_all_cart_goods() {
-    if (confirm("장바구니의 모든 상품을 주문하시겠습니까?")) {
-        $.ajax({
-            type: "POST",
-            url: contextPath + "/cart/placeOrder.do",
-            success: function(response) {
-                if (response === "success") {
-                    alert("주문이 완료되었습니다.");
-                    window.location.href = contextPath + "/order/orderForm.do";
-                } else {
-                    alert("주문 처리에 실패했습니다.");
-                }
-            },
-            error: function() {
-                alert("주문 처리 중 오류가 발생했습니다.");
-            }
-        });
-    }
-}
+	  if (!confirm("장바구니의 모든 상품을 주문하시겠습니까?")) return;
+
+	  const ids    = Array.from(document.querySelectorAll('input[name="goodsId"]'));
+	  const qtys   = Array.from(document.querySelectorAll('input[name="goodsQty"]'));
+	  const names  = Array.from(document.querySelectorAll('input[name="goodsName"]'));
+	  const prices = Array.from(document.querySelectorAll('input[name="goodsPrice"]'));
+
+	  if (ids.length === 0) { alert("상품이 없습니다."); return; }
+	  if (ids.length !== qtys.length || ids.length !== names.length || ids.length !== prices.length) {
+	    alert("입력 배열 길이가 맞지 않습니다. name과 테이블 구조를 확인하세요.");
+	    return;
+	  }
+
+	  // 디버깅 출력
+	  ids.forEach((el, i) => {
+	    console.log(`row${i}`, {
+	      goodsId: el.value, goodsQty: qtys[i].value, goodsName: names[i].value, goodsPrice: prices[i].value
+	    });
+	  });
+
+	  // 동적 폼 생성해서 배열 형태로 전송 (goodsId[], goodsQty[] ...)
+	  const form = document.createElement('form');
+	  form.method = 'POST';
+	  form.action = contextPath + '/order/orderAllCartGoods.do';
+
+	  const append = (name, val) => {
+	    const input = document.createElement('input');
+	    input.type = 'hidden';
+	    input.name = name;
+	    input.value = val;
+	    form.appendChild(input);
+	  };
+
+	  for (let i = 0; i < ids.length; i++) {
+	    append('goodsId[]',   ids[i].value);
+	    append('goodsQty[]',  qtys[i].value);
+	    append('goodsName[]', names[i].value);
+	    append('goodsPrice[]',prices[i].value);
+	  }
+
+	  // 총계도 넘기고 싶으면 아래처럼 dom에서 뽑아 붙이기
+	  const totalGoodsNum = document.getElementById('p_totalGoodsNum')?.textContent.replace(/[^\d]/g,'') || '0';
+	  const totalDelivery = document.getElementById('p_totalDeliveryPrice')?.textContent.replace(/[^\d]/g,'') || '0';
+	  const finalTotal    = document.getElementById('p_final_totalPrice')?.textContent.replace(/[^\d]/g,'') || '0';
+	  append('totalGoodsNum', totalGoodsNum);
+	  append('totalDeliveryPrice', totalDelivery);
+	  append('finalTotalPrice', finalTotal);
+
+	  document.body.appendChild(form);
+	  form.submit();
+	}
+
+
 </script>
 </head>
 <body>
@@ -138,14 +173,19 @@ function fn_order_all_cart_goods() {
                             <a href="${contextPath}/goods/goodsDetail.do?g_id=${item.g_id}">
                                 ${item.g_name}
                             </a>
+                            <input type="hidden" name="goodsId" value="${item.g_id }">
+                            <input type="hidden" name="goodsName" value="${item.g_name }">
                         </td>
                         <td class="price" id="price-${item.c_id}" data-price="${item.g_price}">
                             ${item.g_price}원
+                            <input type="hidden" name="goodsPrice" value="${item.g_price}">
                         </td>
-                        <td>${item.g_stock}</td>
+         				
+                        <td>${item.g_stock}
+                        </td>
                         <td>
                             <button class="qty-btn" onclick="changeQty('${item.c_id}', -1, ${item.g_stock})">-</button>
-                            <input class="qty-id" type="number" id="qty-${item.c_id}" class="qty-input" value="${item.c_qty}" min="1" max="${item.g_stock}" readonly >
+                            <input class="qty-id qty-input" type="number" id="qty-${item.c_id}" name="goodsQty" value="${item.c_qty}" min="1" max="${item.g_stock}" readonly >
                             <button class="qty-btn" onclick="changeQty('${item.c_id}', 1, ${item.g_stock})">+</button>
                         </td>
                         <td class="delivery" id="delivery-${item.c_id}" data-delivery="${item.g_delivery_price}">
@@ -167,24 +207,25 @@ function fn_order_all_cart_goods() {
 <br><br>
 
 <table class="list_view">
-    <tbody>
-        <tr class="fixed">
-            <td>총 상품수</td>
-            <td></td>
-            <td>총 배송비</td>
-            <td></td>
-            <td>최종 결제금액</td>
-        </tr>
-        <tr>
-            <td><p id="p_totalGoodsNum">${totalGoodsNum}개</p></td>
-            <td></td>
-            <td><p id="p_totalDeliveryPrice">${totalDeliveryPrice}원</p></td>
-            <td></td>
-            <td><p id="p_final_totalPrice">
-                <fmt:formatNumber value="${totalGoodsPrice + totalDeliveryPrice - totalDiscountedPrice}" type="number" />원
-            </p></td>
-        </tr>
-    </tbody>
+ <tfoot>
+    <tr class="fixed">
+      <td>총 상품수</td>
+      <td></td>
+      <td>총 배송비</td>
+      <td></td>
+      <td>최종 결제금액</td>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <td><p id="p_totalGoodsNum">개</p></td>
+      <td></td>
+      <td><p id="p_totalDeliveryPrice">원</p></td>
+      <td></td>
+      <td><p id="p_final_totalPrice">원</p></td>
+      <td colspan="2"></td>
+    </tr>
+  </tfoot>
+</table>
 </table>
 
 <br><br>
