@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lookmarket.event.dao.EventDAO">
+	<select id="selectPromotionPostList" resultType="com.lookmarket.event.vo.EventPostVO">
+	    SELECT
+		    post_id AS postId,
+		    promo_title AS promoTitle,
+		    promo_content AS promoContent,
+		    promo_banner_img AS promoBannerImg,
+		    promo_start_date AS promoStartDate,
+		    promo_end_date AS promoEndDate,
+		    promo_created_at AS promoCreatedAt,
+		    promo_status AS promoStatus
+		FROM promotion_post
+		ORDER BY promo_created_at DESC
+
+	</select>
+
+	<select id="selectPromotionPostById" parameterType="int" resultType="com.lookmarket.event.vo.EventPostVO">
+	    SELECT
+	        post_id AS postId,
+	        promo_title AS promoTitle,
+	        promo_content AS promoContent,
+	        promo_banner_img AS promoBannerImg,
+	        promo_start_date AS promoStartDate,
+	        promo_end_date AS promoEndDate,
+	        promo_created_at AS promoCreatedAt,
+	        promo_status AS promoStatus
+	    FROM promotion_post
+	    WHERE post_id = #{postId}
+	</select>
+
+    <insert id="insertPromotionPost" parameterType="com.lookmarket.event.vo.EventPostVO">
+        INSERT INTO promotion_post (
+            promo_title,
+            promo_content,
+            promo_banner_img,
+            promo_start_date,
+            promo_end_date,
+            promo_status
+        ) VALUES (
+            #{promoTitle},
+            #{promoContent},
+            #{promoBannerImg},
+            #{promoStartDate},
+            #{promoEndDate},
+            #{promoStatus}
+        )
+    </insert>
+
+</mapper>

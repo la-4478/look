@@ -18,15 +18,24 @@ html, body {
 	<div class="card" style="width: 400px;">
 		<div class="card-body">
 			<h3 class="card-title text-center mb-4">로그인</h3>
+			
+			<!-- form에 hidden 필드 추가 -->
 			<form action="${contextPath}/member/login.do" method="post">
 				<div class="mb-3">
 					<input type="text" name="m_id" class="form-control"
 						placeholder="아이디" required />
 				</div>
+				
 				<div class="mb-3">
 					<input type="password" name="m_pw" class="form-control"
 						placeholder="비밀번호" required />
 				</div>
+				
+				<!-- redirectUrl 파라미터가 있으면 hidden 필드로 넘김 -->
+				<c:if test="${not empty param.redirectUrl}">
+				    <input type="hidden" name="redirectUrl" value="${param.redirectUrl}" />
+				</c:if>
+				
 				<div class="d-grid gap-2 mb-3">
 					<button type="submit" class="btn btn-primary">로그인</button>
 					<button type="reset" class="btn btn-secondary">다시입력</button>
@@ -35,7 +44,7 @@ html, body {
 
 			<div class="mb-3 text-center">
 				<a
-					href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=0Kh9BAPo35nGcE_1Jbvx&redirect_uri=http://localhost:8090/lookmarket/member/naverCallback.do&state=lookmarket&auth_type=reauthenticate">
+					href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=0Kh9BAPo35nGcE_1Jbvx&redirect_uri=http://localhost:8090/lookmarket/member/naverCallback.do&state=lookmarket&auth_type=reauthenticate&redirectUrl=${param.redirectUrl}">
 					<img src="${contextPath}/resources/image/naverlogin.png"
 					alt="네이버 로그인" style="max-width: 100%; height: 50px;" />
 				</a>
