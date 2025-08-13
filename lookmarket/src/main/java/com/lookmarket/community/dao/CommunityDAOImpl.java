@@ -71,5 +71,9 @@ public class CommunityDAOImpl implements CommunityDAO{
 	public void upBlackHit(String b_id) throws Exception {
 	    sqlSession.update("mapper.community.upBlackHit", b_id);
 	}
+	@Override
+	public void deleteBlackBoard(int b_id) throws Exception {
+	    sqlSession.delete("mapper.community.deleteBlackBoard", b_id);
+	}
 
 }

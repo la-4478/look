@@ -1,5 +1,5 @@
 /* 고충방 글쓰기 */
-body{font-family:'맑은 고딕',sans-serif;background-color:#f9f9f9;padding:30px}
+body .blackwrite{font-family:'맑은 고딕',sans-serif;background-color:#f9f9f9;padding:30px}
 .write-container{width:800px;margin:0 auto;background-color:#fff;border:1px solid #ddd;padding:30px;border-radius:10px}
 h2{margin-bottom:20px;text-align:center}
 .form-group{margin-bottom:20px}

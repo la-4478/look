@@ -23,5 +23,6 @@ public interface CommunityDAO {
 	public BlackBoardVO blackBoardDetail(int b_id) throws Exception;
 	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
 	public void upBlackHit(String b_id) throws Exception;
+	public void deleteBlackBoard(int b_id) throws Exception;
 
 }
