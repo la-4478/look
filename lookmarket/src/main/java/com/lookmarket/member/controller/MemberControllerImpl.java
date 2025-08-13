@@ -41,10 +41,10 @@ public class MemberControllerImpl implements MemberController {
 	@Override
 	@RequestMapping(value="/login.do", method=RequestMethod.POST)
 	public ModelAndView login(@RequestParam("m_id") String m_id,
-	                          @RequestParam("m_pw") String m_pw,
-	                          HttpServletRequest request,
-	                          HttpServletResponse response,
-	                          RedirectAttributes redirectAttributes) throws Exception {
+            @RequestParam("m_pw") String m_pw,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            RedirectAttributes redirectAttributes) throws Exception {
 
 	    ModelAndView mav = new ModelAndView();
 	    String check_id = memberService.overlapped(m_id);
@@ -52,6 +52,7 @@ public class MemberControllerImpl implements MemberController {
 	    if (check_id.equals("true")) {
 	        memberVO = memberService.login(m_id, m_pw);
 	       BusinessVO businessVO = memberService.findBusinessByMemberId(m_id);
+	       
 	        // 탈퇴회원 복구 처리
 	        if (memberVO != null && memberVO.getM_outdate() != null) {
 	            redirectAttributes.addFlashAttribute("message", "계정을 복구합니다.");
@@ -71,15 +72,15 @@ public class MemberControllerImpl implements MemberController {
 	            if(businessVO != null && businessVO.getBm_status() != null) {
 	            session.setAttribute("busiInfo", businessVO);
 	            }
-	            // 🔹 로그인 전 원래 가려던 페이지로 리다이렉트
-	            String redirectUrl = (String) session.getAttribute("redirectAfterLogin");
-	            if (redirectUrl != null && !redirectUrl.isEmpty()) {	
-	            	System.out.println("저장된 페이지 url : " + redirectUrl);
-	                session.removeAttribute("redirectAfterLogin");
-	                mav.setViewName("redirect:" + redirectUrl);
+	            
+	         // 로그인 전 저장된 redirectUrl 확인
+	            String redirectPage = (String) session.getAttribute("redirectAfterLogin");
+	            session.removeAttribute("redirectAfterLogin");
+
+	            if (redirectPage != null && !redirectPage.isEmpty()) {
+	                mav.setViewName("redirect:" + redirectPage);
 	            } else {
-	            	System.out.println("페이지 저장되지 않음");
-	                mav.setViewName("redirect:/main/sijangbajoMain.do"); // 기본 페이지
+	                mav.setViewName("redirect:/main/sijangbajoMain.do");
 	            }
 
 	        } else {
@@ -96,7 +97,7 @@ public class MemberControllerImpl implements MemberController {
 	}
 	
 	@Override
-	@RequestMapping(value = "/naverCallback.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/naverCallback.do", method = RequestMethod.POST)
 	public String naverCallback(@RequestParam("code") String code, @RequestParam("state") String state, HttpSession session, Model model) throws Exception {
 		MemberVO naverMember = naverLoginService.getNaverUserInfo(code, state);
 		
@@ -113,7 +114,15 @@ public class MemberControllerImpl implements MemberController {
         		session.setAttribute("memberInfo", naverMember);
         		session.setAttribute("current_id", naverMember.getM_id());
         		
-        		return "redirect:/main/sijangbajoMain.do";
+        		// 로그인 전 저장된 redirectUrl이 있으면 이동
+                String redirectPage = (String) session.getAttribute("redirectAfterLogin");
+                if (redirectPage != null && !redirectPage.isEmpty()) {
+                    session.removeAttribute("redirectAfterLogin");
+                    return "redirect:" + redirectPage;
+                } else {
+                    // 기본 페이지 이동
+                    return "redirect:/main/sijangbajoMain.do";
+                }
         	}
         } else {
             model.addAttribute("message", "네이버 로그인에 실패했습니다.");
@@ -232,7 +241,7 @@ public class MemberControllerImpl implements MemberController {
 	
 	
 	@Override
-	@RequestMapping(value="/memberList.do", method=RequestMethod.POST)
+	@RequestMapping(value="/memberList.do", method={RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView memberList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
@@ -280,21 +289,33 @@ public class MemberControllerImpl implements MemberController {
 	}
 	
 	@Override
-	@RequestMapping(value={"/memberForm.do", "/loginForm.do", "/findIdForm.do", "/findPwForm.do", "/memberSelect.do", "/memberList.do", "/businessForm.do" }, method={RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//로그인창, 회원가입창 출력
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
-		session = request.getSession();
-		session.setAttribute("sideMenu", "hidden");
-		
-		return mav;
-		
-	}
+    @RequestMapping(value = {"/memberForm.do", "/loginForm.do", "/findIdForm.do", "/findPwForm.do", "/memberSelect.do", "/memberList.do", "/businessForm.do"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        HttpSession session = request.getSession();
+        ModelAndView mav = new ModelAndView();
+        String layout = "common/layout";
+        mav.setViewName(layout);
+        String viewName = (String) request.getAttribute("viewName");
+        mav.addObject("viewName", viewName);
+        
+        session = request.getSession();
+        session.setAttribute("sideMenu", "hidden");
+        
+     // loginForm.do 요청이면 원래 페이지 URL 저장
+        String requestURI = request.getRequestURI();
+        if (requestURI.contains("loginForm.do")) {
+            String redirectUrl = request.getParameter("redirectUrl");
+            if (redirectUrl == null || redirectUrl.isEmpty()) {
+                redirectUrl = request.getHeader("Referer"); // 이전 페이지 URL
+            }
+            // 로그인 폼 자기 자신으로 오는 경우 제외
+            if (redirectUrl != null && !redirectUrl.contains("loginForm.do")) {
+                session.setAttribute("redirectAfterLogin", redirectUrl);
+            }
+        }
+        
+        return mav;
+    }
 
 	@Override
 	@RequestMapping(value="/addBusiness.do", method={RequestMethod.POST,RequestMethod.GET})
