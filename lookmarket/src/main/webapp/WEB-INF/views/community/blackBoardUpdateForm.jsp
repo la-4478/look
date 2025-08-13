@@ -13,18 +13,18 @@
 <div class="edit-container">
     <div class="edit-title">사장님 고충방 수정하기</div>
 
-    <form action="${contextPath}/community/blackboardUpdate.do" method="post">
-        <input type="hidden" name="b_id" value="${board.b_id}" />
+    <form action="${contextPath}/community/blackBoardUpdate.do" method="post">
+        <input type="hidden" name="b_id" value="${blackBoard.b_id}" />
 
         <label for="b_title">제목</label>
-        <input type="text" id="b_title" name="b_title" value="${board.b_title}" required />
+        <input type="text" id="b_title" name="b_title" value="${blackBoard.b_title}" required />
 
         <label for="b_content">내용</label>
-        <textarea id="b_content" name="b_content" required>${board.b_content}</textarea>
+        <textarea id="b_content" name="b_content" required>${blackBoard.b_content}</textarea>
 
         <div class="btn-group">
             <button type="submit">수정 완료</button>
-            <a href="${contextPath}/community/blackBoardDetail.do?b_id=${board.b_id}">취소</a>
+            <a href="${contextPath}/community/blackBoardDetail.do?b_id=${blackBoard.b_id}">취소</a>
         </div>
     </form>
 </div>

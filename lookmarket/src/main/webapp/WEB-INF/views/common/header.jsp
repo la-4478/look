@@ -198,7 +198,7 @@
 											class="menu__title">상품보기</a>
 
 									</div>
-									<ul id="tipSybm1" class="navbar__submenu">
+									<ul id="tipSybm1" class="navbar__submenuu">
 										<li><a
 											href="${contextPath}/jangbogo/goodsList.do?category=all">전체보기</a></li>
 										<li><a
@@ -218,7 +218,7 @@
 										<a href="${contextPath}/event/promotionList.do"
 											class="menu__title">이벤트★</a>
 									</div>
-									<ul id="tipSybm1" class="navbar__submenu">
+									<ul id="tipSybm1" class="navbar__submenuu">
 										<li><a
 											href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션
 												목록</a></li>
@@ -229,7 +229,7 @@
 										<a href="${contextPath}/community/communityList.do"
 											class="menu__title">커뮤니티</a>
 									</div>
-									<ul id="tipSybm1" class="navbar__submenu">
+									<ul id="tipSybm1" class="navbar__submenuu">
 										<li><a href="${contextPath}/community/communityList.do">커뮤니티
 												리뷰목록</a></li>
 										<li><a
@@ -247,7 +247,7 @@
 										<a href="${contextPath}/order/orderForm.do"
 											class="menu__title">주문</a>
 									</div>
-									<ul id="tipSybm1" class="navbar__submenu">
+									<ul id="tipSybm1" class="navbar__submenuu">
 										<li><a href="${contextPath}/order/orderForm.do"
 											class="menu__title">주문정보</a></li>
 										<li><a href="${contextPath}/order/orderResult.do"

@@ -121,5 +121,9 @@
     	INSERT INTO blackboard (m_id, b_title, b_content, b_date, b_hit)
     	VALUES (#{m_id}, #{b_title}, #{b_content}, NOW(), #{b_hit})
 	</insert>
+	<delete id="deleteBlackBoard" parameterType="int">
+	    DELETE FROM blackboard
+	    WHERE b_id = #{b_id}
+	</delete>
 
 </mapper>

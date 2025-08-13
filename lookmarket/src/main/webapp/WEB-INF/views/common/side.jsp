@@ -85,7 +85,12 @@
 						<h3>커뮤니티</h3>
 						<ul>
 							<li><a href="${contextPath}/community/communityList.do">커뮤니티</a></li>
+							<!-- 로그인한 사용자만 리뷰쓰기 메뉴 표시 -->
+							<c:if test="${not empty sessionScope.current_id}">
+								<li><a href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
+							</c:if>
 						</ul>
+					</li>
 				</c:when>
 				<c:when test="${sideMenu_option == 'community_admin'}">
 					<li>
