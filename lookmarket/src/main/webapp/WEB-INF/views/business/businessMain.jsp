@@ -69,7 +69,7 @@
     <h3>운영</h3>
     <div class="actions toolbar">
       <a class="btn primary"
-         href="${contextPath}/jangbogo/goodsAddForm.do"<c:if test="${!isApproved}">disabled</c:if>>상품 등록</a>
+         href="${contextPath}/jangbogo/busigoodsAddForm.do"<c:if test="${!isApproved}">disabled</c:if>>상품 등록</a>
       <a class="btn" href="${contextPath}/jangbogo/goodsList.do?mine=true">내 상품 관리</a>
       <a class="btn" href="${contextPath}/order/businessOrders.do">주문/매출</a>
     </div>

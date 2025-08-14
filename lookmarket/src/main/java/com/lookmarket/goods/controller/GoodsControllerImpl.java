@@ -131,7 +131,7 @@ public class GoodsControllerImpl implements GoodsController{
 	    return mav;
 	}	
 
-	@RequestMapping(value="/busigoodsAddForm.do", method=RequestMethod.GET)
+	@RequestMapping(value="/busigoodsAddForm.do", method= {RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView busigoodsAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";

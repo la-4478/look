@@ -71,6 +71,16 @@
       <input type="text" class="form-control" name="g_expiration_date" id="g_expiration_date"
              value="소비기한은 배송받은 제품 포장지 상단에 적혀있습니다" readonly>
     </div>
+    
+    
+    <div class="mb-3">
+      <label for="g_category" class="form-label">판매 상태 변경</label>
+      <select class="form-select" name="g_status" id="g_status" required>
+        <option value="1" selected>판매중</option>
+        <option value="2">품절</option>
+        <option value="3">판매 종료</option>
+      </select>
+    </div>
 
     <div class="mb-3">
       <label for="i_filename" class="form-label">이미지 (교체 시 선택)</label>

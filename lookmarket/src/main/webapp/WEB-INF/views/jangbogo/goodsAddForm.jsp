@@ -78,6 +78,7 @@
              value="소비기한은 배송받은 제품 포장지 상단에 적혀있습니다" readonly>
     </div>
 
+   
     <!-- i_filename (대표 이미지) -->
     <div class="mb-3">
       <label for="i_filename" class="form-label">이미지</label>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.goods.vo.ImageFileVO;
+import com.lookmarket.order.vo.OrderItemVO;
 
 @Repository("goodsDAO")
 public class GoodsDAOImpl implements GoodsDAO{
@@ -97,5 +98,19 @@ public class GoodsDAOImpl implements GoodsDAO{
 	        default:
 	            try { return Integer.valueOf(category); } catch (NumberFormatException e) { return null; }
 	    }
+	}
+
+
+	@Override
+	public List<OrderItemVO> selectBizOrderItems(Map<String, Object> params) throws DataAccessException {
+		return sqlSession.selectList("mapper.order.selectBizOrderItems", params);
+	}
+
+
+	@Override
+	public int countBizOrderItems(String mId) throws DataAccessException {
+		return sqlSession.selectOne("mapper.order.countBizOrderItems", mId);
+		
+
 	}
 }

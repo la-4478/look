@@ -1,7 +1,7 @@
 package com.lookmarket.goods.service;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lookmarket.goods.dao.GoodsDAO;
 import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.goods.vo.ImageFileVO;
+import com.lookmarket.order.vo.OrderItemVO;
 
 @Service("goodsService")
 public class GoodsServiceImpl implements GoodsService {
@@ -154,6 +155,29 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsDAO.myGoodsList(m_id);
 		
 	}
+
+	@Override
+	public String selectmyGoods(String m_id) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<OrderItemVO> getBizOrderItems(String mId, int page, int size) throws Exception {
+        int offset = (page - 1) * size;
+        Map<String, Object> params = new HashMap<>();
+        params.put("mId", mId);
+        params.put("limit", size);
+        params.put("offset", offset);
+        return goodsDAO.selectBizOrderItems(params);
+	}
+
+	@Override
+	public int countBizOrderItems(String mId) throws Exception {
+        return goodsDAO.countBizOrderItems(mId);
+	}
+	
+	
 }
 
 

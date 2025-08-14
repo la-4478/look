@@ -113,6 +113,7 @@
     const namujiAddress    = f.querySelector('#oi_deli_namuji_address')?.value?.trim() || "";
     const deliveryMessage  = f.querySelector('#oi_delivery_message')?.value?.trim() || "";
     const email            = f.querySelector('#oi_member_email')?.value?.trim() || "";
+    console.log(namujiAddress);
 
     const goodsIds    = Array.from(f.querySelectorAll('input[name="goodsId"]')).map(el => Number(el.value));
     const goodsNames  = Array.from(f.querySelectorAll('input[name="goodsName"]')).map(el => el.value);
@@ -238,7 +239,7 @@
       <h2>주문 정보 입력</h2>
 
       <label for="oi_name">주문자 이름</label>
-      <input type="text" id="oi_name" name="oi_name" placeholder="주문자 이름" required>
+      <input type="text" id="oi_name" name="oi_name" value="${memberInfo.m_name}" readonly>
 
       <label for="oi_receiver_name">수령자 이름</label>
       <input type="text" id="oi_receiver_name" name="oi_receiver_name" placeholder="수령자 이름" required>

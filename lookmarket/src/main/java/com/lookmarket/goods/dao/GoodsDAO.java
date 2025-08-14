@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.goods.vo.ImageFileVO;
+import com.lookmarket.order.vo.OrderItemVO;
 
 public interface GoodsDAO {
 	public List<GoodsVO> selectAllGoodsList() throws DataAccessException;
@@ -20,4 +21,6 @@ public interface GoodsDAO {
 	public int deleteGoodsImages(int g_id) throws DataAccessException;
 	public int deleteGoods(int g_id) throws DataAccessException;
 	public List<GoodsVO> myGoodsList(String m_id) throws DataAccessException;
+	public List<OrderItemVO> selectBizOrderItems(Map<String, Object> params) throws DataAccessException;
+	public int countBizOrderItems(String mId) throws DataAccessException;
 }
