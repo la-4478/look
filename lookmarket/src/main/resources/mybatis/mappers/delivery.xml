@@ -11,10 +11,11 @@
 			<result property="d_transport_num" column="d_transport_num"/>
 			<result property="d_shipped_date" column="d_shipped_date"/>
 			<result property="d_delivery_date" column="d_delivery_date"/>
+			<result property="d_m_id" column="d_m_id"/>
 		</resultMap>
 		<insert id="insertNewdelivery" parameterType="deliveryVO">
-			insert into delivery (o_id, d_transport_num, d_shipped_date, d_delivery_date)
-			values(#{o_id}, #{d_transport_num}, #{d_shipped_date}, #{d_delivery_date})
+			insert into delivery (o_id, d_transport_num, d_shipped_date, d_delivery_date, d_m_id)
+			values(#{o_id}, #{d_transport_num}, #{d_shipped_date}, #{d_delivery_date}, #{d_m_id})
 		</insert>
 		<update id="updatedelivery" parameterType="int">
 			update delivery set d_status = 2 where o_id = #{o_id}

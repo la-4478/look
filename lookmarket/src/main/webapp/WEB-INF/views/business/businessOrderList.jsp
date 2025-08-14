@@ -139,7 +139,7 @@
       <td><a href="${contextPath}/order/detail.do?o_id=${o.OId}">${o.OId}</a></td>
 
       <%-- 주문일시: VO에 없음 → 대체 표시 --%>
-      <td><fmt:formatDate value="${o.order_time}" pattern="yyyy/MM/dd HH:mm:ss" timeZone="Asia/Seoul"/></td>
+      <td><fmt:formatDate value="${o.order_time}" pattern="yyyy/MM/dd HH:mm:ss" timeZone="UTC"/></td>
 
       <%-- 상품명: otGoodsName 사용. item_count는 없으므로 안전 가드 --%>
       <td>
@@ -160,11 +160,12 @@
   <c:set var="st" value="${empty o.o_status ? o.status : o.o_status}" />
   <c:choose>
     <%-- 1) 배송완료: 배송완료일자 존재 --%>
-	<c:when test="${o.d_status == 3}">배송완료</c:when>
+	 <c:when test="${not empty o.d_delivery_date and o.d_delivery_date <= today}">
+        배송완료
+    </c:when>
     <c:when test="${o.d_status == 2}">배송중</c:when>
     <c:when test="${o.d_status == 1}">배송준비중</c:when>
     <c:when test="${o.d_status == 4}">주문취소</c:when>
-
     <c:otherwise>-</c:otherwise>
   </c:choose>
 </td>

@@ -11,6 +11,7 @@ public class DeliveryVO {
 	private String d_transport_num;
 	private String d_shipped_date;
 	private String d_delivery_date;
+	private String d_m_id;
 	
 	public int getD_id() {
 		return d_id;
@@ -53,6 +54,12 @@ public class DeliveryVO {
 	}
 	public void setD_delivery_date(String d_delivery_date) {
 		this.d_delivery_date = d_delivery_date;
+	}
+	public String getD_m_id() {
+		return d_m_id;
+	}
+	public void setD_m_id(String d_m_id) {
+		this.d_m_id = d_m_id;
 	}
 	
 	

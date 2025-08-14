@@ -425,7 +425,6 @@ public class OrderControllerImpl implements OrderController {
 
 	    String now = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
 	    payVO.setPOrderTime(now);
-
 	    
 	    orderService.addNewpay(payVO);
 	    
@@ -453,6 +452,7 @@ public class OrderControllerImpl implements OrderController {
     	// 배송 완료일 = 시작일 + 1일
     	LocalDate deliveryDate = shippedDate.plusDays(1);
     	deliVO.setD_delivery_date(deliveryDate.toString());
+    	deliVO.setD_m_id(memberInfo.getM_id());
 
     	deliveryService.NewDelivery(deliVO);
     	
