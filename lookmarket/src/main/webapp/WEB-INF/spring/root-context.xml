@@ -13,7 +13,8 @@
 		
 		<context:property-placeholder location="/WEB-INF/config/jdbc/jdbc.properties,
 											    /WEB-INF/config/mail/mail.properties,
-											    /WEB-INF/config/chatbot/application.properties" />
+											    /WEB-INF/config/chatbot/application.properties" 
+											    ignore-unresolvable="true"/>
     
 		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		    <property name="host" value="smtp.gmail.com" />
@@ -54,6 +55,17 @@
 
 		<bean id ="transactionManager" class= "org.springframework.jdbc.datasource.DataSourceTransactionManager" >
 	    	<property name ="dataSource" ref= "dataSource"></property >
+		</bean>
+		
+		<!-- 타임아웃 설정 가능한 HttpClient 팩토리 -->
+		<bean id="httpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		    <property name="connectTimeout" value="${openai.http.connect-timeout-ms:5000}"/>
+		    <property name="readTimeout" value="${openai.http.read-timeout-ms:30000}"/>
+		</bean>
+		
+		<!-- OpenAI 호출용 RestTemplate -->
+		<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		    <constructor-arg ref="httpRequestFactory"/>
 		</bean>
 		
 		<tx:annotation-driven/>

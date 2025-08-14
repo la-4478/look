@@ -17,5 +17,7 @@
     	<typeAlias type="com.lookmarket.order.vo.OrderItemVO" alias="OrderItemVO" />
     	<typeAlias type="com.lookmarket.order.vo.PayVO" alias="PayVO" />
     	<typeAlias type="com.lookmarket.order.vo.DeliveryVO" alias="deliveryVO" />
+    	<typeAlias type="com.lookmarket.chatbot.vo.ChatMessageVO" alias="chatMessageVO" />
+    	<typeAlias type="com.lookmarket.chatbot.vo.ChatSessionVO" alias="chatSessionVO" />
   	</typeAliases>
 </configuration>

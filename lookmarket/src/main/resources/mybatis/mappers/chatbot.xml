@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.chat.mapper.ChatMapper">
+
+  <!-- 세션 -->
+  <insert id="createSession" useGeneratedKeys="true" keyProperty="sessionId">
+    INSERT INTO chat_session (user_id, title, created_at, updated_at)
+    VALUES (#{userId}, #{title}, UTC_TIMESTAMP(), UTC_TIMESTAMP())
+  </insert>
+
+  <update id="touchSession">
+    UPDATE chat_session
+       SET updated_at = UTC_TIMESTAMP(),
+           title = COALESCE(#{title}, title)
+     WHERE session_id = #{sessionId}
+  </update>
+
+  <select id="getSession" resultType="com.lookmarket.chatbot.vo.ChatSessionVO">
+    SELECT session_id AS sessionId, user_id AS userId, title,
+           created_at AS createdAt, updated_at AS updatedAt
+      FROM chat_session
+     WHERE session_id = #{sessionId}
+  </select>
+
+  <!-- 메시지 -->
+  <insert id="insertMessage" useGeneratedKeys="true" keyProperty="messageId">
+    INSERT INTO chat_message (session_id, role, content, meta_json, created_at)
+    VALUES (#{sessionId}, #{role}, #{content}, #{metaJson,jdbcType=LONGVARCHAR},
+            UTC_TIMESTAMP())
+  </insert>
+
+  <select id="loadMessagesForContext" resultType="com.lookmarke.chatbot.vo.ChatMessageVO">
+    SELECT message_id AS messageId, session_id AS sessionId, role, content,
+           meta_json AS metaJson, created_at AS createdAt
+      FROM chat_message
+     WHERE session_id = #{sessionId}
+     ORDER BY created_at DESC
+     LIMIT #{limit}
+  </select>
+
+  <!-- 로그 -->
+  <insert id="insertCallLog">
+    INSERT INTO chat_call_log
+      (session_id, model, prompt_tokens, completion_tokens, total_tokens, cost_usd, request_id, created_at)
+    VALUES
+      (#{sessionId}, #{model}, #{promptTokens}, #{completionTokens}, #{totalTokens},
+       #{costUsd}, #{requestId}, UTC_TIMESTAMP())
+  </insert>
+
+</mapper>
