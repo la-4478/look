@@ -49,25 +49,21 @@ public class EventControllerImpl implements EventController{
 	}
 	@Override
 	@RequestMapping(value="/promotionDetail.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView promotionDetail(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    HttpSession session = request.getSession();
+	public ModelAndView promotionDetail(@RequestParam(value="postId", required=true) Integer postId,
+	                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    ModelAndView mav = new ModelAndView("common/layout");
 
-	    // 🔹 상세 정보 조회용 ID 받기
-	    String postId = request.getParameter("id");
-
-	    // 🔹 Service 통해 해당 이벤트 정보 가져오기
 	    EventPostVO promo = eventService.selectPromotionPostById(postId);
-
-	    // 🔹 promo 객체를 모델에 담아서 JSP로 전달
 	    mav.addObject("promo", promo);
 	    mav.addObject("viewName", "event/promotionDetail");
 
+	    HttpSession session = request.getSession();
 	    session.setAttribute("sideMenu", "reveal");
 	    session.setAttribute("sideMenu_option", "event");
 
 	    return mav;
 	}
+
 	
 	@Override
 	@RequestMapping(value="/promotionAddForm.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -124,6 +120,74 @@ public class EventControllerImpl implements EventController{
 	    // 서비스 호출 (DB insert)
 	    eventService.insertPromotionPost(eventPostVO);
 
+	    return new ModelAndView("redirect:/event/promotionList.do");
+	}
+
+	// 수정폼 띄우기
+	@Override
+	@RequestMapping(value="/promotionUpdateForm.do", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView promotionUpdateForm(@RequestParam(value="postId", required=true) Integer postId,
+	                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView("common/layout");
+
+	    EventPostVO promo = eventService.selectPromotionPostById(postId);
+	    mav.addObject("promo", promo);
+	    mav.addObject("viewName", "event/promotionUpdateForm");
+
+	    HttpSession session = request.getSession();
+	    session.setAttribute("sideMenu", "reveal");
+	    session.setAttribute("sideMenu_option", "event");
+
+	    return mav;
+	}
+
+
+	// 수정 처리
+	@Override
+	@RequestMapping(value="/updatePromotionPost.do", method = RequestMethod.POST)
+	public ModelAndView updatePromotionPost(HttpServletRequest request, HttpServletResponse response,
+	                                        @ModelAttribute EventPostVO eventPostVO,
+	                                        @RequestParam(value="imageFile", required=false) MultipartFile imageFile) throws Exception {
+	    request.setCharacterEncoding("utf-8");
+
+	    // 이미지 파일 업데이트 처리 (업로드 되어 있으면 새 이미지로 변경)
+	    if (imageFile != null && !imageFile.isEmpty()) {
+	        String uploadDir = "C:/lookmarket_resources/event_banners/";
+	        File uploadPath = new File(uploadDir);
+	        if (!uploadPath.exists()) uploadPath.mkdirs();
+
+	        String originalFilename = imageFile.getOriginalFilename();
+	        String extension = "";
+	        int dotIndex = originalFilename.lastIndexOf(".");
+	        if (dotIndex >= 0) {
+	            extension = originalFilename.substring(dotIndex).toLowerCase();
+	        }
+
+	        String storedFileName = UUID.randomUUID().toString() + extension;
+	        File destFile = new File(uploadPath, storedFileName);
+	        imageFile.transferTo(destFile);
+
+	        eventPostVO.setPromoBannerImg(storedFileName);
+	    } else {
+	        // 이미지 변경 없으면 기존 이미지 유지 필요 → DB에서 기존값 조회 후 세팅하거나 폼에서 hidden으로 받기
+	        EventPostVO existing = eventService.selectPromotionPostById(eventPostVO.getPostId());
+	        eventPostVO.setPromoBannerImg(existing.getPromoBannerImg());
+	    }
+
+	    eventService.updatePromotionPost(eventPostVO);
+
+	    return new ModelAndView("redirect:/event/promotionDetail.do?postId=" + eventPostVO.getPostId());
+	}
+
+	// 삭제 처리 메서드 추가 (GET 방식 허용)
+	@RequestMapping(value = "/deletePromotionPost.do", method = RequestMethod.GET)
+	public ModelAndView deletePromotionPost(@RequestParam("postId") int postId,
+	                                        HttpServletRequest request,
+	                                        HttpServletResponse response) throws Exception {
+	    // 프로모션 삭제 서비스 호출
+	    eventService.deletePromotionPost(postId);
+
+	    // 삭제 후 목록 페이지로 리다이렉트
 	    return new ModelAndView("redirect:/event/promotionList.do");
 	}
 

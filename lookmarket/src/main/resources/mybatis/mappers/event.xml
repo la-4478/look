@@ -49,5 +49,20 @@
             #{promoStatus}
         )
     </insert>
+	<update id="updatePromotionPost" parameterType="com.lookmarket.event.vo.EventPostVO">
+	    UPDATE promotion_post
+	    SET
+	        promo_title = #{promoTitle},
+	        promo_content = #{promoContent},
+	        promo_banner_img = #{promoBannerImg},
+	        promo_start_date = #{promoStartDate},
+	        promo_end_date = #{promoEndDate},
+	        promo_status = #{promoStatus}
+	    WHERE post_id = #{postId}
+	</update>
+	
+	<delete id="deletePromotionPost" parameterType="int">
+	    DELETE FROM promotion_post WHERE post_id = #{postId}
+	</delete>
 
 </mapper>

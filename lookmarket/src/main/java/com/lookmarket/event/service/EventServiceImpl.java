@@ -26,8 +26,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventPostVO selectPromotionPostById(String postId) throws Exception {
-        return eventDAO.selectPromotionPostById(Integer.parseInt(postId));
+    public EventPostVO selectPromotionPostById(Integer postId) throws Exception {
+        return eventDAO.selectPromotionPostById(postId);
     }
 
     @Override
@@ -36,7 +36,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void deletePromotionPost(String postId) throws Exception {
-        eventDAO.deletePromotionPost(Integer.parseInt(postId));
+    public void deletePromotionPost(Integer postId) throws Exception {
+        // DB에서 삭제 처리 로직
+        eventDAO.deletePromotionPost(postId);
     }
+
 }

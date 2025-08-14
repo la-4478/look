@@ -19,23 +19,41 @@
             <div class="promotion-card">
                 <c:choose>
                     <c:when test="${not empty promo.promoBannerImg}">
-                        <img src="${contextPath}/upload/${promo.promoBannerImg}" alt="프로모션 이미지" />
+                        <img src="${contextPath}/event_banners/${promo.promoBannerImg}" alt="프로모션 이미지" />
                     </c:when>
                     <c:otherwise>
                         <div class="promotion-no-image">이미지 없음</div>
                     </c:otherwise>
                 </c:choose>
+
                 <div class="promotion-content">
                     <h5 class="promotion-title">${promo.promoTitle}</h5>
                     <p class="promotion-dates">
                         <fmt:formatDate value="${promo.promoStartDate}" pattern="yyyy-MM-dd" /> ~
                         <fmt:formatDate value="${promo.promoEndDate}" pattern="yyyy-MM-dd" />
                     </p>
-                    <a href="${contextPath}/event/promotionDetail.do?postId=${promo.postId}" class="promotion-btn">자세히 보기</a>
-                </div>
-            </div>
+
+                    <c:set var="m_role" value="${sessionScope.m_role != null ? sessionScope.m_role : sessionScope.memberInfo.m_role}" />
+
+                    <c:if test="${not empty promo.postId}">
+                        <div class="promotion-btn-group">
+                            <a href="${contextPath}/event/promotionDetail.do?postId=${promo.postId}" class="promotion-btn">자세히 보기</a>
+
+                            <c:if test="${m_role == 3}">
+                            <div class="promotion-sub-btns">
+                                <button class="promotion-btn-edit"
+                                        onclick="location.href='${contextPath}/event/promotionUpdateForm.do?postId=${promo.postId}'">수정하기</button>
+                                <button class="promotion-btn-delete"
+                                        onclick="if(confirm('삭제하시겠습니까?')) location.href='${contextPath}/event/deletePromotionPost.do?postId=${promo.postId}'">삭제하기</button>
+                            </div>
+                            </c:if>
+                        </div>
+                    </c:if>
+                </div> <!-- promotion-content 닫는 태그 -->
+            </div> <!-- promotion-card 닫는 태그 -->
         </c:forEach>
     </div>
 </div>
+
 </body>
 </html>
