@@ -365,7 +365,8 @@ public class OrderControllerImpl implements OrderController {
 	            (ordererPhone != null && !ordererPhone.isBlank()) ? ordererPhone : receiverPhone
 	    );
 	    // ★ 변경: 상세주소는 별도 칼럼이면 setOiDeliNamujiAddress(...)도 같이 세팅해
-	    orderVO.setOiDeliveryAddress(joinAddress(zipcode, roadAddress, namujiAddress));
+	    orderVO.setOiDeliveryAddress(joinAddress(zipcode, roadAddress));
+	    orderVO.setOi_deli_namuji_address(namujiAddress);
 	    orderVO.setOiDeliveryMessage(deliveryMsg);
 	    orderVO.setOiDeliveryPrice(deliveryPrice);
 
@@ -506,11 +507,10 @@ public class OrderControllerImpl implements OrderController {
 	        catch(Exception e){ return 0; }
 	    }).toList();
 	}
-	private String joinAddress(String zipcode, String addr1, String addr2) {
+	private String joinAddress(String zipcode, String addr1) {
 	    StringBuilder sb = new StringBuilder();
 	    if (zipcode != null && !zipcode.isBlank()) sb.append("(").append(zipcode).append(") ");
 	    if (addr1 != null && !addr1.isBlank()) sb.append(addr1.trim());
-	    if (addr2 != null && !addr2.isBlank()) sb.append(" ").append(addr2.trim());
 	    return sb.toString().trim();
 	}
 
