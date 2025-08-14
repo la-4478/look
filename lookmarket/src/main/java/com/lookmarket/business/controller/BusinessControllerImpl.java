@@ -1,12 +1,15 @@
 package com.lookmarket.business.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lookmarket.goods.service.GoodsService;
@@ -14,6 +17,7 @@ import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
+import com.lookmarket.order.service.DeliveryService;
 import com.lookmarket.order.vo.OrderItemVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +33,8 @@ public class BusinessControllerImpl implements BusinessController{
 	private MemberService memberService;
 	@Autowired
 	private GoodsService goodsService;
+	@Autowired
+	private DeliveryService deliveryService;
 	
 
 	//viewName 수정 필요
@@ -238,5 +244,23 @@ public class BusinessControllerImpl implements BusinessController{
 	    session.setAttribute("sideMenu_option", "myPage_business");
 
 	    return mav;
+	}
+
+	@Override
+	@RequestMapping(value="/updateDelivery.do", method= {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public Map<String, Object> updateDelivery(@RequestParam("o_id") int orderId, @RequestParam("d_status") int dStatus /* 2 = 배송중*/) throws Exception {
+	    Map<String, Object> res = new HashMap<>();
+	    System.out.println("orderId : " + orderId + "dStatus" + dStatus);
+	    try {
+	        int updated = deliveryService.updateStatusByOrderId(orderId, dStatus);
+	        res.put("success", updated > 0);
+	        res.put("d_status", dStatus);
+	        res.put("message", updated > 0 ? "업데이트 성공" : "대상 주문이 없거나 이미 동일 상태입니다.");
+	    } catch (Exception e) {
+	        res.put("success", false);
+	        res.put("message", "서버 오류: " + e.getMessage());
+	    }
+	    return res;
 	}
 }

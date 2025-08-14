@@ -18,6 +18,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>내 상품 주문 목록</title>
   <link rel="stylesheet" href="${contextPath}/resources/css/business.css"/>
+  <script>
+  const contextPath = '${contextPath}';
+  function fn_delivery_on(oId){
+	  if (!confirm('배송대기(준비중) 상태를 배송중으로 변경하시겠습니까?')) return;
+
+	    $.ajax({
+	        type: "POST",
+	        url: contextPath + "/business/updateDelivery.do",
+	        data: { o_id: oId, d_status: 2 },
+	        success: function(res) {
+	       	if (res && res.success) {
+	        	alert("배송 상태가 '배송중'으로 변경되었습니다.");
+	            location.reload(); // ← 페이지 새로고침
+	        }
+	        if (!res || res.success !== true) {
+	            alert(res && res.message ? res.message : '상태 변경에 실패했습니다.');
+	            return;
+	        }
+	     // 해당 행만 갱신
+	        const $row = $('tr[data-oid="' + oId + '"]');
+	        // 상태 텍스트 갱신
+	        $row.find('.status-cell').text('배송중');
+
+	        // 버튼 교체: 배송등록 버튼 제거, 배송조회 버튼 추가(없으면)
+	        const $actions = $row.find('.actions');
+	        $actions.find('button.btn:contains("배송등록")').remove();
+
+	        // 배송조회 버튼이 없다면 추가(중복 방지)
+	        if ($actions.find('a.btn:contains("배송조회")').length === 0) {
+	          const traceHref = contextPath + '/order/shipTrace.do?o_id=' + oId;
+	          $actions.append(' <a class="btn" href="' + traceHref + '">배송조회</a>');
+	        }
+
+	        // (선택) 토스트 느낌
+	        // alert('배송상태가 "배송중"으로 변경되었습니다.');
+	      },
+	      
+	      error: function(xhr, status, err) {
+	          // 서버에서 에러 본문을 보냈다면 조금 더 친절하게
+	          const msg = xhr && xhr.responseJSON && xhr.responseJSON.message
+	            ? xhr.responseJSON.message
+	            : (xhr.responseText || '요청 처리 중 오류가 발생했습니다.');
+	          alert('상태 변경 실패: ' + msg);
+	      }
+	    });
+  }
+  </script>
 </head>
 <body>
 
@@ -110,12 +157,13 @@
 
       <%-- 상태: 기존 로직 유지 (st가 null이면 아래 otherwise로 '-') --%>
 <td>
-  <c:set var="st" value="${empty d_status ? d_status : d_status}" />
+  <c:set var="st" value="${empty o.o_status ? o.status : o.o_status}" />
   <c:choose>
     <%-- 1) 배송완료: 배송완료일자 존재 --%>
-	<c:when test="${not empty o.d_delivery_date}">배송완료</c:when>
-	<c:when test="${not empty o.d_shipped_date}">배송중</c:when>
-	<c:when test="${st == 1 }">배송 준비중</c:when>
+	<c:when test="${o.d_status == 3}">배송완료</c:when>
+    <c:when test="${o.d_status == 2}">배송중</c:when>
+    <c:when test="${o.d_status == 1}">배송준비중</c:when>
+    <c:when test="${o.d_status == 4}">주문취소</c:when>
 
     <c:otherwise>-</c:otherwise>
   </c:choose>
@@ -125,10 +173,10 @@
       <%-- 관리: 상세는 OId로 유지, 나머지 버튼은 st가 null이면 노출 안 됨(기존 조건 그대로) --%>
       <td class="actions">
         <a class="btn" href="${contextPath}/order/detail.do?o_id=${o.OId}">상세</a>
-        <c:if test="${empty o.d_shipped_date}">
-          <a class="btn" href="${contextPath}/order/shipForm.do?o_id=${o.OId}">배송등록</a>
+        <c:if test="${o.d_status == 1}">
+          <button class="btn" type="button" onclick="fn_delivery_on(${o.OId})"> 배송등록</button>
         </c:if>
-        <c:if test="${not empty o.d_delivery_date}">
+        <c:if test="${o.d_status == 3}">
           <a class="btn" href="${contextPath}/order/shipTrace.do?o_id=${o.OId}">배송조회</a>
         </c:if>
       </td>

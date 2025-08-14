@@ -1,6 +1,11 @@
 package com.lookmarket.order.controller;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +26,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lookmarket.cart.service.CartService;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.member.vo.MemberVO;
+import com.lookmarket.order.service.DeliveryService;
 import com.lookmarket.order.service.OrderService;
 import com.lookmarket.order.vo.ApiResponse;
+import com.lookmarket.order.vo.DeliveryVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
@@ -38,6 +45,8 @@ public class OrderControllerImpl implements OrderController {
 	private OrderService orderService;
 	@Autowired
 	private CartService cartService;
+	@Autowired
+	private DeliveryService deliveryService;
 	
 	// 클래스 안에 필드로 Random 생성 (필요시)
 	private Random random = new Random();
@@ -210,7 +219,7 @@ public class OrderControllerImpl implements OrderController {
 	        payVO.setPMethod(paymentMethod);
 	        payVO.setPPayMonth(installment);
 	        payVO.setPFinalTotalPrice(finalTotalPrice);
-	        payVO.setPOrderTime(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+	        payVO.setPOrderTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 	        orderService.addNewpay(payVO);
 
 	        // ====== 세션 ======
@@ -419,11 +428,40 @@ public class OrderControllerImpl implements OrderController {
 
 	    
 	    orderService.addNewpay(payVO);
+	    
+    	// 주문 시간 예시 (DB나 현재 시간)
+    	LocalDateTime orderDateTime = LocalDateTime.now(); // 지금 시간 예시
+    	LocalDate shippedDate;
 
+    	// 기준 시간 = 정오 12시
+    	LocalTime cutoffTime = LocalTime.NOON;
+
+    	// 주문 시간이 정오 이전이면 당일출발, 이후면 다음날출발
+    	if (orderDateTime.toLocalTime().isBefore(cutoffTime)) {
+    	    shippedDate = orderDateTime.toLocalDate(); // 당일
+    	} else {
+    	    shippedDate = orderDateTime.toLocalDate().plusDays(1); // 다음날
+    	}
+
+    	DeliveryVO deliVO = new DeliveryVO();
+    	deliVO.setO_id(generatedOrderId);
+    	//운송장 번호 난수 생성
+    	deliVO.setD_transport_num(String.valueOf(generateOrderNum()));
+    	//배송 시작일
+    	deliVO.setD_shipped_date(shippedDate.toString());
+
+    	// 배송 완료일 = 시작일 + 1일
+    	LocalDate deliveryDate = shippedDate.plusDays(1);
+    	deliVO.setD_delivery_date(deliveryDate.toString());
+
+    	deliveryService.NewDelivery(deliVO);
+    	
 	    // 7) 카트 비우기
 	    for (Integer gid : goodsIds) {
 	        orderService.removeCartItem(memberInfo.getM_id(), gid);
 	    }
+	    
+	    
 	    // 8) 세션 저장
 	    session.setAttribute("itemVO", itemVO);
 	    session.setAttribute("PayVO", payVO);
@@ -578,6 +616,7 @@ public class OrderControllerImpl implements OrderController {
 	        // 필요하면 배송비/할인도 붙임
 	        myOrderList.add(item);
 	    }
+
 
 	    if (myOrderList.isEmpty()) {
 	        ModelAndView err = new ModelAndView("/common/layout");

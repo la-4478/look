@@ -166,13 +166,13 @@
        FROM delivery d
       WHERE d.o_id = oi.o_id
       ORDER BY d.d_id DESC
-      LIMIT 1) AS d_delivery_date
+      LIMIT 1) AS d_delivery_date,
       
       (SELECT d.d_status
 	   FROM delivery d
 	  WHERE d.o_id = oi.o_id
 	  ORDER BY d.d_id DESC
-	  LIMIT 1) AS d_status,
+	  LIMIT 1) AS d_status
 
   FROM order_item oi
   WHERE EXISTS (
