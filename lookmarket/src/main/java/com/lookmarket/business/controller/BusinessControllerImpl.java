@@ -14,6 +14,7 @@ import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
+import com.lookmarket.order.vo.OrderItemVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -77,20 +78,62 @@ public class BusinessControllerImpl implements BusinessController{
 	
 	@Override
 	@RequestMapping(value="/businessOrderList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView businessOrderList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//주문 리스트
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
-		
-		session = request.getSession();
+	public ModelAndView businessOrderList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    ModelAndView mav = new ModelAndView();
+	    System.out.println("businessOrderList 컨트롤러 진입");
+	    String layout = "common/layout";
+	    mav.setViewName(layout);
+
+	    String viewName = (String) request.getAttribute("viewName");
+	    if (viewName == null || viewName.isBlank()) viewName = "business/orderList";
+	    mav.addObject("viewName", viewName);
+
+	    String m_id = (String) session.getAttribute("loginUserId");
+	    if (m_id == null) {
+	        mav.setViewName("redirect:/member/loginForm.do");
+	        return mav;
+	    }
+
+	    // 페이징 파라미터
+	    int page = parseIntOrDefault(request.getParameter("page"), 1);
+	    int size = parseIntOrDefault(request.getParameter("size"), 20);
+
+	    // (옵션) 내 상품 리스트가 필요하면 유지
+	    List<GoodsVO> myGoods = goodsService.myGoodsList(m_id);
+	    if(myGoods == null) {
+	    	System.out.println("상품리스트 없음");
+	        mav.setViewName("redirect:/business/businessMain.do");
+	        return mav;
+	    }
+	    mav.addObject("myGoods", myGoods);
+	    System.out.println("myGoods 가져오고 저장함" + myGoods.toString());
+
+	    // 주문 아이템 조회 (JOIN X, EXISTS O)
+	    List<OrderItemVO> orders = goodsService.getBizOrderItems(m_id, page, size);
+	    int total = goodsService.countBizOrderItems(m_id);
+	    if(total == 0) {
+	    	System.out.println("주문정보 없음");
+	        mav.setViewName("redirect:/business/businessMain.do");
+	        return mav;
+	    }
+	    int totalPages = (int) Math.ceil(total / (double) size);
+	    System.out.println("orders 가져오고 저장함" + orders.toString());
+	    
+	    mav.addObject("orders", orders);
+	    mav.addObject("page", page);
+	    mav.addObject("size", size);
+	    mav.addObject("totalPages", totalPages);
+	    mav.addObject("totalElements", total);
+
 	    session.setAttribute("sideMenu", "reveal");
-		session.setAttribute("sideMenu_option", "myPage_business");
-		
-		return mav;
+	    session.setAttribute("sideMenu_option", "myPage_business");
+	    return mav;
+	}
+
+	private int parseIntOrDefault(String s, int def) {
+	    try { return (s == null || s.isBlank()) ? def : Integer.parseInt(s); }
+	    catch (Exception e) { return def; }
 	}
 	
 	@Override
@@ -107,7 +150,7 @@ public class BusinessControllerImpl implements BusinessController{
 		session = request.getSession();
 	    session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "myPage_business");
-		
+			
 		return mav;
 	}
 	
@@ -196,5 +239,4 @@ public class BusinessControllerImpl implements BusinessController{
 
 	    return mav;
 	}
-
 }

@@ -20,10 +20,7 @@
   <link rel="stylesheet" href="${contextPath}/resources/css/business.css"/>
 </head>
 <body>
-  <main class="wrap" id="content" role="main">
-    <header>
-      <h1>내 상품 주문 목록</h1>
-    </header>
+
 
     <!-- 필터/검색 -->
     <section class="section filters">
@@ -68,6 +65,7 @@
 
     <!-- 주문 리스트 -->
     <section class="section">
+     <h1>내 상품 주문 목록</h1>
       <table class="orders-table">
         <thead>
           <tr>
@@ -82,48 +80,66 @@
           </tr>
         </thead>
         <tbody>
-          <c:forEach var="o" items="${orderList}">
-            <%-- 상태 필드 유연 처리: o_status 우선, 없으면 status --%>
-            <c:set var="st" value="${empty o.o_status ? o.status : o.o_status}" />
-            <tr>
-              <td><a href="${contextPath}/order/detail.do?o_id=${o.o_id}">${o.o_id}</a></td>
-              <td><fmt:formatDate value="${o.order_time}" pattern="yyyy-MM-dd HH:mm"/></td>
-              <td>
-                <c:out value="${o.g_name}"/>
-                <c:if test="${o.item_count>1}"> 외 ${o.item_count-1}개</c:if>
-              </td>
-              <td>${o.quantity}</td>
-              <td><fmt:formatNumber value="${empty o.total_price ? o.pay_amount : o.total_price}" pattern="#,###"/>원</td>
-              <td>
-                <c:out value="${empty o.buyer_name ? o.m_name : o.buyer_name}"/>
-                <span class="muted">(${empty o.buyer_id ? o.m_id : o.buyer_id})</span>
-              </td>
-              <td>
-                <c:choose>
-                  <c:when test="${st=='PENDING' || st==1}">결제대기</c:when>
-                  <c:when test="${st=='PAID' || st==2}">결제완료</c:when>
-                  <c:when test="${st=='SHIPPED' || st==3}">배송중</c:when>
-                  <c:when test="${st=='COMPLETED' || st==4}">구매확정</c:when>
-                  <c:when test="${st=='CANCELED' || st==5}">취소/환불</c:when>
-                  <c:otherwise>-</c:otherwise>
-                </c:choose>
-              </td>
-              <td class="actions">
-                <a class="btn" href="${contextPath}/order/detail.do?o_id=${o.o_id}">상세</a>
-                <c:if test="${st=='PAID' || st==2}">
-                  <a class="btn" href="${contextPath}/order/shipForm.do?o_id=${o.o_id}">배송등록</a>
-                </c:if>
-                <c:if test="${st=='SHIPPED' || st==3}">
-                  <a class="btn" href="${contextPath}/order/shipTrace.do?o_id=${o.o_id}">배송조회</a>
-                </c:if>
-              </td>
-            </tr>
-          </c:forEach>
+  <c:forEach var="o" items="${orders}">
+    <%-- 상태 필드 유연 처리: o_status 우선, 없으면 status (없으면 null이라 자동으로 '-') --%>
 
-          <c:if test="${empty orderList}">
-            <tr><td colspan="8">조건에 맞는 주문이 없습니다.</td></tr>
-          </c:if>
-        </tbody>
+    <%-- 금액 계산: (개별가격 * 수량) - (할인, null이면 0) --%>
+    <c:set var="sale" value="${empty o.otSalePrice ? 0 : o.otSalePrice}" />
+    <c:set var="lineTotal" value="${o.otGoodsPrice * o.otGoodsQty - sale}" />
+
+    <tr>
+      <%-- 주문번호: OrderItemVO에는 OId(주문ID), ONum(주문아이템PK) 둘 다 있음. 상세가 o_id로 받으니 OId 사용 --%>
+      <td><a href="${contextPath}/order/detail.do?o_id=${o.OId}">${o.OId}</a></td>
+
+      <%-- 주문일시: VO에 없음 → 대체 표시 --%>
+      <td><fmt:formatDate value="${o.order_time}" pattern="yyyy/MM/dd HH:mm:ss" timeZone="Asia/Seoul"/></td>
+
+      <%-- 상품명: otGoodsName 사용. item_count는 없으므로 안전 가드 --%>
+      <td>
+        <c:out value="${o.otGoodsName}" />
+      </td>
+
+      <%-- 수량: otGoodsQty --%>
+      <td>${o.otGoodsQty}</td>
+
+      <%-- 금액: 계산값 포맷팅 --%>
+      <td><fmt:formatNumber value="${lineTotal}" pattern="#,###" />원</td>
+
+      <%-- 구매자: VO에 없음 → 대체 표시 --%>
+      <td>${o.buyer_name} <span class="muted"></span></td>
+
+      <%-- 상태: 기존 로직 유지 (st가 null이면 아래 otherwise로 '-') --%>
+<td>
+  <c:set var="st" value="${empty d_status ? d_status : d_status}" />
+  <c:choose>
+    <%-- 1) 배송완료: 배송완료일자 존재 --%>
+	<c:when test="${not empty o.d_delivery_date}">배송완료</c:when>
+	<c:when test="${not empty o.d_shipped_date}">배송중</c:when>
+	<c:when test="${st == 1 }">배송 준비중</c:when>
+
+    <c:otherwise>-</c:otherwise>
+  </c:choose>
+</td>
+
+
+      <%-- 관리: 상세는 OId로 유지, 나머지 버튼은 st가 null이면 노출 안 됨(기존 조건 그대로) --%>
+      <td class="actions">
+        <a class="btn" href="${contextPath}/order/detail.do?o_id=${o.OId}">상세</a>
+        <c:if test="${empty o.d_shipped_date}">
+          <a class="btn" href="${contextPath}/order/shipForm.do?o_id=${o.OId}">배송등록</a>
+        </c:if>
+        <c:if test="${not empty o.d_delivery_date}">
+          <a class="btn" href="${contextPath}/order/shipTrace.do?o_id=${o.OId}">배송조회</a>
+        </c:if>
+      </td>
+    </tr>
+  </c:forEach>
+
+  <c:if test="${empty orders}">
+    <tr><td colspan="8">조건에 맞는 주문이 없습니다.</td></tr>
+  </c:if>
+</tbody>
+
       </table>
     </section>
 

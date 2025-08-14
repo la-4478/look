@@ -18,8 +18,8 @@
             oi_receiver_name,
             oi_receiver_phone,
             oi_delivery_address,
-            oi_delivery_message,
             oi_deli_namuji_address,
+            oi_delivery_message,
             oi_date
         ) VALUES (
             #{mId},
@@ -64,7 +64,6 @@
         INSERT INTO payment (
             o_id,
             p_method,
-            p_card_name,
             p_pay_month,
             p_orderer_phone,
             p_order_time,
@@ -73,7 +72,6 @@
         ) VALUES (
             #{oId},
             #{pMethod},
-            #{pCardName},
             #{pPayMonth},
             #{pOrdererPhone},
             #{pOrderTime},
@@ -97,28 +95,109 @@
         WHERE o.o_id = #{oId}
     </select>
 
-    <resultMap id="orderDetailResult" type="OrderVO">
-        <id property="oId" column="o_id" />
-        <result property="mId" column="m_id" />
-        <result property="oiDeliveryPrice" column="oi_delivery_price" />
-        <result property="oiTotalGoodsPrice" column="oi_total_goods_price" />
-        <result property="oiSalePrice" column="oi_sale_price" />
-        <result property="oiName" column="oi_name" />
-        <result property="oiReceiverName" column="oi_receiver_name" />
-        <result property="oiReceiverPhone" column="oi_receiver_phone" />
-        <result property="oiDate" column="oi_date" />
-        <result property="oiDeliveryAddress" column="oi_delivery_address" />
-        <result property="oiDeliveryMessage" column="oi_delivery_message" />
-        
-        <collection property="orderItems" ofType="OrderItemVO" javaType="java.util.ArrayList">
-            <result property="otGId" column="ot_g_id" />
-            <result property="otGoodsPrice" column="ot_goods_price" />
-            <result property="otSalePrice" column="ot_sale_price" />
-            <result property="otGoodsName" column="ot_goods_name" />
-            <result property="otGoodsQty" column="ot_goods_qty" />
-        </collection>
-    </resultMap>
+     <resultMap id="orderDetailResult" type="OrderVO">
+    <id property="oId" column="o_id" />
+    <result property="mId" column="m_id" />
+    <result property="oiDeliveryPrice" column="oi_delivery_price" />
+    <result property="oiTotalGoodsPrice" column="oi_total_goods_price" />
+    <result property="oiSalePrice" column="oi_sale_price" />
+    <result property="oiName" column="oi_name" />
+    <result property="oiReceiverName" column="oi_receiver_name" />
+    <result property="oiReceiverPhone" column="oi_receiver_phone" />
+    <result property="oiDate" column="oi_date" />
+    <result property="oiDeliveryAddress" column="oi_delivery_address" />
+    <result property="oiDeliveryMessage" column="oi_delivery_message" />
+  </resultMap>
 
+  <resultMap id="orderItems" type="OrderItemVO">
+    <result property="otGId"        column="ot_g_id" />
+    <result property="otGoodsPrice"  column="ot_goods_price" />
+    <result property="otSalePrice"   column="ot_sale_price" />
+    <result property="otGoodsName"   column="ot_goods_name" />
+    <result property="otGoodsQty"    column="ot_goods_qty" />
+  </resultMap>
+
+  <!-- =========================
+       사업자 주문아이템 목록 (뷰VO로 직결, JOIN 없이 서브쿼리)
+       ========================= -->
+  <select id="selectBizOrderItems" parameterType="map"
+        resultType="com.lookmarket.order.vo.OrderListRowVO">
+  SELECT
+    -- 기존 아이템/헤더
+    oi.o_num          AS ONum,
+    oi.o_id           AS OId,
+    oi.ot_g_id        AS otGId,
+    oi.ot_goods_name  AS otGoodsName,
+    oi.ot_goods_qty   AS otGoodsQty,
+    oi.ot_goods_price AS otGoodsPrice,
+    oi.ot_sale_price  AS otSalePrice,
+
+    (SELECT o.oi_date FROM order_info o WHERE o.o_id = oi.o_id) AS order_time,
+    (SELECT m.m_name
+       FROM member m
+      WHERE m.m_id = (SELECT o2.m_id FROM order_info o2 WHERE o2.o_id = oi.o_id)
+      LIMIT 1) AS buyer_name,
+    (CASE
+       WHEN EXISTS (SELECT 1 FROM delivery d WHERE d.o_id = oi.o_id) THEN 'SHIPPED'
+       WHEN EXISTS (SELECT 1 FROM payment  p WHERE p.o_id = oi.o_id) THEN 'PAID'
+       ELSE 'PENDING'
+     END) AS o_status,
+
+    -- ✅ 배송정보 4종 (최신 d_id 기준 1건)
+    (SELECT d.d_company
+       FROM delivery d
+      WHERE d.o_id = oi.o_id
+      ORDER BY d.d_id DESC
+      LIMIT 1) AS d_company,
+
+    (SELECT d.d_transport_num
+       FROM delivery d
+      WHERE d.o_id = oi.o_id
+      ORDER BY d.d_id DESC
+      LIMIT 1) AS d_transport_num,
+
+    (SELECT d.d_shipped_date
+       FROM delivery d
+      WHERE d.o_id = oi.o_id
+      ORDER BY d.d_id DESC
+      LIMIT 1) AS d_shipped_date,
+
+    (SELECT d.d_delivery_date
+       FROM delivery d
+      WHERE d.o_id = oi.o_id
+      ORDER BY d.d_id DESC
+      LIMIT 1) AS d_delivery_date
+      
+      (SELECT d.d_status
+	   FROM delivery d
+	  WHERE d.o_id = oi.o_id
+	  ORDER BY d.d_id DESC
+	  LIMIT 1) AS d_status,
+
+  FROM order_item oi
+  WHERE EXISTS (
+    SELECT 1 FROM goods g
+    WHERE g.g_id = oi.ot_g_id
+      AND g.cre_m_id = #{mId}
+  )
+  ORDER BY
+    (SELECT o.oi_date FROM order_info o WHERE o.o_id = oi.o_id) DESC,
+    oi.o_num DESC
+  LIMIT #{limit} OFFSET #{offset}
+</select>
+
+
+
+  <!-- 페이징 총건수: 단일 파라미터(String mId) 호출이므로 #{_parameter} 사용 -->
+  <select id="countBizOrderItems" parameterType="string" resultType="int">
+    SELECT COUNT(1)
+    FROM order_item oi
+    WHERE EXISTS (
+      SELECT 1 FROM goods g
+      WHERE g.g_id = oi.ot_g_id
+        AND g.cre_m_id = #{_parameter}
+    )
+  </select>
     <!-- ==============================
          장바구니에서 상품 삭제
          ============================== -->
@@ -127,5 +206,6 @@
         WHERE m_id = #{m_id}
           AND g_id = #{g_id}
     </delete>
-	
+    
+
 </mapper>

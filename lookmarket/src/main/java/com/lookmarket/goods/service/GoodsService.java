@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.goods.vo.ImageFileVO;
+import com.lookmarket.order.vo.OrderItemVO;
 
 public interface GoodsService {
 	public List<GoodsVO> getAllGoods() throws Exception;
@@ -20,4 +21,7 @@ public interface GoodsService {
 	public int deleteGoods(int gId) throws Exception;
 	public List<GoodsVO> myGoodsList(String m_id) throws Exception;
 	public List<GoodsVO> getMyGoodsByCategory(String category, String m_id) throws Exception;
+	public String selectmyGoods(String m_id) throws Exception;
+	public List<OrderItemVO> getBizOrderItems(String mId, int page, int size) throws Exception;
+	public int countBizOrderItems(String mId) throws Exception;
 }

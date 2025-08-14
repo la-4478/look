@@ -100,5 +100,8 @@
     <select id="selectMainimagefile" parameterType="int" resultType="imageFileVO">
     	select * from goods_image where g_id=#{g_id}
     </select>
+    
+
 
 </mapper>
+
