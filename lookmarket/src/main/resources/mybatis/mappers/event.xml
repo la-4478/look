@@ -64,5 +64,65 @@
 	<delete id="deletePromotionPost" parameterType="int">
 	    DELETE FROM promotion_post WHERE post_id = #{postId}
 	</delete>
-
+	<insert parameterType="map" id="insertCoupon">
+		INSERT INTO promotion_coupon(
+			promo_code, 
+			promo_discount_type, 
+			promo_discount_value, 
+			promo_max_discount, 
+			promo_min_purchase, 
+			promo_start_date, 
+			promo_end_date, 
+			promo_coupon_active, 
+			m_id, 
+			promo_used_date, 
+			post_id)
+		VALUES(
+			#{promo_code}, 
+			#{promo_discount_type}, 
+			#{promo_discount_value}, 
+			#{promo_max_discount}, 
+			#{promo_min_purchase}, 
+			#{promo_start_date}, 
+			#{promo_end_date}, 
+			#{promo_coupon_active}, 
+			#{m_id}, 
+			#{promo_used_date}, 
+			#{post_id}) 
+	</insert>
+	
+	<select parameterType="int" id="selectCouponById" resultType="map">
+		SELECT * FROM promotion_coupon 
+		WHERE promo_id = #{promoId} 
+	</select>
+	
+	<select id="selectCouponList" resultType="map">
+		SELECT * FROM promotion_coupon 
+		ORDER BY promo_start_date DESC 
+	</select>
+	
+	<update parameterType="map" id="updateCoupon">
+		UPDATE promotion_coupon 
+		SET 
+			promo_code = #{promo_code},
+			promo_discount_type = #{promo_discount_type},
+			promo_discount_value = #{promo_discount_value},
+			promo_max_discount = #{promo_max_discount},
+			promo_min_purchase = #{promo_min_purchase},
+			promo_start_date = #{promo_start_date},
+			promo_end_date = #{promo_end_date},
+			promo_coupon_active = #{promo_coupon_active},
+			m_id = #{m_id},
+			promo_used_date = #{promo_used_date},
+			post_id = #{post_id}
+		WHERE 
+			promo_id = #{promo_id} 
+	</update>
+	
+	<delete parameterType="int" id="deleteCoupon">
+		DELETE FROM promotion_coupon 
+		WHERE promo_id = #{promoId} 
+	</delete>
+	
+	<!-- 쿠폰-프로모션 연결 -->
 </mapper>

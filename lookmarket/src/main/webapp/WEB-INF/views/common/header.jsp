@@ -30,15 +30,15 @@
 			<div id="logo">
 				<c:choose>
 					<c:when test="${pageType eq 'sijangbajo'}">
-						<a href="${contextPath}/main/sijangbajoMain.do"> <img
-							width="176" height="80" alt="시장봐조"
-							src="${contextPath}/resources/image/sijangbajologo.png" />
+						<a href="${contextPath}/main/sijangbajoMain.do"> 
+						<img width="176" height="80" alt="시장봐조"
+							 src="${contextPath}/resources/image/sijangbajologo.png" />
 						</a>
 					</c:when>
 					<c:when test="${pageType eq 'jangbogo'}">
-						<a href="${contextPath}/main/jangbogoMain.do"> <img
-							width="176" height="80" alt="장보고"
-							src="${contextPath}/resources/image/jangbogologo.png" />
+						<a href="${contextPath}/main/jangbogoMain.do"> 
+						<img width="176" height="80" alt="장보고"
+							 src="${contextPath}/resources/image/jangbogologo.png" />
 						</a>
 					</c:when>
 				</c:choose>
@@ -169,15 +169,12 @@
 											class="menu__title">이벤트★</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a
-											href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션
-												목록</a></li>
+										<li><a href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션 목록</a></li>
 									</ul> 
 									<c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
 										<ul id="tipSybm1" class="navbar__submenu">
-											<li><a
-												href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션
-													등록</a></li>
+											<li><a href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션 등록</a></li>
+											<li><a href="${contextPath}/event/couponAddForm.do">쿠폰 등록</a></li>
 										</ul>
 									</c:if>
 							</li>
