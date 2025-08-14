@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.mypage.vo.MyPageVO;
+import com.lookmarket.order.vo.OrderItemVO;
+import com.lookmarket.order.vo.OrderVO;
 
 @Repository("myPageDAO")
 public class MyPageDAOImpl implements MyPageDAO{
@@ -37,4 +39,20 @@ public class MyPageDAOImpl implements MyPageDAO{
 	public List<ReviewVO> selectMyCommunityList(String m_id) throws DataAccessException{
 		return sqlSession.selectList("mapper.mypage.selectMyCommunityList", m_id);
 	}
+	
+	// ---------------- 주문 관련 추가 ----------------
+    @Override
+    public List<OrderVO> getOrdersByMemberId(String m_id) throws DataAccessException {
+        return sqlSession.selectList("mapper.mypage.getOrdersByMemberId", m_id);
+    }
+
+    @Override
+    public OrderVO getOrderById(int oId) throws DataAccessException {
+        return sqlSession.selectOne("mapper.mypage.getOrderById", oId);
+    }
+
+    @Override
+    public List<OrderItemVO> getOrderItemsByOrderId(int oId) throws DataAccessException {
+        return sqlSession.selectList("mapper.mypage.getOrderItemsByOrderId", oId);
+    }
 }

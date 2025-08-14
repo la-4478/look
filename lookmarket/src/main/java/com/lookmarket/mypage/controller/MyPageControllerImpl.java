@@ -15,6 +15,8 @@ import com.lookmarket.common.base.BaseController;
 import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.mypage.service.MyPageService;
 import com.lookmarket.mypage.vo.MyPageVO;
+import com.lookmarket.order.vo.OrderItemVO;
+import com.lookmarket.order.vo.OrderVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,8 +27,6 @@ import jakarta.servlet.http.HttpSession;
 public class MyPageControllerImpl extends BaseController implements MyPageController{
 	@Autowired
 	private MyPageService myPageService;
-	@Autowired
-	private MyPageVO myPageVO;
 	
 	//사용자	
 	@Override
@@ -43,7 +43,12 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 		session = request.getSession();
 		String current_id = (String)session.getAttribute("current_id");
 		
-		myPageVO = myPageService.getMyPageInfo(current_id);
+		MyPageVO myPageVO = myPageService.getMyPageInfo(current_id);
+		System.out.println("회원 정보 : " + myPageVO);
+		if (myPageVO == null) {
+	        mav.addObject("message", "회원 정보를 찾을 수 없습니다.");
+	        return mav;
+	    }
 		
 		String m_email = myPageVO.getM_email();
 		
@@ -66,38 +71,58 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 		return mav;
 	}
 	
+	//주문내역(사용자)
 	@Override
 	@RequestMapping(value="/listMyOrderHistory.do", method=RequestMethod.GET)
 	public ModelAndView listMyOrderHistory(HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		//주문내역(사용자)
-		HttpSession session;
+		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
-		session = request.getSession();
 		session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "myPage");
 		
+		String current_id = (String)session.getAttribute("current_id");
+		System.out.println("current_id = " + current_id);
+	    if(current_id != null) {
+	        // 주문 리스트 가져오기
+	        List<OrderVO> orderList = myPageService.getOrdersByMemberId(current_id);
+	        mav.addObject("orderList", orderList);
+	    } else {
+	        mav.addObject("message", "로그인이 필요합니다.");
+	    }
+	    
 		return mav;
 	}
 	
+	//주문상세내역(사용자)
 	@Override
 	@RequestMapping(value="/myOrderDetail.do", method=RequestMethod.GET)
-	public ModelAndView myOrderDetail(HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		//주문상세내역(사용자)
-		HttpSession session;
+	public ModelAndView myOrderDetail(@RequestParam("oId") int oId, HttpServletRequest request, HttpServletResponse response)  throws Exception{
+		
+		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
-		session = request.getSession();
 		session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "myPage");
+		
+		// 주문 상세정보 가져오기
+		OrderVO order = myPageService.getOrderById(oId);             // 주문 기본정보 조회
+		List<OrderItemVO> orderItems = myPageService.getOrderItemsByOrderId(oId);  // 주문 상품 리스트 조회
+
+		if(order != null) {
+	        mav.addObject("order", order);
+	        mav.addObject("orderItems", orderItems);
+	    } else {
+	        mav.addObject("message", "주문 정보를 찾을 수 없습니다.");
+	    }
 		
 		return mav;
 	}

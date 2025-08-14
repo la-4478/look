@@ -17,7 +17,6 @@
 						<h3>마이페이지</h3>
 						<ul>
 							<li><a href="${contextPath}/mypage/mypageInfo.do">내정보</a></li>
-							<li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
 							<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역</a></li>
 							<li><a href="#">배송조회</a></li>
 							<li><a href="${contextPath}/mypage/myWishList.do">찜목록</a></li>

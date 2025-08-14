@@ -27,6 +27,33 @@
 		<result property="m_outdate" column="m_outdate" />
 	</resultMap>
 	
+	<!-- 주문 정보 resultMap -->
+    <resultMap id="orderResultMap" type="com.lookmarket.order.vo.OrderVO">
+        <result property="oId" column="o_id"/>
+        <result property="mId" column="m_id"/>
+        <result property="oiDeliveryPrice" column="oi_delivery_price"/>
+        <result property="oiTotalGoodsPrice" column="oi_total_goods_price"/>
+        <result property="oiSalePrice" column="oi_sale_price"/>
+        <result property="oiName" column="oi_name"/>
+        <result property="oiReceiverName" column="oi_receiver_name"/>
+        <result property="oiReceiverPhone" column="oi_receiver_phone"/>
+        <result property="oiDate" column="oi_date"/>
+        <result property="oiDeliveryAddress" column="oi_delivery_address"/>
+        <result property="oi_deli_namuji_address" column="oi_deli_namuji_address"/>
+        <result property="oiDeliveryMessage" column="oi_delivery_message"/>
+    </resultMap>
+
+    <!-- 주문 아이템 resultMap -->
+    <resultMap id="orderItemResultMap" type="com.lookmarket.order.vo.OrderItemVO">
+        <result property="oNum" column="o_num"/>
+        <result property="oId" column="o_id"/>
+        <result property="otGId" column="ot_g_id"/>
+        <result property="otGoodsPrice" column="ot_goods_price"/>
+        <result property="otSalePrice" column="ot_sale_price"/>
+        <result property="otGoodsName" column="ot_goods_name"/>
+        <result property="otGoodsQty" column="ot_goods_qty"/>
+    </resultMap>
+	
 	<select id="getMyPageInfo" parameterType="String" resultType="myPageVO">
 		<![CDATA[
 			SELECT * FROM member
@@ -66,6 +93,65 @@
         	WHERE m_id = #{m_id}
         	ORDER BY r_date DESC
     	]]>
+	</select>
+	
+		<!-- 회원 주문목록 조회 -->
+    <select id="getOrdersByMemberId" parameterType="String" resultType="OrderVO">
+    <![CDATA[
+        SELECT 
+            o_id AS oId,
+            m_id AS mId,
+            oi_delivery_price AS oiDeliveryPrice,
+            oi_total_goods_price AS oiTotalGoodsPrice,
+            oi_sale_price AS oiSalePrice,
+            oi_name AS oiName,
+            oi_receiver_name AS oiReceiverName,
+            oi_receiver_phone AS oiReceiverPhone,
+            oi_delivery_address AS oiDeliveryAddress,
+            oi_deli_namuji_address AS oi_deli_namuji_address,
+            oi_delivery_message AS oiDeliveryMessage,
+            oi_date AS oiDate
+        FROM order_info
+        WHERE m_id = #{m_id}
+        ORDER BY oi_date DESC
+    ]]>
+</select>
+    
+    <!-- 주문 상세 조회 -->
+    <select id="getOrderById" parameterType="int" resultType="OrderVO">
+    <![CDATA[
+        SELECT 
+            o_id AS oId,
+            m_id AS mId,
+            oi_delivery_price AS oiDeliveryPrice,
+            oi_total_goods_price AS oiTotalGoodsPrice,
+            oi_sale_price AS oiSalePrice,
+            oi_name AS oiName,
+            oi_receiver_name AS oiReceiverName,
+            oi_receiver_phone AS oiReceiverPhone,
+            oi_delivery_address AS oiDeliveryAddress,
+            oi_deli_namuji_address AS oi_deli_namuji_address,
+            oi_delivery_message AS oiDeliveryMessage,
+            oi_date AS oiDate
+        FROM order_info
+        WHERE o_id = #{oId}
+    ]]>
+</select>
+    
+    <!-- 주문 상품목록 조회 -->
+    <select id="getOrderItemsByOrderId" parameterType="int" resultType="OrderItemVO">
+    <![CDATA[
+        SELECT 
+            o_num AS oNum,
+            o_id AS oId,
+            ot_g_id AS otGId,
+            ot_goods_price AS otGoodsPrice,
+            ot_sale_price AS otSalePrice,
+            ot_goods_name AS otGoodsName,
+            ot_goods_qty AS otGoodsQty
+        FROM order_item
+        WHERE o_id = #{oId}
+    ]]>
 </select>
 	
 </mapper>
