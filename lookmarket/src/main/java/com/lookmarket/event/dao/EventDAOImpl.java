@@ -27,7 +27,7 @@ public class EventDAOImpl implements EventDAO {
     }
 
     @Override
-    public EventPostVO selectPromotionPostById(int postId) throws DataAccessException {
+    public EventPostVO selectPromotionPostById(Integer postId) throws DataAccessException {
         return sqlSession.selectOne("com.lookmarket.event.dao.EventDAO.selectPromotionPostById", postId);
     }
 
@@ -37,7 +37,7 @@ public class EventDAOImpl implements EventDAO {
     }
 
     @Override
-    public void deletePromotionPost(int postId) throws DataAccessException {
+    public void deletePromotionPost(Integer postId) throws DataAccessException {
         sqlSession.delete("com.lookmarket.event.dao.EventDAO.deletePromotionPost", postId);
     }
 }
