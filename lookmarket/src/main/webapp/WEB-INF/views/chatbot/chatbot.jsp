@@ -40,7 +40,7 @@
       $('#userMessage').val('');
 
       $.ajax({
-        url: '${contextPath}/chatbot/ask.do',
+        url: '${contextPath}/chatbot/message.do',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ message: msg }),
