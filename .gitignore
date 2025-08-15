@@ -1,2 +1,3 @@
 /lookmarket/target/
 lookmarket.zip
+lookmarket/src/main/webapp/WEB-INF/chatbot/application.properties
