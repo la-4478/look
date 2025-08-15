@@ -56,7 +56,10 @@
         </div>
         <div id="chatbot-body">
             <p>안녕하세요! 무엇을 도와드릴까요?</p>
-            <!-- 추후 채팅 기능 여기에 추가 가능 -->
+			<div id="chatInputArea">
+		      <input id="userMessage" class="userMessage" type="text" placeholder="질문을 입력하세요..." autocomplete="off" />
+		      <button id="sendButton" class="sendButton">전송</button>
+		    </div>
         </div>
     </div>
     <div id="scroll-buttons">
@@ -68,6 +71,48 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 
     <!-- 하나로 합쳐서 정리 -->
+<script>
+function appendMessage(message, isUser) {
+    const messageElem = $('<div>').addClass('message').text(message);
+    if (isUser) {
+      messageElem.addClass('userMessage');
+    } else {
+      messageElem.addClass('botMessage');
+    }
+    $('#chatMessages').append(messageElem);
+    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+  }
+
+  function sendMessage() {
+    const msg = $('#userMessage').val().trim();
+    if (!msg) return alert('메시지를 입력하세요.');
+
+    appendMessage(msg, true);
+    $('#userMessage').val('');
+
+    $.ajax({
+      url: "${contextPath}/chatbot/ask.do",
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ message: msg }),
+      success: function(response) {
+        appendMessage(response, false);
+      },
+      error: function() {
+        appendMessage('서버와 통신에 실패했습니다.', false);
+      }
+    });
+  }
+
+  $('#sendButton').on('click', sendMessage);
+
+  $('#userMessage').on('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+</script>
 <script>
     $(document).ready(function() {
         // 챗봇 열기
@@ -90,6 +135,8 @@
             $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
         });
     });
+    
+    
 </script>
 
     

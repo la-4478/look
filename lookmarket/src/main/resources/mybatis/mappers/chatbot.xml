@@ -31,7 +31,7 @@
             UTC_TIMESTAMP())
   </insert>
 
-  <select id="loadMessagesForContext" resultType="com.lookmarke.chatbot.vo.ChatMessageVO">
+  <select id="loadMessagesForContext" resultType="com.lookmarket.chatbot.vo.ChatMessageVO">
     SELECT message_id AS messageId, session_id AS sessionId, role, content,
            meta_json AS metaJson, created_at AS createdAt
       FROM chat_message

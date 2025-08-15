@@ -1,16 +1,19 @@
 package com.lookmarket.chatbot.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.lookmarket.chatbot.service.ChatbotService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/chatbot")
@@ -19,16 +22,10 @@ public class ChatbotController {
     @Autowired
     private ChatbotService chatbotService;
 
-    @PostMapping("/message.do")
+    @PostMapping("/ask")
     @ResponseBody
-    public ResponseEntity<String> getChatResponse(@RequestParam("message") String message) {
-        try {
-            String result = chatbotService.getChatbotResponse(message);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Error occurred: " + e.getMessage());
-        }
+    public String ask(@RequestParam("message") String message) {
+        return chatbotService.askChatGPT(message);
     }
     
 	@RequestMapping(value="/chatbot.do", method= {RequestMethod.POST, RequestMethod.GET})
