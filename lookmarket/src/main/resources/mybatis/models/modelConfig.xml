@@ -3,6 +3,11 @@
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+
+  <!--
+    typeAliases: XML에서 타입 길게 쓰기 귀찮으니 별칭 등록
+    - 패키지/클래스명은 아래 VO 코드와 동일해야 함
+  -->
 	<typeAliases>
     	<typeAlias type="com.lookmarket.goods.vo.GoodsVO" alias="goodsVO" />
     	<typeAlias type="com.lookmarket.goods.vo.ImageFileVO" alias="imageFileVO" />
@@ -13,11 +18,27 @@
     	<typeAlias type="com.lookmarket.community.vo.BlackBoardVO" alias="blackBoardVO" />
     	<typeAlias type="com.lookmarket.community.vo.ReviewVO" alias="reviewVO" />
     	<typeAlias type="com.lookmarket.mypage.vo.MyPageVO" alias="myPageVO" />
-    	<typeAlias type="com.lookmarket.order.vo.OrderVO" alias="OrderVO" />
-    	<typeAlias type="com.lookmarket.order.vo.OrderItemVO" alias="OrderItemVO" />
-    	<typeAlias type="com.lookmarket.order.vo.PayVO" alias="PayVO" />
+    	<typeAlias type="com.lookmarket.order.vo.OrderVO" alias="orderVO" />
+    	<typeAlias type="com.lookmarket.order.vo.OrderItemVO" alias="orderItemVO" />
+    	<typeAlias type="com.lookmarket.order.vo.PayVO" alias="payVO" />
     	<typeAlias type="com.lookmarket.order.vo.DeliveryVO" alias="deliveryVO" />
     	<typeAlias type="com.lookmarket.chatbot.vo.ChatMessageVO" alias="chatMessageVO" />
     	<typeAlias type="com.lookmarket.chatbot.vo.ChatSessionVO" alias="chatSessionVO" />
+    	<typeAlias type="com.lookmarket.chatbot.vo.ChatCallLogVO" alias="chatCallLogVO"/>
+  		<typeAlias type="com.lookmarket.chatbot.vo.ChatFeedbackVO" alias="chatFeedbackVO"/>
+  		<typeAlias type="com.lookmarket.chatbot.vo.AppUserVO" alias="appUserVO"/>
+  		<typeAlias type="com.lookmarket.kb.KbDocumentVO" alias="kbDocumentVO"/>
+	    <typeAlias type="com.lookmarket.kb.KbChunkVO" alias="kbChunkVO"/>
   	</typeAliases>
+
+
+  <!--
+    임베딩(float[]) <-> MEDIUMBLOB 변환 핸들러
+    - DB엔 4바이트 * 차원수 로 저장
+    - Little Endian으로 저장/복원 (플랫폼 독립)
+  -->
+  <typeHandlers>
+    <typeHandler handler="com.lookmarket.kb.mybatis.FloatArrayBlobTypeHandler"
+                 javaType="float[]" jdbcType="BLOB"/>
+  </typeHandlers>
 </configuration>

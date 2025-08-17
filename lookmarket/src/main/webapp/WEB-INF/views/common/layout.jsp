@@ -13,6 +13,68 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link href="${contextPath}/resources/css/chatbot.css" rel="stylesheet" type="text/css"><!-- 챗봇 CSS 파일 -->
 </head>
+<script>
+    /**
+     * 채팅창에 말풍선을 추가한다.
+     * @param {string} message - 표시할 텍스트
+     * @param {boolean} isUser - true면 사용자 말풍선, false면 봇 말풍선
+     */
+    function appendMessage(message, isUser) {
+      const messageElem = $('<div>').addClass('message').text(message);
+      if (isUser) {
+        messageElem.addClass('userMessage');  // 우측 정렬 등 스타일링용 클래스
+      } else {
+        messageElem.addClass('botMessage');   // 좌측 정렬 등 스타일링용 클래스
+      }
+      $('#chatMessages').append(messageElem);
+      // 최근 메시지가 보이도록 스크롤을 하단으로 내린다.
+      $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+    }
+
+    /**
+     * 입력창의 텍스트를 서버에 보낸다.
+     * - contentType: 'application/json' → 컨트롤러 @RequestBody 로 받게 함
+     * - dataType: 'json' → 컨트롤러가 JSON 반환 시 자동 파싱
+     */
+    function sendMessage() {
+      const msg = $('#userMessage').val().trim();
+      if (!msg) return alert('메시지를 입력하세요.');
+
+      // 1) 먼저 사용자 말풍선 출력
+      appendMessage(msg, true);
+      // 2) 입력창 비우기
+      $('#userMessage').val('');
+
+      // 3) 서버로 JSON POST
+      $.ajax({
+        url: '${contextPath}/chatbot/message.do',       // 컨트롤러 매핑
+        method: 'POST',
+        contentType: 'application/json; charset=UTF-8', // 서버가 @RequestBody로 JSON 받도록
+        dataType: 'json',                               // 서버 응답을 JSON으로 파싱
+        data: JSON.stringify({ message: msg }),         // {"message":"..."} 형태
+        success: function(response) {
+          // 컨트롤러가 ChatResponse { content: "..."}를 돌려줌
+          appendMessage(response.content, false);
+        },
+        error: function(xhr) {
+          // 에러도 JSON 포맷을 유지했으므로 .content 우선 시도
+          const msg = xhr.responseJSON?.content || '서버와 통신에 실패했습니다.';
+          appendMessage(msg, false);
+        }
+      });
+    }
+
+    // 전송 버튼 클릭
+    $('#sendButton').on('click', sendMessage);
+
+    // Enter 키 전송 (Shift+Enter 로 줄바꿈 같은 고급 기능은 추후)
+    $('#userMessage').on('keypress', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
 
 <body>
     <c:if test="${not empty message}">
@@ -56,8 +118,11 @@
         </div>
         <div id="chatbot-body">
             <p>안녕하세요! 무엇을 도와드릴까요?</p>
-            <!-- 추후 채팅 기능 여기에 추가 가능 -->
+	    <div id="chatInputArea">
+	      <input id="userMessage" type="text" placeholder="질문을 입력하세요..." autocomplete="off" />
+	      <button id="sendButton">전송</button>
         </div>
+    </div>
     </div>
     <div id="scroll-buttons">
     	<button id="scroll-up" class="scroll-btn">▲</button>

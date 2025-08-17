@@ -1,0 +1,6 @@
+# application.properties 안에서 API key를 ${OPENAI_API_KEY} 로 치환
+regex:openai\.api-?key\s*=\s*sk-[A-Za-z0-9]+==>openai.api-key=${OPENAI_API_KEY}
+regex:openai\.api-?key\s*=\s*.*==>openai.api-key=${OPENAI_API_KEY}
+
+# 혹시 다른 곳에 단독으로 들어간 openai api key (sk- 로 시작하는 문자열 전체) 를 치환
+regex:sk-[A-Za-z0-9]+==>OPENAI_API_KEY_REDACTED

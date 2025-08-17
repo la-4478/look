@@ -58,12 +58,24 @@
 		</bean>
 		
 		<!-- 타임아웃 설정 가능한 HttpClient 팩토리 -->
-		<bean id="httpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		<!--
+		    기존:
+		    <bean id="httpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+		        <property name="connectTimeout" value="${openai.http.connect-timeout-ms:5000}"/>
+		        <property name="readTimeout" value="${openai.http.read-timeout-ms:30000}"/>
+		    </bean>
+		
+		    문제: HttpComponentsClientHttpRequestFactory는 Apache HttpClient5에 의존.
+		         현재 POM에 httpclient5가 없어 ClassNotFoundException 발생.
+		    해결: 외부 라이브러리 없이 동작하는 JDK 기반 팩토리(SimpleClientHttpRequestFactory)로 교체.
+		-->
+		<bean id="httpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+		    <!-- 주석: 밀리초 기준 타임아웃 -->
 		    <property name="connectTimeout" value="${openai.http.connect-timeout-ms:5000}"/>
 		    <property name="readTimeout" value="${openai.http.read-timeout-ms:30000}"/>
 		</bean>
 		
-		<!-- OpenAI 호출용 RestTemplate -->
+		<!-- OpenAI 외의 내부 API 등 호출 시 사용할 RestTemplate -->
 		<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
 		    <constructor-arg ref="httpRequestFactory"/>
 		</bean>
@@ -72,7 +84,7 @@
 		
 		<aop:aspectj-autoproxy />
 		
-		<context:component-scan base-package="com.lookmarket">
+		<context:component-scan base-package="com.lookmarket, config">
 			<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 		</context:component-scan>
 		

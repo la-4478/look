@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lookmarket.chat.ChatMapper">
+
+  <resultMap id="AppUserMap" type="AppUserVO">
+    <id     column="user_id"      property="userId"/>
+    <result column="username"     property="username"/>
+    <result column="display_name" property="displayName"/>
+    <result column="created_at"   property="createdAt"/>
+  </resultMap>
+
+  <resultMap id="ChatSessionMap" type="ChatSessionVO">
+    <id     column="session_id"   property="sessionId"/>
+    <result column="user_id"      property="userId"/>
+    <result column="title"        property="title"/>
+    <result column="created_at"   property="createdAt"/>
+    <result column="updated_at"   property="updatedAt"/>
+  </resultMap>
+
+  <resultMap id="ChatMessageMap" type="ChatMessageVO">
+    <id     column="message_id"   property="messageId"/>
+    <result column="session_id"   property="sessionId"/>
+    <result column="role"         property="role"/>
+    <result column="content"      property="content"/>
+    <result column="meta_json"    property="metaJson" jdbcType="LONGVARCHAR"/>
+    <result column="created_at"   property="createdAt"/>
+  </resultMap>
+
+  <resultMap id="ChatCallLogMap" type="ChatCallLogVO">
+    <id     column="call_id"          property="callId"/>
+    <result column="session_id"       property="sessionId"/>
+    <result column="model"            property="model"/>
+    <result column="prompt_tokens"    property="promptTokens"/>
+    <result column="completion_tokens" property="completionTokens"/>
+    <result column="total_tokens"     property="totalTokens"/>
+    <result column="cost_usd"         property="costUsd"/>
+    <result column="request_id"       property="requestId"/>
+    <result column="created_at"       property="createdAt"/>
+  </resultMap>
+
+  <resultMap id="ChatFeedbackMap" type="ChatFeedbackVO">
+    <id     column="feedback_id"  property="feedbackId"/>
+    <result column="message_id"   property="messageId"/>
+    <result column="rating"       property="rating"/>
+    <result column="note"         property="note"/>
+    <result column="created_at"   property="createdAt"/>
+  </resultMap>
+
+  <!-- user -->
+  <insert id="insertUser" parameterType="AppUserVO"
+          useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    INSERT INTO app_user (username, display_name)
+    VALUES (#{username}, #{displayName})
+  </insert>
+
+  <select id="findUserById" resultMap="AppUserMap">
+    SELECT * FROM app_user WHERE user_id = #{userId}
+  </select>
+
+  <select id="findUserByUsername" resultMap="AppUserMap">
+    SELECT * FROM app_user WHERE username = #{username}
+  </select>
+
+  <!-- session -->
+  <insert id="insertSession" parameterType="ChatSessionVO"
+          useGeneratedKeys="true" keyProperty="sessionId" keyColumn="session_id">
+    INSERT INTO chat_session (user_id, title)
+    VALUES (#{userId}, #{title})
+  </insert>
+
+  <update id="updateSessionTitle">
+    UPDATE chat_session SET title = #{title} WHERE session_id = #{sessionId}
+  </update>
+
+  <select id="findSession" resultMap="ChatSessionMap">
+    SELECT * FROM chat_session WHERE session_id = #{sessionId}
+  </select>
+
+  <select id="listSessionsByUser" resultMap="ChatSessionMap">
+    SELECT * FROM chat_session
+    WHERE user_id = #{userId}
+    ORDER BY updated_at DESC
+    LIMIT #{limit} OFFSET #{offset}
+  </select>
+
+  <delete id="deleteSession">
+    DELETE FROM chat_session WHERE session_id = #{sessionId}
+  </delete>
+
+  <!-- message -->
+  <insert id="insertMessage" parameterType="ChatMessageVO"
+          useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
+    INSERT INTO chat_message (session_id, role, content, meta_json)
+    VALUES (#{sessionId}, #{role}, #{content}, #{metaJson})
+  </insert>
+
+  <select id="listMessages" resultMap="ChatMessageMap">
+    SELECT * FROM chat_message
+    WHERE session_id = #{sessionId}
+    ORDER BY created_at ASC
+    LIMIT #{limit}
+  </select>
+
+  <select id="listMessagesAfter" resultMap="ChatMessageMap">
+    SELECT * FROM chat_message
+    WHERE session_id = #{sessionId}
+      AND message_id > #{afterId}
+    ORDER BY message_id ASC
+  </select>
+
+  <!-- call log -->
+  <insert id="insertCallLog" parameterType="ChatCallLogVO"
+          useGeneratedKeys="true" keyProperty="callId" keyColumn="call_id">
+    INSERT INTO chat_call_log
+      (session_id, model, prompt_tokens, completion_tokens, total_tokens, cost_usd, request_id)
+    VALUES
+      (#{sessionId}, #{model}, #{promptTokens}, #{completionTokens}, #{totalTokens}, #{costUsd}, #{requestId})
+  </insert>
+
+  <!-- feedback -->
+  <insert id="insertFeedback" parameterType="ChatFeedbackVO"
+          useGeneratedKeys="true" keyProperty="feedbackId" keyColumn="feedback_id">
+    INSERT INTO chat_feedback (message_id, rating, note)
+    VALUES (#{messageId}, #{rating}, #{note})
+  </insert>
+
+  <select id="listFeedbackByMessage" resultMap="ChatFeedbackMap">
+    SELECT * FROM chat_feedback WHERE message_id = #{messageId} ORDER BY created_at DESC
+  </select>
+</mapper>

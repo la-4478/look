@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kb.KbMapper">
+
+  <resultMap id="KbDocumentMap" type="KbDocumentVO">
+    <id     column="doc_id"        property="docId"/>
+    <result column="source_url"    property="sourceUrl"/>
+    <result column="title"         property="title"/>
+    <result column="raw_text"      property="rawText"/>
+    <result column="lang"          property="lang"/>
+    <result column="content_hash"  property="contentHash"/>
+    <result column="created_at"    property="createdAt"/>
+    <result column="updated_at"    property="updatedAt"/>
+  </resultMap>
+
+  <resultMap id="KbChunkMap" type="KbChunkVO">
+    <id     column="chunk_id"      property="chunkId"/>
+    <result column="doc_id"        property="docId"/>
+    <result column="title"         property="title"/>
+    <result column="text"          property="text"/>
+    <result column="embedding"     property="embedding" jdbcType="BLOB"/>
+    <result column="token_count"   property="tokenCount"/>
+    <result column="order_in_doc"  property="orderInDoc"/>
+    <result column="created_at"    property="createdAt"/>
+    <result column="updated_at"    property="updatedAt"/>
+  </resultMap>
+
+  <insert id="insertDocument" parameterType="KbDocumentVO"
+          useGeneratedKeys="true" keyProperty="docId" keyColumn="doc_id">
+    INSERT INTO kb_document (source_url, title, raw_text, lang, content_hash)
+    VALUES (#{sourceUrl}, #{title}, #{rawText}, #{lang}, #{contentHash})
+  </insert>
+
+  <select id="findDocumentById" resultMap="KbDocumentMap">
+    SELECT * FROM kb_document WHERE doc_id = #{docId}
+  </select>
+
+  <select id="findDocumentByHash" resultMap="KbDocumentMap">
+    SELECT * FROM kb_document WHERE content_hash = #{contentHash}
+  </select>
+
+  <select id="listDocuments" resultMap="KbDocumentMap">
+    SELECT * FROM kb_document ORDER BY updated_at DESC
+  </select>
+
+  <delete id="deleteDocument">
+    DELETE FROM kb_document WHERE doc_id = #{docId}
+  </delete>
+
+  <insert id="insertChunk" parameterType="KbChunkVO"
+          useGeneratedKeys="true" keyProperty="chunkId" keyColumn="chunk_id">
+    INSERT INTO kb_chunk
+      (doc_id, title, text, embedding, token_count, order_in_doc)
+    VALUES
+      (#{docId}, #{title}, #{text},
+       #{embedding, jdbcType=BLOB},
+       #{tokenCount}, #{orderInDoc})
+  </insert>
+
+  <insert id="insertChunksBatch">
+    INSERT INTO kb_chunk (doc_id, title, text, embedding, token_count, order_in_doc)
+    VALUES
+    <foreach collection="list" item="c" separator=",">
+      (#{c.docId}, #{c.title}, #{c.text},
+       #{c.embedding, jdbcType=BLOB},
+       #{c.tokenCount}, #{c.orderInDoc})
+    </foreach>
+  </insert>
+
+  <select id="selectAllChunks" resultMap="KbChunkMap">
+    SELECT * FROM kb_chunk ORDER BY updated_at DESC
+  </select>
+
+  <select id="selectChunksByDoc" resultMap="KbChunkMap">
+    SELECT * FROM kb_chunk WHERE doc_id = #{docId} ORDER BY order_in_doc ASC
+  </select>
+
+  <delete id="deleteChunksByDoc">
+    DELETE FROM kb_chunk WHERE doc_id = #{docId}
+  </delete>
+</mapper>

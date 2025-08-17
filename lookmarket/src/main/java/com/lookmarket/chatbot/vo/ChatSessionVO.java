@@ -1,18 +1,16 @@
 package com.lookmarket.chatbot.vo;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import lombok.Data;
 
-import org.springframework.stereotype.Component;
-
-@Component("chatSessionVO")
+@Data
 public class ChatSessionVO {
 	  private Long sessionId;
 	  private Long userId;
 	  private String title;
-	  private LocalDateTime createdAt;
-	  private LocalDateTime updatedAt;
-	  
-	  
+	  private Timestamp createdAt;
+	  private Timestamp updatedAt;
+  
 	public Long getSessionId() {
 		return sessionId;
 	}
@@ -31,18 +29,18 @@ public class ChatSessionVO {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public LocalDateTime getCreatedAt() {
+	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-	public LocalDateTime getUpdatedAt() {
+	public Timestamp getUpdatedAt() {
 		return updatedAt;
 	}
-	public void setUpdatedAt(LocalDateTime updatedAt) {
+	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	  
-	  
+  
+  
 }
