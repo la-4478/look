@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.lookmarket.chatbot.mapper.GoodsBotMapper;
 import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.goods.vo.ImageFileVO;
 import com.lookmarket.order.vo.OrderItemVO;
@@ -18,6 +19,13 @@ import com.lookmarket.order.vo.OrderItemVO;
 public class GoodsDAOImpl implements GoodsDAO{
 	@Autowired
 	private SqlSession sqlSession;
+	private GoodsBotMapper goodsMapper;
+    public void GoodsDAO(GoodsBotMapper goodsMapper) {
+        this.goodsMapper = goodsMapper;
+    }
+    public List<GoodsVO> findByKeyword(String keyword) {
+        return goodsMapper.selectByKeyword(keyword);
+    }
 	
 	@Override
 	public List<GoodsVO> selectAllGoodsList() throws DataAccessException{
