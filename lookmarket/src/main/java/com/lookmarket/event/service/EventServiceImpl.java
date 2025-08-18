@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lookmarket.event.dao.EventDAO;
+import com.lookmarket.event.vo.CouponVO;
 import com.lookmarket.event.vo.EventPostVO;
 
 @Service("eventService")
@@ -41,4 +42,28 @@ public class EventServiceImpl implements EventService {
         eventDAO.deletePromotionPost(postId);
     }
 
+    @Override
+    public List<CouponVO> selectCouponListByPostId(int postId) throws Exception {
+        return eventDAO.selectCouponListByPostId(postId);
+    }
+
+    @Override
+    public CouponVO selectCouponById(int promoId) throws Exception {
+        return eventDAO.selectCouponById(promoId);
+    }
+
+    @Override
+    public void insertCoupon(CouponVO couponVO) throws Exception {
+        eventDAO.insertCoupon(couponVO);
+    }
+
+    @Override
+    public void updateCoupon(CouponVO couponVO) throws Exception {
+        eventDAO.updateCoupon(couponVO);
+    }
+
+    @Override
+    public void deleteCoupon(int promoId) throws Exception {
+        eventDAO.deleteCoupon(promoId);
+    }
 }

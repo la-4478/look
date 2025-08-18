@@ -262,12 +262,12 @@ import jakarta.servlet.http.HttpSession;
 
 		        String originalFilename = file.getOriginalFilename();
 		        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-		        String storedFilename = UUID.randomUUID().toString() + extension;
 
-		        File saveFile = new File(uploadPath + storedFilename);
+
+		        File saveFile = new File(uploadPath + originalFilename);
 		        file.transferTo(saveFile);
 
-		        reviewVO.setR_filename(storedFilename);
+		        reviewVO.setR_filename(originalFilename);
 		        reviewVO.setR_filetype(file.getContentType());
 		    } else {
 		        reviewVO.setR_filename(null);
@@ -347,12 +347,12 @@ import jakarta.servlet.http.HttpSession;
 
 		        String originalFilename = file.getOriginalFilename();
 		        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-		        String storedFilename = UUID.randomUUID().toString() + extension;
 
-		        File saveFile = new File(uploadPath + storedFilename);
+
+		        File saveFile = new File(uploadPath + originalFilename);
 		        file.transferTo(saveFile);
 
-		        reviewVO.setR_filename(storedFilename);
+		        reviewVO.setR_filename(originalFilename);
 		        reviewVO.setR_filetype(file.getContentType());
 		    } else {
 		        reviewVO.setR_filename(null);

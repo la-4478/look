@@ -64,65 +64,86 @@
 	<delete id="deletePromotionPost" parameterType="int">
 	    DELETE FROM promotion_post WHERE post_id = #{postId}
 	</delete>
-	<insert parameterType="map" id="insertCoupon">
-		INSERT INTO promotion_coupon(
-			promo_code, 
-			promo_discount_type, 
-			promo_discount_value, 
-			promo_max_discount, 
-			promo_min_purchase, 
-			promo_start_date, 
-			promo_end_date, 
-			promo_coupon_active, 
-			m_id, 
-			promo_used_date, 
-			post_id)
-		VALUES(
-			#{promo_code}, 
-			#{promo_discount_type}, 
-			#{promo_discount_value}, 
-			#{promo_max_discount}, 
-			#{promo_min_purchase}, 
-			#{promo_start_date}, 
-			#{promo_end_date}, 
-			#{promo_coupon_active}, 
-			#{m_id}, 
-			#{promo_used_date}, 
-			#{post_id}) 
-	</insert>
 	
-	<select parameterType="int" id="selectCouponById" resultType="map">
-		SELECT * FROM promotion_coupon 
-		WHERE promo_id = #{promoId} 
-	</select>
 	
-	<select id="selectCouponList" resultType="map">
-		SELECT * FROM promotion_coupon 
-		ORDER BY promo_start_date DESC 
-	</select>
+	    <!-- 쿠폰 VO 매핑 -->
+    <resultMap id="couponResultMap" type="com.lookmarket.event.vo.CouponVO">
+        <id property="promoId" column="promo_id"/>
+        <result property="promoCode" column="promo_code"/>
+        <result property="promoDiscountType" column="promo_discount_type"/>
+        <result property="promoDiscountValue" column="promo_discount_value"/>
+        <result property="promoMaxDiscount" column="promo_max_discount"/>
+        <result property="promoMinPurchase" column="promo_min_purchase"/>
+        <result property="promoStartDate" column="promo_start_date"/>
+        <result property="promoEndDate" column="promo_end_date"/>
+        <result property="promoCouponActive" column="promo_coupon_active"/>
+        <result property="mId" column="m_id"/>
+        <result property="promoUsedDate" column="promo_used_date"/>
+        <result property="postId" column="post_id"/>
+    </resultMap>
+
+    <!-- 쿠폰 목록 조회 (전체 또는 특정 postId) -->
+    <select id="selectCouponListByPostId" parameterType="int" resultMap="couponResultMap">
+        SELECT * FROM promotion_coupon WHERE post_id = #{postId}
+        ORDER BY promo_start_date DESC
+    </select>
+
+    <!-- 쿠폰 단건 조회 -->
+    <select id="selectCouponById" parameterType="int" resultMap="couponResultMap">
+        SELECT * FROM promotion_coupon WHERE promo_id = #{promoId}
+    </select>
+
+    <!-- 쿠폰 등록 -->
+    <insert id="insertCoupon" parameterType="com.lookmarket.event.vo.CouponVO">
+        INSERT INTO promotion_coupon (
+            promo_code,
+            promo_discount_type,
+            promo_discount_value,
+            promo_max_discount,
+            promo_min_purchase,
+            promo_start_date,
+            promo_end_date,
+            promo_coupon_active,
+            m_id,
+            promo_used_date,
+            post_id
+        ) VALUES (
+            #{promoCode},
+            #{promoDiscountType},
+            #{promoDiscountValue},
+            #{promoMaxDiscount},
+            #{promoMinPurchase},
+            #{promoStartDate},
+            #{promoEndDate},
+            #{promoCouponActive},
+            #{mId},
+            #{promoUsedDate},
+            #{postId}
+        )
+    </insert>
+
+    <!-- 쿠폰 수정 -->
+    <update id="updateCoupon" parameterType="com.lookmarket.event.vo.CouponVO">
+        UPDATE promotion_coupon
+        SET
+            promo_code = #{promoCode},
+            promo_discount_type = #{promoDiscountType},
+            promo_discount_value = #{promoDiscountValue},
+            promo_max_discount = #{promoMaxDiscount},
+            promo_min_purchase = #{promoMinPurchase},
+            promo_start_date = #{promoStartDate},
+            promo_end_date = #{promoEndDate},
+            promo_coupon_active = #{promoCouponActive},
+            m_id = #{mId},
+            promo_used_date = #{promoUsedDate},
+            post_id = #{postId}
+        WHERE promo_id = #{promoId}
+    </update>
+
+    <!-- 쿠폰 삭제 -->
+    <delete id="deleteCoupon" parameterType="int">
+        DELETE FROM promotion_coupon
+        WHERE promo_id = #{promoId}
+    </delete>
 	
-	<update parameterType="map" id="updateCoupon">
-		UPDATE promotion_coupon 
-		SET 
-			promo_code = #{promo_code},
-			promo_discount_type = #{promo_discount_type},
-			promo_discount_value = #{promo_discount_value},
-			promo_max_discount = #{promo_max_discount},
-			promo_min_purchase = #{promo_min_purchase},
-			promo_start_date = #{promo_start_date},
-			promo_end_date = #{promo_end_date},
-			promo_coupon_active = #{promo_coupon_active},
-			m_id = #{m_id},
-			promo_used_date = #{promo_used_date},
-			post_id = #{post_id}
-		WHERE 
-			promo_id = #{promo_id} 
-	</update>
-	
-	<delete parameterType="int" id="deleteCoupon">
-		DELETE FROM promotion_coupon 
-		WHERE promo_id = #{promoId} 
-	</delete>
-	
-	<!-- 쿠폰-프로모션 연결 -->
 </mapper>
