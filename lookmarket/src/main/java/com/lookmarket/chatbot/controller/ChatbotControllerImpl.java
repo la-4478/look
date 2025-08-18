@@ -1,7 +1,5 @@
 package com.lookmarket.chatbot.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,17 +27,6 @@ public class ChatbotControllerImpl implements ChatbotController {
     private ChatbotService chatbotService;
 	@Autowired
 	private AiAnswerService aiAnswerService;
-
-    /**
-     * 클라이언트에서 JSON을 보내므로 consumes/produces를 명시한다.
-     * @RequestBody 로 {"message":"..."} 를 파싱해 DTO로 받는다.
-     * 반환도 JSON이므로 ResponseEntity<ChatResponse> 로 보낸다.
-     */
-    @PostMapping(
-        value = "/message.do",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
     
     @Override
     @ResponseBody
@@ -60,16 +47,25 @@ public class ChatbotControllerImpl implements ChatbotController {
         }
     }
     
-    @PostMapping(value="/message.do", consumes="application/json", produces="application/json")
-    public Map<String, Object> message(@RequestBody Map<String, String> body) {
-        String q = body.getOrDefault("message", "").trim();
-        if (q.isEmpty()) return Map.of("content", "질문을 입력해 주세요.");
-        var ans = aiAnswerService.answer(q);
-        return Map.of(
-            "content", ans.content(),
-            "sources", ans.sources() // 필요하면 프론트에서 '참고: ...' 출력
-        );
-    }
+    @PostMapping(
+    		  value = "/message.do",
+    		  consumes = MediaType.APPLICATION_JSON_VALUE,
+    		  produces = MediaType.APPLICATION_JSON_VALUE
+    		)
+    		public ResponseEntity<ChatResponse> message(@RequestBody ChatRequest body) {
+    		    if (body == null || body.getMessage() == null || body.getMessage().isBlank()) {
+    		        return ResponseEntity.badRequest().body(new ChatResponse("메시지가 비었습니다."));
+    		    }
+
+    		    boolean useRag = "rag".equalsIgnoreCase(body.getMessage()); // ChatRequest에 mode 추가 가정
+    		    if (useRag) {
+    		        var ans = aiAnswerService.answer(body.getMessage());
+    		        return ResponseEntity.ok(new ChatResponse(ans.content())); // 필요시 sources 추가
+    		    } else {
+    		        String result = chatbotService.getChatbotResponse(body.getMessage());
+    		        return ResponseEntity.ok(new ChatResponse(result));
+    		    }
+    		}
 
     /**
      * 레이아웃 엔진으로 JSP 진입. 기존 프로젝트 컨벤션 그대로 맞춰 둠.

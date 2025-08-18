@@ -45,6 +45,7 @@
 	    	<property name="dataSource" ref="dataSource" />
 	  		<property name="configLocation" value="classpath:mybatis/models/modelConfig.xml"  />
 	  		<property name="mapperLocations" value="classpath:mybatis/mappers/*.xml" />
+	  		<property name="typeHandlersPackage" value="com.lookmarket.kb.mybatis"/>
 		</bean >
 		
 		<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">

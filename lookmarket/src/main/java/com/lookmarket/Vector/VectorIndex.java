@@ -20,7 +20,7 @@ public class VectorIndex {
 
  public void load(List<KbChunkVO> chunks) {
      entries.clear();
-     for (KbChunkVO c : chunks) entries.add(new Entry(c.getId(), c.getTitle(), c.getText(), c.getEmbedding()));
+     for (KbChunkVO c : chunks) entries.add(new Entry(c.getChunkId(), c.getTitle(), c.getText(), c.getEmbedding()));
  }
  public List<SearchHit> topK(float[] q, int k){
      float qn = Entry.l2(q);

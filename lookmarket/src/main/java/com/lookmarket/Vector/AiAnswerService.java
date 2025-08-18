@@ -47,7 +47,7 @@ public class AiAnswerService {
         Map res = openAIClient.post().uri("/chat/completions").bodyValue(req)
             .retrieve().bodyToMono(Map.class).block();
 
-        String content = (String)((Map)((List)((Map)res.get("choices")).get(0)).get("message")).get("content");
+        String content = (String) ((Map)((Map)((List)res.get("choices")).get(0)).get("message")).get("content");
 
         // 출처(타이틀만 간단히)
         List<String> sources = hits.stream().map(VectorIndex.SearchHit::title).toList();

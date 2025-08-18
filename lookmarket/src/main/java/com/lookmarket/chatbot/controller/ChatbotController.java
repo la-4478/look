@@ -1,9 +1,7 @@
 package com.lookmarket.chatbot.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lookmarket.chatbot.dto.ChatDTO.ChatRequest;

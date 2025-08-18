@@ -27,8 +27,8 @@
     	<typeAlias type="com.lookmarket.chatbot.vo.ChatCallLogVO" alias="chatCallLogVO"/>
   		<typeAlias type="com.lookmarket.chatbot.vo.ChatFeedbackVO" alias="chatFeedbackVO"/>
   		<typeAlias type="com.lookmarket.chatbot.vo.AppUserVO" alias="appUserVO"/>
-  		<typeAlias type="com.lookmarket.kb.KbDocumentVO" alias="kbDocumentVO"/>
-	    <typeAlias type="com.lookmarket.kb.KbChunkVO" alias="kbChunkVO"/>
+  		<typeAlias type="com.lookmarket.kb.vo.KbDocumentVO" alias="kbDocumentVO"/>
+	    <typeAlias type="com.lookmarket.kb.vo.KbChunkVO" alias="kbChunkVO"/>
   	</typeAliases>
 
 
