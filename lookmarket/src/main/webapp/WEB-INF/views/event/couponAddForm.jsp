@@ -14,9 +14,9 @@
     <form action="${contextPath}/event/insertCoupon.do" method="post">
         <div class="form-group">
             <label for="promoCode">쿠폰 코드</label>
-            <input type="text" id="promoCode" name="promoCode" required />
+            <input type="text" id="promoCode" name="promoCode" required/>
         </div>
-
+		<input type = "hidden" name="postId" value="${postId}"/>
         <div class="form-group">
             <label for="promoDiscountType">할인 유형</label>
             <select id="promoDiscountType" name="promoDiscountType" required>
@@ -61,9 +61,11 @@
 
         <div class="submit-btn">
             <button type="submit">등록하기</button>
-            <a href="${contextPath}/event/couponList.do">취소</a>
+            <a href="${contextPath}/event/couponList.do?postId=${postId}">취소</a>
         </div>
     </form>
+    <c:out value="${postId}" default="postId 없음"/>
+    
 </div>
 </body>
 </html>

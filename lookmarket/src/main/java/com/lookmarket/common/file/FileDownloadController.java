@@ -12,25 +12,35 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class FileDownloadController {
-	private static final String CURR_IMAGE_REPO_PATH = "C:\\lookmarket_resources\\file_repo";
-	
-	@RequestMapping("/doqnload")
-	protected void download(@RequestParam("i_file_name") String i_file_name, @RequestParam("g_id") String g_id, HttpServletResponse response) throws Exception{
-		OutputStream out = response.getOutputStream();
-		String filePath = CURR_IMAGE_REPO_PATH + "\\" + g_id + "\\" + i_file_name;
-		File image = new File(filePath);
-		
-		response.setHeader("Cache-Control", "no-cache");
-		response.addHeader("Content-disposition", "attachment; i_file_name=" + i_file_name);
-		FileInputStream in = new FileInputStream(image);
-		byte[] buffer = new byte[1024*8];
-		while(true) {
-			int count = in.read(buffer);
-			if(count==-1) break;
-			out.write(buffer, 0, count);
-		}
-		
-		in.close();
-		out.close();
-	}
+    private static final String CURR_IMAGE_REPO_PATH = "C:\\lookmarket_resources\\file_repo";
+
+    @RequestMapping("/download")
+    protected void download(@RequestParam("i_file_name") String i_file_name,
+                            @RequestParam(value = "g_id", required = false) String g_id,
+                            HttpServletResponse response) throws Exception {
+
+        OutputStream out = response.getOutputStream();
+
+        String filePath;
+        if (g_id == null || g_id.isEmpty()) {
+            filePath = CURR_IMAGE_REPO_PATH + File.separator + i_file_name;
+        } else {
+            filePath = CURR_IMAGE_REPO_PATH + File.separator + g_id + File.separator + i_file_name;
+        }
+
+        File image = new File(filePath);
+
+        response.setHeader("Cache-Control", "no-cache");
+        response.addHeader("Content-disposition", "attachment; filename=" + i_file_name);
+
+        FileInputStream in = new FileInputStream(image);
+        byte[] buffer = new byte[1024 * 8];
+        int count;
+        while ((count = in.read(buffer)) != -1) {
+            out.write(buffer, 0, count);
+        }
+
+        in.close();
+        out.close();
+    }
 }
