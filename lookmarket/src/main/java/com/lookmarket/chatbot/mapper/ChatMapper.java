@@ -32,6 +32,7 @@ public interface ChatMapper {
                                    @Param("limit") int limit);
   List<ChatMessageVO> listMessagesAfter(@Param("sessionId") long sessionId,
                                         @Param("afterId") long afterMessageId);
+  
 
   // call log
   int insertCallLog(ChatCallLogVO log);

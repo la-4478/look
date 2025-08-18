@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lookmarket.chatbot.mapper.PromoBotMapper">
+
+  <!-- 진행중 이벤트 (상태 + 날짜 범위) -->
+  <select id="findActivePromos" parameterType="int" resultType="map">
+    SELECT post_id, promo_title, promo_start_date, promo_end_date, promo_banner_img
+    FROM promotion_post
+    WHERE promo_status = 1
+      AND CURDATE() BETWEEN promo_start_date AND promo_end_date
+    ORDER BY promo_created_at DESC
+    LIMIT #{limit}
+  </select>
+
+  <!-- 내 쿠폰(개인 발급 + 전체 공용) 활성 중 -->
+  <select id="findAvailableCouponsForUser" parameterType="map" resultType="map">
+    SELECT promo_code, promo_discount_type, promo_discount_value, promo_max_discount,
+           promo_min_purchase, promo_start_date, promo_end_date
+    FROM promotion_coupon
+    WHERE promo_coupon_active = 1
+      AND CURDATE() BETWEEN promo_start_date AND promo_end_date
+      AND (m_id IS NULL OR m_id = #{mId})
+    ORDER BY promo_end_date ASC
+    LIMIT #{limit}
+  </select>
+
+</mapper>

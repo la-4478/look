@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lookmarket.chatbot.dto.ChatDTO.ChatRequest;
-import com.lookmarket.chatbot.dto.ChatDTO.ChatResponse;
+import com.lookmarket.chatbot.dto.ChatRequest;
+import com.lookmarket.chatbot.dto.ChatResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface ChatbotController {
 
-    public ResponseEntity<ChatResponse> getChatResponse(@RequestBody ChatRequest body) throws Exception;
+    public ResponseEntity<ChatResponse> getChatResponse(@RequestBody ChatRequest body, HttpServletRequest request) throws Exception;
 
     public ModelAndView chatbot(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

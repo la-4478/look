@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lookmarket.chatbot.mapper.BoardBotMapper">
+
+  <!-- 공개글만 제목/내용 LIKE 검색 -->
+  <select id="searchBoard" parameterType="map" resultType="map">
+    SELECT b_id, b_title, b_content, b_date
+    FROM blackboard
+    WHERE b_secret = 1
+      AND (b_title LIKE CONCAT('%', #{q}, '%')
+        OR b_content LIKE CONCAT('%', #{q}, '%'))
+    ORDER BY b_id DESC
+    LIMIT #{limit}
+  </select>
+
+</mapper>

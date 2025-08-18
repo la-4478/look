@@ -23,77 +23,62 @@
   </div>
 
   <script>
-    /**
-     * 채팅창에 말풍선을 추가한다.
-     * @param {string} message - 표시할 텍스트
-     * @param {boolean} isUser - true면 사용자 말풍선, false면 봇 말풍선
-     */
-    function appendMessage(message, isUser) {
-      const messageElem = $('<div>').addClass('message').text(message);
-      if (isUser) {
-        messageElem.addClass('userMessage');  // 우측 정렬 등 스타일링용 클래스
-      } else {
-        messageElem.addClass('botMessage');   // 좌측 정렬 등 스타일링용 클래스
-      }
-      $('#chatMessages').append(messageElem);
-      // 최근 메시지가 보이도록 스크롤을 하단으로 내린다.
-      $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
-    }
-
-    /**
-     * 입력창의 텍스트를 서버에 보낸다.
-     * - contentType: 'application/json' → 컨트롤러 @RequestBody 로 받게 함
-     * - dataType: 'json' → 컨트롤러가 JSON 반환 시 자동 파싱
-     */
-  // JSP의 sendMessage()에 추가
-     let inFlight = false;
-
-function sendMessage() {
-  if (inFlight) return;
-
-  const text = $('#userMessage').val().trim();
-  if (!text) { alert('메시지를 입력하세요.'); return; }
-
-  inFlight = true;
-  $('#sendButton').prop('disabled', true);
-
-  // 1) 사용자 말풍선 출력
-  appendMessage(text, true);
-  // 2) 입력창 비우기
-  $('#userMessage').val('');
-
-  // 3) 서버로 JSON POST
-  $.ajax({
-    url: '${contextPath}/chatbot/message.do',
-    method: 'POST',
-    contentType: 'application/json; charset=UTF-8',
-    dataType: 'json',
-    data: JSON.stringify({ message: text })
-  })
-  .done(function(response) {
-    const content = response?.content ?? '응답 형식이 올바르지 않습니다.';
-    appendMessage(content, false);
-  })
-  .fail(function(xhr) {
-    const errMsg = xhr.responseJSON?.content || '서버와 통신에 실패했습니다.';
-    appendMessage(errMsg, false);
-  })
-  .always(function() {
-    inFlight = false;                    // ✅ 여기서 풀어줘야 두 번째 요청 가능
-    $('#sendButton').prop('disabled', false);
-    $('#userMessage').focus();
-  });
-}
-
-// 이벤트 바인딩(중복 바인딩 방지)
-$('#sendButton').off('click.chat').on('click.chat', sendMessage);
-$('#userMessage').off('keydown.chat').on('keydown.chat', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    sendMessage();
+  function appendMessage(message, isUser) {
+    const messageElem = $('<div>').addClass('message').text(message);
+    messageElem.addClass(isUser ? 'userMessage' : 'botMessage');
+    $('#chatMessages').append(messageElem);
+    $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
   }
-});
 
-  </script>
+  let inFlight = false;
+
+  function sendMessage() {
+    if (inFlight) return;
+
+    const text = $('#userMessage').val().trim();
+    if (!text) { alert('메시지를 입력하세요.'); return; }
+
+    inFlight = true;
+    $('#sendButton').prop('disabled', true);
+
+    appendMessage(text, true);
+    $('#userMessage').val('');
+
+    $.ajax({
+      url: '${contextPath}/chatbot/message.do',
+      method: 'POST',
+      contentType: 'application/json; charset=UTF-8',
+      dataType: 'json',
+      data: JSON.stringify({ message: text })
+    })
+    .done(function(res) {
+      // 항상 ChatResponse { content, sessionId, error }
+      const msg = res && typeof res.content === 'string'
+        ? res.content
+        : '응답 형식이 올바르지 않습니다.';
+      appendMessage(msg, false);
+    })
+    .fail(function(xhr) {
+      const err = (xhr.responseJSON && xhr.responseJSON.content)
+        ? xhr.responseJSON.content
+        : '서버와 통신에 실패했습니다.';
+      appendMessage(err, false);
+    })
+    .always(function() {
+      inFlight = false;
+      $('#sendButton').prop('disabled', false);
+      $('#userMessage').focus();
+    });
+  }
+
+  $('#sendButton').off('click.chat').on('click.chat', sendMessage);
+  $('#userMessage').off('keydown.chat').on('keydown.chat', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+</script>
+
 </body>
 </html>

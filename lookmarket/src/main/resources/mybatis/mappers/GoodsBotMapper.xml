@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lookmarket.chatbot.mapper.GoodsBotMapper">
+
+  <!-- 상품 이름/설명에서 LIKE 검색 (g_discription 오타 컬럼명 주의) -->
+  <select id="searchGoodsLike" parameterType="map" resultType="map">
+    SELECT g_id, g_name, g_discription, g_price, g_stock, g_brand
+    FROM goods
+    WHERE (g_name LIKE CONCAT('%', #{q}, '%')
+        OR g_discription LIKE CONCAT('%', #{q}, '%'))
+      AND g_status = 1
+    ORDER BY g_stock DESC, g_id DESC
+    LIMIT #{limit}
+  </select>
+
+  <!-- 대표 이미지: goods.i_filename (대표), 상세는 goods_image -->
+  <select id="findMainImage" parameterType="int" resultType="string">
+    SELECT i_filename FROM goods WHERE g_id = #{gId}
+  </select>
+
+  <select id="findSubImages" parameterType="int" resultType="string">
+    SELECT i_filename FROM goods_image WHERE g_id = #{gId} ORDER BY i_id ASC
+  </select>
+
+  <!-- 평균 별점 + 리뷰 개수 -->
+  <select id="findReviewStats" parameterType="int" resultType="map">
+    SELECT AVG(r_star) AS avgStar, COUNT(*) AS cnt
+    FROM review
+    WHERE g_id = #{gId} AND r_secret = 0
+  </select>
+
+  <!-- 최신 리뷰 2건 -->
+  <select id="findLatestReviews" parameterType="int" resultType="map">
+    SELECT r_title, r_content, r_star, r_date
+    FROM review
+    WHERE g_id = #{gId} AND r_secret = 0
+    ORDER BY r_date DESC
+    LIMIT 2
+  </select>
+<select id="selectByKeyword" parameterType="string" resultType="GoodsVO">
+  SELECT g_id AS gId, name, price
+  FROM goods
+  WHERE name LIKE CONCAT('%', #{q}, '%')
+  ORDER BY g_id DESC
+</select>
+</mapper>
