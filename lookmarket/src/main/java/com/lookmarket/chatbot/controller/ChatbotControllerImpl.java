@@ -1,5 +1,7 @@
 package com.lookmarket.chatbot.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,12 @@ public class ChatbotControllerImpl implements ChatbotController {
     private ChatbotService chatbotService;
 	@Autowired
 	private AiAnswerService aiAnswerService;
-    
+	
+    @PostMapping(
+  		  value = "/message.do",
+  		  consumes = MediaType.APPLICATION_JSON_VALUE,
+  		  produces = MediaType.APPLICATION_JSON_VALUE
+)
     @Override
     @ResponseBody
     public ResponseEntity<ChatResponse> getChatResponse(@RequestBody ChatRequest body) {
@@ -47,24 +54,20 @@ public class ChatbotControllerImpl implements ChatbotController {
         }
     }
     
+
+    
     @PostMapping(
-    		  value = "/message.do",
+    		  value = "/message-rag.do", // ★ 경로 변경하여 충돌 제거
     		  consumes = MediaType.APPLICATION_JSON_VALUE,
     		  produces = MediaType.APPLICATION_JSON_VALUE
     		)
-    		public ResponseEntity<ChatResponse> message(@RequestBody ChatRequest body) {
-    		    if (body == null || body.getMessage() == null || body.getMessage().isBlank()) {
-    		        return ResponseEntity.badRequest().body(new ChatResponse("메시지가 비었습니다."));
-    		    }
+    		public ResponseEntity<ChatResponse> messageRag(@RequestBody Map<String, String> body) {
+    		    String q = body.getOrDefault("message", "").trim();
+    		    if (q.isEmpty()) return ResponseEntity.ok(new ChatResponse("질문을 입력해 주세요."));
 
-    		    boolean useRag = "rag".equalsIgnoreCase(body.getMessage()); // ChatRequest에 mode 추가 가정
-    		    if (useRag) {
-    		        var ans = aiAnswerService.answer(body.getMessage());
-    		        return ResponseEntity.ok(new ChatResponse(ans.content())); // 필요시 sources 추가
-    		    } else {
-    		        String result = chatbotService.getChatbotResponse(body.getMessage());
-    		        return ResponseEntity.ok(new ChatResponse(result));
-    		    }
+    		    var ans = aiAnswerService.answer(q);
+    		    // ChatResponse를 확장해 sources까지 내려주거나, content만 내려주려면 아래처럼
+    		    return ResponseEntity.ok(new ChatResponse(ans.content()));
     		}
 
     /**
