@@ -15,8 +15,11 @@ import com.lookmarket.common.base.BaseController;
 import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.mypage.service.MyPageService;
 import com.lookmarket.mypage.vo.MyPageVO;
+import com.lookmarket.order.service.DeliveryService;
+import com.lookmarket.order.vo.DeliveryVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.wishlist.vo.WishListVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +30,8 @@ import jakarta.servlet.http.HttpSession;
 public class MyPageControllerImpl extends BaseController implements MyPageController{
 	@Autowired
 	private MyPageService myPageService;
+	@Autowired
+	private DeliveryService deliveryService;
 	
 	//사용자	
 	@Override
@@ -138,18 +143,26 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 	@RequestMapping(value="/myWishList.do", method=RequestMethod.GET)
 	public ModelAndView myWishList(HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		//찜(사용자)
-		HttpSession session;
+		HttpSession session = request.getSession();
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
-		session = request.getSession();
 		session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "myPage");
 		
-		return mav;
+		String m_id = (String) session.getAttribute("current_id");
+	    if(m_id != null) {
+	        // 찜목록 데이터 가져오기
+	        List<WishListVO> wishList = myPageService.getMyWishList(m_id);
+	        mav.addObject("wishList", wishList);
+	    } else {
+	        mav.addObject("message", "로그인이 필요합니다.");
+	    }
+
+	    return mav;
 	}
 	
 	@Override
@@ -210,5 +223,24 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 	        return "redirect:/mypage/mypageInfo.do";
 	    }
 	}
-
+	
+	@Override
+	@RequestMapping(value="/listMyDelivery.do", method=RequestMethod.GET)
+    public ModelAndView listMyDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session = request.getSession();
+		ModelAndView mav = new ModelAndView();
+		
+		String layout = "common/layout";
+		mav.setViewName(layout);
+		
+		String viewName = (String)request.getAttribute("viewName");
+		mav.addObject("viewName", viewName);
+		
+		String memberId = (String) session.getAttribute("m_id"); // 로그인된 회원 ID
+		
+        List<DeliveryVO> listMyDelivery = deliveryService.getDeliveryList(memberId);
+        
+        mav.addObject("listMyDelivery", listMyDelivery);
+        return mav;
+    }
 }

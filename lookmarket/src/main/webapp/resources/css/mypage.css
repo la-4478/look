@@ -1,11 +1,13 @@
-/* 위시리스트 */
-.product-card { border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 20px; text-align: center; transition: box-shadow 0.3s; height: 100%; }
-.product-card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); } 
-.product-image { height: 160px; object-fit: cover; width: 100%; border-radius: 5px; } 
-.product-name { font-weight: bold; margin-top: 10px; }
-.product-price { color: #d9534f; margin-top: 5px; font-size: 16px; }
-.btn-small { padding: 4px 8px; font-size: 12px; }
-.top-right { text-align: right; margin-bottom: 15px; } 
+/* 찜목록 */
+.wish-list { max-width:700px; margin:0 auto; padding:30px 20px; }
+.wish-list h2 { text-align:center; color:#ff6f91; font-size:26px; margin-bottom:25px; }
+.product-card { background:linear-gradient(145deg,#fff,#ffeef2); border-radius:15px; padding:15px; box-shadow:0 8px 20px rgba(0,0,0,0.1); transition:0.3s; display:flex; flex-direction:column; align-items:center; text-align:center; }
+.product-card:hover { box-shadow:0 12px 25px rgba(0,0,0,0.15); }
+.product-image { width:100%; max-width:180px; height:auto; border-radius:10px; margin-bottom:10px; }
+.product-name { font-size:16px; font-weight:600; margin-bottom:5px; color:#333; }
+.product-price { font-size:15px; color:#ff6f91; font-weight:bold; }
+.btn-small { padding:5px 10px; font-size:13px; border-radius:6px; text-decoration:none; }
+
     
 /* 내가 쓴 리뷰 목록 */
 body { font-family: '맑은 고딕', sans-serif; margin: 20px; background-color: #f9f9f9; }
@@ -18,6 +20,20 @@ body { font-family: '맑은 고딕', sans-serif; margin: 20px; background-color:
 .btn-view { background-color: #0077cc; color: white; text-align: center; padding: 8px 0; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; display: block; }
 .btn-view:hover { background-color: #005fa3; }
 .star-rating { color: gold; font-size: 18px; margin-bottom: 8px; }
+
+/* 배송 조회 */
+.delivery-list { max-width:700px; margin:0 auto; padding:30px 20px; }
+.delivery-list h2 { text-align:center; color:#ff6f91; font-size:26px; margin-bottom:25px; }
+.delivery-item-card { background:linear-gradient(145deg,#fff,#ffeef2); border-radius:20px; padding:20px 25px; margin-bottom:20px; box-shadow:0 8px 20px rgba(0,0,0,0.1); display:flex; flex-direction:column; gap:8px; transition:0.3s; }
+.delivery-item-card:hover { box-shadow:0 12px 25px rgba(0,0,0,0.15); }
+.delivery-item-card div { display:flex; align-items:center; gap:10px; font-size:14px; color:#555; }
+.delivery-item-card div::before { font-size:18px; }
+.delivery-item-card div:nth-child(1)::before { content:"📝"; }
+.delivery-item-card div:nth-child(2)::before { content:"🚚"; }
+.delivery-item-card div:nth-child(3)::before { content:"🏢"; }
+.delivery-item-card div:nth-child(4)::before { content:"📅"; }
+.no-delivery { text-align:center; color:#999; font-size:16px; padding:40px 0; }
+
 
 /* 나의 주문 내역 */
 .order-history { max-width:700px; margin:0 auto; background:#fff5f8; border-radius:20px; padding:30px 40px; box-shadow:0 8px 20px rgba(0,0,0,0.1); }

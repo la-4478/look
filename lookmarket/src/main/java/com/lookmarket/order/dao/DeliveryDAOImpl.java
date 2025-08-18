@@ -1,5 +1,7 @@
 package com.lookmarket.order.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -22,5 +24,10 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 	public Object newDelivery(DeliveryVO deliVO) throws DataAccessException {
 		return sqlSession.insert("mapper.deli.insertNewdelivery", deliVO);
 	}
+	
+	@Override
+    public List<DeliveryVO> selectDeliveryListByMember(String d_m_id) {
+        return sqlSession.selectList("mapper.mypage.selectDeliveryListByMember", d_m_id);
+    }
 
 }
