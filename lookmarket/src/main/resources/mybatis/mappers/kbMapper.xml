@@ -79,4 +79,11 @@
   <delete id="deleteChunksByDoc">
     DELETE FROM kb_chunk WHERE doc_id = #{docId}
   </delete>
+    <select id="searchFulltext" resultType="KbChunkVO">
+    SELECT chunk_id AS chunkId, doc_id AS docId, title, text, embedding, token_count AS tokenCount, created_at AS createdAt
+    FROM kb_chunk
+    WHERE MATCH(title, text) AGAINST (#{q} IN NATURAL LANGUAGE MODE)
+    ORDER BY created_at DESC
+    LIMIT #{limit}
+  </select>
 </mapper>

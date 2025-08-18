@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lookmarket.chatbot.mapper.OrderBotMapper">
+
+  <!-- 최근 주문 1건 (회원 기준) -->
+  <select id="findLatestOrder" parameterType="string" resultType="map">
+    SELECT
+      oi.o_id, oi.m_id, oi.oi_date, oi.oi_name,
+      oi.oi_total_goods_price, oi.oi_delivery_price, oi.oi_sale_price,
+      oi.oi_delivery_address, oi.oi_deli_namuji_address
+    FROM order_info oi
+    WHERE oi.m_id = #{mId}
+    ORDER BY oi.oi_date DESC
+    LIMIT 1
+  </select>
+
+  <!-- 해당 주문의 아이템들 -->
+  <select id="findOrderItems" parameterType="int" resultType="map">
+    SELECT o_num, ot_g_id, ot_goods_name, ot_goods_qty, ot_goods_price, ot_sale_price
+    FROM order_item
+    WHERE o_id = #{oId}
+    ORDER BY o_num ASC
+  </select>
+
+  <!-- 배송 정보 (여러 건일 수 있으나 최신 1건) -->
+  <select id="findLatestDeliveryByOrder" parameterType="int" resultType="map">
+    SELECT d_id, d_status, d_company, d_transport_num, d_shipped_date, d_delivery_date
+    FROM delivery
+    WHERE o_id = #{oId}
+    ORDER BY d_id DESC
+    LIMIT 1
+  </select>
+
+  <!-- 결제 정보 -->
+  <select id="findPaymentByOrder" parameterType="int" resultType="map">
+    SELECT p_method, p_pay_month, p_order_time, p_final_total_price, p_transaction_id
+    FROM payment
+    WHERE o_id = #{oId}
+  </select>
+
+</mapper>

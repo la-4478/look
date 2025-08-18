@@ -48,6 +48,7 @@
 	  		<property name="mapperLocations" value="classpath:mybatis/mappers/*.xml" />
 	  		<property name="typeHandlersPackage" value="com.lookmarket.kb.mybatis"/>
 		</bean >
+		<mybatis-spring:scan base-package="com.lookmarket.chatbot.mapper"/>
 		
 		<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
     		<constructor-arg ref="sqlSessionFactory" />
