@@ -1,10 +1,10 @@
 package com.lookmarket.event.controller;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -203,12 +203,21 @@ public class EventControllerImpl implements EventController{
 	    HttpSession session = request.getSession();
 	    ModelAndView mav = new ModelAndView("common/layout");
 
-	    List<CouponVO> couponList = eventService.selectCouponListByPostId(postId);
+	    List<CouponVO> couponList;
+
+	    if (postId == null) {
+	        // postId가 없으면 전체 쿠폰 목록 조회
+	        couponList = eventService.selectAllCoupons(); // 전체 쿠폰 조회용 서비스 메서드 필요
+	        mav.addObject("postId", null);
+	    } else {
+	        // 특정 postId의 쿠폰 목록 조회
+	        couponList = eventService.selectCouponListByPostId(postId);
+	        mav.addObject("postId", postId);
+	    }
+	    System.out.println("couponList :" +couponList);
 	    mav.addObject("couponList", couponList);
-	    mav.addObject("postId", postId);
 	    mav.addObject("viewName", "event/couponList");
 
-	    // 사이드 메뉴 세팅 (너가 다른 메서드들에서 일관적으로 쓰는 세션 세팅 포함)
 	    session.setAttribute("sideMenu", "reveal");
 	    session.setAttribute("sideMenu_option", "event");
 
@@ -216,27 +225,35 @@ public class EventControllerImpl implements EventController{
 	}
 
 
+
 	// 쿠폰 등록 폼
 	@RequestMapping(value="/couponAddForm.do", method = RequestMethod.GET)
-	public ModelAndView couponAddForm(HttpServletRequest request,
+	public ModelAndView couponAddForm(@RequestParam(value = "postId", required = false) Integer postId,
+	                                  HttpServletRequest request,
 	                                  HttpServletResponse response) throws Exception {
 	    ModelAndView mav = new ModelAndView("common/layout");
-
 	    mav.addObject("viewName", "event/couponAddForm");
+	    mav.addObject("postId", postId);  // null일 수도 있음
 
+	    request.setAttribute("postId", postId); // null이어도 괜찮음
 	    return mav;
 	}
+
+
 
 	// 쿠폰 등록 처리
 	@RequestMapping(value="/insertCoupon.do", method = RequestMethod.POST)
 	public ModelAndView insertCoupon(@ModelAttribute CouponVO couponVO,
-	                                 HttpServletRequest request,
-	                                 HttpServletResponse response) throws Exception {
+	                                 HttpServletRequest request) throws Exception {
 	    request.setCharacterEncoding("utf-8");
-
 	    eventService.insertCoupon(couponVO);
 
-	    return new ModelAndView("redirect:/event/couponList.do?postId=" + couponVO.getPostId());
+	    Integer pid = couponVO.getPostId();
+	    if (pid == null) {
+	        // postId 없는 상황에 대한 안전한 기본 처리
+	        return new ModelAndView("redirect:/event/couponList.do");
+	    }
+	    return new ModelAndView("redirect:/event/couponList.do?postId=" + pid);
 	}
 
 	// 쿠폰 상세 보기
@@ -276,19 +293,29 @@ public class EventControllerImpl implements EventController{
 
 	    eventService.updateCoupon(couponVO);
 
-	    return new ModelAndView("redirect:/event/couponList.do?postId=" + couponVO.getPostId());
+	    String redirectUrl = "/event/couponList.do";
+	    if (couponVO.getPostId() != null) {
+	        redirectUrl += "?postId=" + couponVO.getPostId();
+	    }
+
+	    return new ModelAndView("redirect:" + redirectUrl);
 	}
+
 
 	// 쿠폰 삭제
 	@RequestMapping(value="/deleteCoupon.do", method = RequestMethod.GET)
 	public ModelAndView deleteCoupon(@RequestParam("promoId") int promoId,
-	                                 @RequestParam("postId") int postId,
+	                                 @RequestParam(value="postId", required=false) Integer postId,
 	                                 HttpServletRequest request,
 	                                 HttpServletResponse response) throws Exception {
 
 	    eventService.deleteCoupon(promoId);
 
-	    return new ModelAndView("redirect:/event/couponList.do?postId=" + postId);
+	    if (postId != null) {
+	        return new ModelAndView("redirect:/event/couponList.do?postId=" + postId);
+	    } else {
+	        return new ModelAndView("redirect:/event/couponList.do");
+	    }
 	}
 
 

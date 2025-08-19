@@ -65,4 +65,9 @@ public class EventDAOImpl implements EventDAO {
     public void deleteCoupon(int promoId) throws Exception {
         sqlSession.delete("com.lookmarket.event.dao.EventDAO.deleteCoupon", promoId);
     }
+
+	@Override
+	public List<CouponVO> selectAllCoupons() throws Exception{
+		return sqlSession.selectList("com.lookmarket.event.dao.EventDAO.selectAllCoupons");
+	}
 }

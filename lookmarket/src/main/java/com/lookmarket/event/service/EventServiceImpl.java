@@ -66,4 +66,9 @@ public class EventServiceImpl implements EventService {
     public void deleteCoupon(int promoId) throws Exception {
         eventDAO.deleteCoupon(promoId);
     }
+
+	@Override
+	public List<CouponVO> selectAllCoupons() throws Exception {
+		return eventDAO.selectAllCoupons();
+	}
 }

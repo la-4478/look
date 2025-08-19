@@ -39,7 +39,7 @@
             <input type="file" id="imageFile" name="imageFile" accept="image/*" />
             <c:if test="${not empty promo.promoBannerImg}">
                 <p>현재 이미지:</p>
-                <img src="${contextPath}/upload/${promo.promoBannerImg}" alt="현재 프로모션 이미지" style="max-width: 300px;" />
+                <img src="${contextPath}/resources/image/${promo.promoBannerImg}" alt="프로모션 이미지" style="max-width: 300px;"/>
             </c:if>
         </div>
 
