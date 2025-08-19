@@ -15,7 +15,7 @@ public class CouponVO {
 	private Date promoStartDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date promoEndDate;
-	private Integer promoCouponActive;
+	private boolean promoCouponActive;
 	private String mId; // nullable
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date promoUsedDate;
@@ -68,16 +68,16 @@ public class CouponVO {
 	public void setPromoEndDate(Date promoEndDate) {
 		this.promoEndDate = promoEndDate;
 	}
-	public Integer getPromoCouponActive() {
-		return promoCouponActive;
-	}
-	public void setPromoCouponActive(Integer promoCouponActive) {
-		this.promoCouponActive = promoCouponActive;
-	}
-	public String getmId() {
+    public Boolean getPromoCouponActive() {
+        return promoCouponActive;
+    }
+    public void setPromoCouponActive(Boolean promoCouponActive) {
+        this.promoCouponActive = promoCouponActive;
+    }
+	public String getMId() {
 		return mId;
 	}
-	public void setmId(String mId) {
+	public void setMId(String mId) {
 		this.mId = mId;
 	}
 	public Date getPromoUsedDate() {

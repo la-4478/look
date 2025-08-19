@@ -166,16 +166,17 @@
 								
 							<li class="menu">
 									<div>
-										<a href="${contextPath}/event/promotionList.do"
-											class="menu__title">이벤트★</a>
+										<a href="${contextPath}/event/promotionList.do" class="menu__title">이벤트★</a>											
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
 										<li><a href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션 목록</a></li>
+										<li><a href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰 목록</a></li>
 									</ul> 
 									<c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
 										<ul id="tipSybm1" class="navbar__submenu">
 											<li><a href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션 등록</a></li>
 											<li><a href="${contextPath}/event/couponAddForm.do">쿠폰 등록</a></li>
+											<li><a href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰 목록</a></li>
 										</ul>
 									</c:if>
 							</li>

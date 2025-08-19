@@ -101,7 +101,7 @@
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${coupon.promoCouponActive == 1}">
+                                <c:when test="${coupon.promoCouponActive}">
                                     <span class="active">활성</span>
                                 </c:when>
                                 <c:otherwise>
@@ -112,6 +112,8 @@
                         <td class="btn-group">
                             <a href="${contextPath}/event/couponDetail.do?promoId=${coupon.promoId}">상세보기</a>
                             <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}">수정</a>
+							<a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}"
+							   onclick="return confirm('삭제하시겠습니까?')">삭제</a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -126,7 +128,7 @@
         <a href="${contextPath}/event/promotionList.do">프로모션 목록으로 돌아가기</a>
     </div>
     <div style="margin-top:20px;">
-	    <a href="${contextPath}/event/couponAddForm.do?postId=${param.postId}">쿠폰 등록</a>
+	    <a href="${contextPath}/event/couponAddForm.do?postId=${postId}">쿠폰 등록</a>
 	</div>
     
 </div>

@@ -92,9 +92,14 @@
     <select id="selectCouponById" parameterType="int" resultMap="couponResultMap">
         SELECT * FROM promotion_coupon WHERE promo_id = #{promoId}
     </select>
+    
+    <!-- 쿠폰 전체 조회 -->
+	<select id="selectAllCoupons" resultMap="couponResultMap">
+	    SELECT * FROM promotion_coupon
+	</select>
 
     <!-- 쿠폰 등록 -->
-    <insert id="insertCoupon" parameterType="com.lookmarket.event.vo.CouponVO">
+    <insert id="insertCoupon" parameterType="com.lookmarket.event.vo.CouponVO" useGeneratedKeys="true" keyProperty="promoId">
         INSERT INTO promotion_coupon (
             promo_code,
             promo_discount_type,
