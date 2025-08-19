@@ -35,6 +35,7 @@
 
     <!-- 내용 -->
     <div class="review-content">
+    	<div>상품명 : ${review.g_name}</div>
         ${review.r_content}
     </div>
 

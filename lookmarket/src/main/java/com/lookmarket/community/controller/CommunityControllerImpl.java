@@ -235,7 +235,7 @@ import jakarta.servlet.http.HttpSession;
 		    }
 
 		    String r_title = request.getParameter("r_title");
-		    String g_id = request.getParameter("g_id");
+		    String g_name = request.getParameter("g_name");
 		    String r_star = request.getParameter("r_star");
 		    String r_content = request.getParameter("r_content");
 		    String r_secret = request.getParameter("r_secret");
@@ -245,7 +245,7 @@ import jakarta.servlet.http.HttpSession;
 		    ReviewVO reviewVO = new ReviewVO();
 		    reviewVO.setM_id(current_id);
 		    reviewVO.setR_title(r_title);
-		    reviewVO.setG_id(g_id);
+		    reviewVO.setg_name(g_name);
 		    reviewVO.setR_star(r_star);
 		    reviewVO.setR_content(r_content);
 		    reviewVO.setR_secret("public".equals(r_secret) ? "1" : "0");
@@ -320,7 +320,7 @@ import jakarta.servlet.http.HttpSession;
 
 		    String r_id = request.getParameter("r_id");
 		    String r_title = request.getParameter("r_title");
-		    String g_id = request.getParameter("g_id");
+		    String g_name = request.getParameter("g_name");
 		    String r_star = request.getParameter("r_star");
 		    String r_content = request.getParameter("r_content");
 		    String r_secret = request.getParameter("r_secret");
@@ -331,7 +331,7 @@ import jakarta.servlet.http.HttpSession;
 		    reviewVO.setR_id(r_id);
 		    reviewVO.setM_id(current_id);
 		    reviewVO.setR_title(r_title);
-		    reviewVO.setG_id(g_id);
+		    reviewVO.setg_name(g_name);
 		    reviewVO.setR_star(r_star);
 		    reviewVO.setR_content(r_content);
 		    reviewVO.setR_secret("public".equals(r_secret) ? "1" : "0");

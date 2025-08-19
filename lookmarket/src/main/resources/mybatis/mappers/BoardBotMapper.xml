@@ -5,15 +5,48 @@
 
 <mapper namespace="com.lookmarket.chatbot.mapper.BoardBotMapper">
 
-  <!-- 공개글만 제목/내용 LIKE 검색 -->
-  <select id="searchBoard" parameterType="map" resultType="map">
-    SELECT b_id, b_title, b_content, b_date
-    FROM blackboard
-    WHERE b_secret = 1
-      AND (b_title LIKE CONCAT('%', #{q}, '%')
-        OR b_content LIKE CONCAT('%', #{q}, '%'))
-    ORDER BY b_id DESC
-    LIMIT #{limit}
-  </select>
+<!-- 리뷰 본문: g_name 정확 일치 -->
+<select id="findLatestReviewsByGoodsName" resultType="map">
+  SELECT r_id, m_id, g_name, r_star, r_content,
+         DATE_FORMAT(r_date, '%Y-%m-%d %H:%i:%s') AS r_date
+  FROM review
+  WHERE g_name = #{gName}
+  ORDER BY r_date DESC, r_id DESC
+  LIMIT #{limit} OFFSET #{offset}
+</select>
+
+<!-- 리뷰 통계: g_name 정확 일치 -->
+<select id="findReviewStatsByGoodsName" resultType="map">
+  SELECT ROUND(AVG(r_star),1) AS avgStar,
+         COUNT(*)            AS cnt
+  FROM review
+  WHERE g_name = #{gName}
+</select>
+
+<!-- LIKE 폴백 -->
+<select id="findLatestReviewsByGoodsNameLike" resultType="map">
+  SELECT r_id, m_id, g_name, r_star, r_content,
+         DATE_FORMAT(r_date, '%Y-%m-%d %H:%i:%s') AS r_date
+  FROM review
+  WHERE g_name LIKE #{gNameLike}
+  ORDER BY r_date DESC, r_id DESC
+  LIMIT #{limit} OFFSET #{offset}
+</select>
+
+<select id="findReviewStatsByGoodsNameLike" resultType="map">
+  SELECT ROUND(AVG(r_star),1) AS avgStar,
+         COUNT(*)            AS cnt
+  FROM review
+  WHERE g_name LIKE #{gNameLike}
+</select>
+
+<!-- (옵션) 상품 정보 필요시 -->
+<select id="findGoodsInfoByName" resultType="map">
+  SELECT g_name, g_price, g_brand, g_stock
+  FROM goods
+  WHERE g_name = #{gName}
+  ORDER BY g_id DESC
+  LIMIT 1
+</select>
 
 </mapper>

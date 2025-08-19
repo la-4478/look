@@ -144,17 +144,26 @@ sendMessage();
 
   </script>
 <script>
-    $(document).ready(function() {
-        // 챗봇 열기
-        $('#chatbot-button').click(function() {
-            $('#chatbot-popup').css('right', '20px');
-        });
+$(document).ready(function() {
+	  // 열기
+	  $('#chatbot-button').on('click', function() {
+	    $('#chatbot-popup').addClass('open');
+	  });
 
-        // 챗봇 닫기
-        $('#chatbot-close').click(function() {
-            $('#chatbot-popup').css('right', '-350px');
-        });
+	  // 닫기
+	  $('#chatbot-close').on('click', function() {
+	    $('#chatbot-popup').removeClass('open');
+	  });
 
+	  // (선택) 바깥 클릭 시 닫기
+	  $(document).on('click', function(e) {
+	    const $popup = $('#chatbot-popup');
+	    const $button = $('#chatbot-button');
+	    if (!$popup.is(e.target) && $popup.has(e.target).length === 0 &&
+	        !$button.is(e.target) && $button.has(e.target).length === 0) {
+	      $popup.removeClass('open');
+	    }
+	  });
         // 위로 스크롤
         $('#scroll-up').click(function() {
             $('html, body').animate({ scrollTop: 0 }, 'slow');

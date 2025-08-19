@@ -35,10 +35,36 @@
   </select>
 
   <!-- 결제 정보 -->
-  <select id="findPaymentByOrder" parameterType="int" resultType="map">
-    SELECT p_method, p_pay_month, p_order_time, p_final_total_price, p_transaction_id
+<select id="findPaymentByOrder" parameterType="int" resultType="map">
+  <![CDATA[
+    SELECT
+      IFNULL(p_method, '') AS p_method,                -- ← 널 방지
+      p_pay_month,
+      p_order_time,
+      p_final_total_price,
+      p_transaction_id,
+
+      -- 간편결제 provider=KAKAOPAY → KAKAOPAY
+      REGEXP_REPLACE(
+        REGEXP_SUBSTR(p_method, 'provider=[^,}[:space:]]+'),
+        '^provider=',
+        ''
+      ) AS p_provider,
+
+      -- 카드명 card={ ... name=현대카드 ... } → 현대카드
+      REGEXP_REPLACE(
+        REGEXP_SUBSTR(p_method, 'card=\\{[^}]*name=[^,}]+'),
+        '^.*name=',
+        ''
+      ) AS p_card_name
+
     FROM payment
     WHERE o_id = #{oId}
-  </select>
+    LIMIT 2
+  ]]>
+</select>
+
+
+
 
 </mapper>

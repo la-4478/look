@@ -15,4 +15,9 @@ public interface GoodsBotMapper {
     List<Map<String,Object>> findLatestReviews(int gId);
     List<Map<String, Object>> searchGoodsByTokens(@Param("tokens") List<String> tokens,@Param("limit") int limit);
 	List<GoodsVO> selectByKeyword(@Param("q") String keyword);
+	// 전체 상품명 (운영에서는 최근 N일/판매중만 등 조건 걸어도 OK)
+    List<String> listAllGoodsNames();
+
+    // LIKE 탐색(폴백용)
+    List<String> findGoodsNamesLike(@Param("pat") String pat);
 }
