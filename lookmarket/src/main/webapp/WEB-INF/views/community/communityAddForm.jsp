@@ -22,8 +22,8 @@
 
         <!-- 상품 ID -->
         <div class="form-group">
-            <label for="g_id">상품 ID</label>
-            <input type="text" id="g_id" name="g_id" required />
+            <label for="g_name">상품 ID</label>
+            <input type="text" id="g_name" name="g_name" required />
         </div>
 
         <!-- 별점 ★ 클릭 방식 -->

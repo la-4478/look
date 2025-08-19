@@ -29,7 +29,7 @@
   <select id="findReviewStats" parameterType="int" resultType="map">
     SELECT AVG(r_star) AS avgStar, COUNT(*) AS cnt
     FROM review
-    WHERE g_id = #{gId} AND r_secret = 0
+    WHERE g_name = #{gName} AND r_secret = 0
   </select>
 
   <!-- 최신 리뷰 2건 -->
@@ -70,4 +70,25 @@
     LIMIT #{limit}
   </if>
 </select>
+<!-- ✅ 모든 상품명 리스트 (Extractor 용) -->
+  <select id="listAllGoodsNames" resultType="string">
+    <![CDATA[
+      SELECT g_name
+      FROM goods
+      WHERE 1=1
+      -- 필요시: AND g_status = 1
+      ORDER BY g_name ASC
+    ]]>
+  </select>
+
+  <!-- (옵션) LIKE 후보 (Extractor 폴백용) -->
+  <select id="findGoodsNamesLike" parameterType="string" resultType="string">
+    <![CDATA[
+      SELECT g_name
+      FROM goods
+      WHERE g_name LIKE #{pat}
+      ORDER BY g_name ASC
+      LIMIT 50
+    ]]>
+  </select>
 </mapper>

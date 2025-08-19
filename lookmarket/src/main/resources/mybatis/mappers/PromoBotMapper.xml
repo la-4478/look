@@ -1,30 +1,62 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.lookmarket.chatbot.mapper.PromoBotMapper">
 
-  <!-- 진행중 이벤트 (상태 + 날짜 범위) -->
-  <select id="findActivePromos" parameterType="int" resultType="map">
-    SELECT post_id, promo_title, promo_start_date, promo_end_date, promo_banner_img
-    FROM promotion_post
-    WHERE promo_status = 1
-      AND CURDATE() BETWEEN promo_start_date AND promo_end_date
-    ORDER BY promo_created_at DESC
-    LIMIT #{limit}
+  <!-- 진행중 프로모션 -->
+  <select id="findActivePromotions" parameterType="map" resultType="map">
+    <![CDATA[
+      SELECT post_id, promo_title, promo_content, promo_banner_img,
+             promo_start_date, promo_end_date, promo_status
+      FROM promotion_post
+      WHERE promo_status = 1
+        AND promo_start_date <= #{today}
+        AND promo_end_date   >= #{today}
+      ORDER BY promo_start_date DESC, post_id DESC
+      LIMIT #{limit} OFFSET #{offset}
+    ]]>
   </select>
 
-  <!-- 내 쿠폰(개인 발급 + 전체 공용) 활성 중 -->
-  <select id="findAvailableCouponsForUser" parameterType="map" resultType="map">
-    SELECT promo_code, promo_discount_type, promo_discount_value, promo_max_discount,
-           promo_min_purchase, promo_start_date, promo_end_date
-    FROM promotion_coupon
-    WHERE promo_coupon_active = 1
-      AND CURDATE() BETWEEN promo_start_date AND promo_end_date
-      AND (m_id IS NULL OR m_id = #{mId})
-    ORDER BY promo_end_date ASC
-    LIMIT #{limit}
+  <!-- 키워드 검색(진행중만) -->
+  <select id="searchActivePromotions" parameterType="map" resultType="map">
+    <![CDATA[
+      SELECT post_id, promo_title, promo_content, promo_banner_img,
+             promo_start_date, promo_end_date, promo_status
+      FROM promotion_post
+      WHERE promo_status = 1
+        AND promo_start_date <= #{today}
+        AND promo_end_date   >= #{today}
+        AND (promo_title   LIKE CONCAT('%', #{q}, '%')
+         OR  promo_content LIKE CONCAT('%', #{q}, '%'))
+      ORDER BY promo_start_date DESC, post_id DESC
+      LIMIT #{limit} OFFSET #{offset}
+    ]]>
+  </select>
+
+  <!-- 단건 조회 -->
+  <select id="findPromotionById" parameterType="int" resultType="map">
+    <![CDATA[
+      SELECT post_id, promo_title, promo_content, promo_banner_img,
+             promo_start_date, promo_end_date, promo_status, promo_created_at
+      FROM promotion_post
+      WHERE post_id = #{postId}
+    ]]>
+  </select>
+
+  <!-- 배너만 N건 -->
+  <select id="findActiveBanners" parameterType="map" resultType="map">
+    <![CDATA[
+      SELECT post_id, promo_title, promo_banner_img
+      FROM promotion_post
+      WHERE promo_status = 1
+        AND promo_start_date <= #{today}
+        AND promo_end_date   >= #{today}
+        AND promo_banner_img IS NOT NULL
+      ORDER BY promo_start_date DESC, post_id DESC
+      LIMIT #{limit}
+    ]]>
   </select>
 
 </mapper>

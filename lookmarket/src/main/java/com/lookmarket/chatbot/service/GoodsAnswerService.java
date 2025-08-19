@@ -72,12 +72,7 @@ public class GoodsAnswerService {
         return v == null ? "" : String.valueOf(v);
     }
 
-    // 한글 간단 토큰화 + 불용어 제거
-    private static final Set<String> STOP = Set.of(
-            "가격","얼마","얼마야","얼만데","얼마임","좀","요","요?","요요","거","그","이","저","는","은","가",
-            "에","을","를","부터","까지","에서","로","으로","과","와","하고","해주세요","해줘","알려줘","문의","질문",
-            "리뷰","평점","어때","어떤","상품","제품","정보","있나요","있냐","있니","?"
-    );
+
 
     private static List<String> extractTokens(String s) {
         if (s == null) return List.of();
@@ -89,7 +84,6 @@ public class GoodsAnswerService {
         List<String> out = new ArrayList<>();
         for (String t : arr) {
             if (t.length() < 2) continue;
-            if (STOP.contains(t)) continue;
             out.add(t);
         }
         // 키워드가 너무 많으면 상위 3~4개만

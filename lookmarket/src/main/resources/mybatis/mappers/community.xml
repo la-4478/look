@@ -16,7 +16,7 @@
 		<result property="r_id" column="r_id" />
 		<result property="m_id" column="m_id" />
 		<result property="r_title" column="r_title" />
-		<result property="g_id" column="g_id" />
+		<result property="g_name" column="g_name" />
 		<result property="r_star" column="r_star" />
 		<result property="r_content" column="r_content" />
 		<result property="r_filename" column="r_filename" />
@@ -70,7 +70,7 @@
     INSERT INTO review (
         m_id,
         r_title,
-        g_id,
+        g_name,
         r_star,
         r_content,
         r_filename,
@@ -81,7 +81,7 @@
     ) VALUES (
         #{m_id},
         #{r_title},
-        #{g_id},
+        #{g_name},
         #{r_star},
         #{r_content},
         #{r_filename},
@@ -95,7 +95,7 @@
    		UPDATE review
     	SET
         	r_title = #{r_title},
-        	g_id = #{g_id},
+        	g_name = #{g_name},
         	r_star = #{r_star},
         	r_content = #{r_content},
         	r_secret = #{r_secret},

@@ -7,7 +7,7 @@ public class ReviewVO {
 	String r_id;
 	String m_id;
 	String r_title;
-	String g_id;
+	String g_name;
 	String r_star;
 	String r_content;
 	String r_filename;
@@ -33,11 +33,11 @@ public class ReviewVO {
 	public void setR_title(String r_title) {
 		this.r_title = r_title;
 	}
-	public String getG_id() {
-		return g_id;
+	public String getg_name() {
+		return g_name;
 	}
-	public void setG_id(String g_id) {
-		this.g_id = g_id;
+	public void setg_name(String g_name) {
+		this.g_name = g_name;
 	}
 	public String getR_star() {
 		return r_star;
