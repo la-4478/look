@@ -46,4 +46,28 @@
   WHERE name LIKE CONCAT('%', #{q}, '%')
   ORDER BY g_id DESC
 </select>
+<select id="searchGoodsByTokens" parameterType="map" resultType="map">
+  SELECT
+    g.g_id          AS g_id,
+    g.g_name        AS g_name,
+    g.g_discription AS g_discription,
+    g.g_price       AS g_price,
+    g.g_stock       AS g_stock,
+    g.g_brand       AS g_brand
+  FROM goods g
+  <where>
+    <if test="tokens != null and tokens.size() > 0">
+      <foreach collection="tokens" item="t" separator=" OR ">
+        ( g.g_name LIKE CONCAT('%', #{t}, '%')
+          OR g.g_brand LIKE CONCAT('%', #{t}, '%')
+          OR g.g_discription LIKE CONCAT('%', #{t}, '%') )
+      </foreach>
+    </if>
+  </where>
+  GROUP BY g.g_id  <!-- 조인으로 중복될 수 있으면 DISTINCT나 GROUP BY로 안전장치 -->
+  ORDER BY g.g_id DESC
+  <if test="limit != null">
+    LIMIT #{limit}
+  </if>
+</select>
 </mapper>

@@ -28,7 +28,7 @@ public class GoodsAnswerService {
 
         // ② DB 검색 (토큰 OR-LIKE)
         // ✅ rows를 명확한 제네릭 컬렉션으로 받기
-        List<Map<String, Object>> rows = (List<Map<String, Object>>) mapper.searchGoodsByTokens(Map.of("tokens", tokens, "limit", 3));
+        List<Map<String, Object>> rows = mapper.searchGoodsByTokens(tokens, 3);
 
         System.out.println("[GOODS] tokens=" + tokens + " hits=" + (rows == null ? 0 : rows.size()));
         if (rows == null || rows.isEmpty()) return Optional.empty();
@@ -54,7 +54,6 @@ public class GoodsAnswerService {
         sb.append("상품 ‘").append(name).append("’ (브랜드: ").append(brand).append(")\n")
           .append("- 가격: ").append(price).append("원, 재고: ").append(stock).append("개\n");
         if (avgStar != null) sb.append(String.format("- 리뷰 평점: ★%.1f (%d건)\n", avgStar, cnt));
-        if (main != null && !main.isBlank()) sb.append("- 대표 이미지: ").append(main).append("\n");
         if (desc != null && !desc.isBlank()) {
             sb.append("- 설명: ").append(desc.length() > 200 ? desc.substring(0, 200) + "..." : desc);
         }
@@ -75,7 +74,7 @@ public class GoodsAnswerService {
 
     // 한글 간단 토큰화 + 불용어 제거
     private static final Set<String> STOP = Set.of(
-            "가격","얼마","얼마야","얼만데","얼마임","좀","요","요?","요요","거","그","이","저","는","은","이","가",
+            "가격","얼마","얼마야","얼만데","얼마임","좀","요","요?","요요","거","그","이","저","는","은","가",
             "에","을","를","부터","까지","에서","로","으로","과","와","하고","해주세요","해줘","알려줘","문의","질문",
             "리뷰","평점","어때","어떤","상품","제품","정보","있나요","있냐","있니","?"
     );

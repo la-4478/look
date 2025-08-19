@@ -13,6 +13,6 @@ public interface GoodsBotMapper {
     List<String> findSubImages(int gId);
     Map<String,Object> findReviewStats(int gId);
     List<Map<String,Object>> findLatestReviews(int gId);
-	Object searchGoodsByTokens(Map<String, Object> of);
+    List<Map<String, Object>> searchGoodsByTokens(@Param("tokens") List<String> tokens,@Param("limit") int limit);
 	List<GoodsVO> selectByKeyword(@Param("q") String keyword);
 }
