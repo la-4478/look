@@ -16,7 +16,8 @@
   <div id="mainCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img src="${contextPath}/resources/image/테스트이미지.PNG" class="d-block w-100" alt="..." />
+      <a href="https://www.nonghyupmall.com/BC31010R/main.nh?emdvEndYn=Y&basketCnt=0&cdnAplYn=N&nhVuchYn=N">
+        <img src="${contextPath}/resources/image/테스트이미지.PNG" class="d-block w-100" alt="..." /></a>
       </div>
       <div class="carousel-item">
         <img src="${contextPath}/resources/image/테스트이미지2.PNG" class="d-block w-100" alt="..." />
@@ -32,11 +33,11 @@
 
   <!-- 2. 원형 퀵메뉴 -->
   <div class="row quick-menu mb-5">
-    <div class="col"><img src="${contextPath}/resources/image/신선식품.png" /></div>
-    <div class="col"><img src="${contextPath}/resources/image/가공식품.png" /></div>
-    <div class="col"><img src="${contextPath}/resources/image/생활용품.png" /></div>
-    <div class="col"><img src="${contextPath}/resources/image/패션잡화.png" /></div>
-    <div class="col"><img src="${contextPath}/resources/image/지역특산물.png" /></div>
+    <div class="col"><a href="${contextPath}/jangbogo/goodsList.do?category=fresh"><img src="${contextPath}/resources/image/신선식품.png" /></a></div>
+    <div class="col"><a href="${contextPath}/jangbogo/goodsList.do?category=processed"><img src="${contextPath}/resources/image/가공식품.png" /></a></div>
+    <div class="col"><a href="${contextPath}/jangbogo/goodsList.do?category=living"><img src="${contextPath}/resources/image/생활용품.png" /></a></div>
+    <div class="col"><a href="${contextPath}/jangbogo/goodsList.do?category=fashion"><img src="${contextPath}/resources/image/패션잡화.png" /></a></div>
+    <div class="col"><a href="${contextPath}/jangbogo/goodsList.do?category=local"><img src="${contextPath}/resources/image/지역특산물.png" /></a></div>
   </div>
   <!-- 3. 카테고리별 추천상품 -->
 <h5 class="mt-5">카테고리별 추천상품</h5>

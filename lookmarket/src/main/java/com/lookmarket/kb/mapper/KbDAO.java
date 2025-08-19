@@ -14,7 +14,7 @@ import com.lookmarket.kb.vo.KbDocumentVO;
  * - 청크 배치/조회
  */
 @Mapper
-public interface KbMapper {
+public interface KbDAO {
   // ===== Document =====
   /** 문서 1건 등록 (AUTO_INCREMENT docId 반환) */
   int insertDocument(KbDocumentVO doc);

@@ -3,10 +3,12 @@ package com.lookmarket.chatbot.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.lookmarket.goods.vo.GoodsVO;
-
+@Mapper
 public interface GoodsBotMapper {
     List<Map<String,Object>> searchGoodsLike(Map<String,Object> p);
     String findMainImage(int gId);

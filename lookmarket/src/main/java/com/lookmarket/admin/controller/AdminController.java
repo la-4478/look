@@ -18,4 +18,5 @@ public interface AdminController {
 	public String approveBusiness(String m_id, RedirectAttributes ra) throws Exception;
 	public String rejectBusiness(String m_id, RedirectAttributes ra) throws Exception;
 	public String reversBusiness(String m_id, RedirectAttributes ra) throws Exception;
+	public ModelAndView inquiry(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

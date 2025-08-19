@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.Inquiry">
+
+  <!-- 컬럼↔필드 매핑 -->
+  <resultMap id="InquiryResult" type="InquiryVO">
+    <result property="inquiryId" column="inquiry_id"/>
+    <result property="mId"        column="m_id"/>
+    <result property="title"      column="title"/>
+    <result property="question"   column="question"/>
+    <result property="answer"     column="answer"/>
+    <result property="status"     column="status"/>
+    <result property="answeredBy" column="answered_by"/>
+    <result property="createdAt"  column="created_at"/>
+    <result property="answeredAt" column="answered_at"/>
+    <result property="updatedAt"  column="updated_at"/>
+    <result property="deletedAt"  column="deleted_at"/>
+  </resultMap>
+
+  <!-- 1) 사용자 문의 등록 -->
+  <insert id="insertInquiry" parameterType="InquiryVO" useGeneratedKeys="true" keyProperty="inquiryId">
+    INSERT INTO inquiry (m_id, title, question, status)
+    VALUES (#{mId}, #{title}, #{question}, #{status})
+  </insert>
+
+  <!-- 2) 내 문의 목록 (사용자 전용) -->
+  <select id="selectMyInquiries" resultMap="InquiryResult">
+    SELECT *
+    FROM inquiry
+    WHERE m_id = #{mId}
+      AND deleted_at IS NULL
+    ORDER BY updated_at DESC
+  </select>
+
+  <!-- 3) 문의 단건 조회 (권한 체크는 서비스에서) -->
+  <select id="selectInquiryById" resultType="InquiryVO" parameterType="int">
+    SELECT * FROM inquiry WHERE inquiry_id = #{inquiryId} 
+  </select>
+
+  <!-- 4) 관리자 목록 (필터 옵션) -->
+  <select id="selectInquiriesForAdmin" resultType="InquiryVO" parameterType="String">
+    SELECT
+      inquiry_id AS inquiryId,
+      m_id 
+      title,
+      question,
+      status,
+      created_at  AS createdAt,
+      updated_at  AS updatedAt
+    FROM inquiry
+    WHERE deleted_at IS NULL
+    ORDER BY
+      updated_at DESC
+  </select>
+
+  <!-- 5) 답변 등록/수정 (단답형) + 상태/답변자/시간 갱신 -->
+  <update id="updateAnswer">
+    UPDATE inquiry
+    SET answer = #{answer},
+        status = 'ANSWERED',
+        answered_by = #{answeredBy},
+        answered_at = NOW()
+    WHERE inquiry_id = #{inquiryId}
+      AND deleted_at IS NULL
+  </update>
+
+  <!-- 6) 상태만 닫기(관리자) -->
+  <update id="closeInquiry">
+    UPDATE inquiry
+    SET status = 'CLOSED'
+    WHERE inquiry_id = #{inquiryId}
+      AND deleted_at IS NULL
+  </update>
+
+  <!-- 7) 소프트 삭제(작성자 본인 또는 관리자) -->
+  <update id="softDeleteInquiry">
+    UPDATE inquiry
+    SET deleted_at = NOW()
+    WHERE inquiry_id = #{inquiryId}
+      AND deleted_at IS NULL
+  </update>
+
+</mapper>

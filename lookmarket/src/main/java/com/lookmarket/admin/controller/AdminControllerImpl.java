@@ -205,5 +205,12 @@ public class AdminControllerImpl implements AdminController{
 		ra.addFlashAttribute("msg", "사업자 승인 되돌리기 성공: " + m_id);
 		return "redirect:/admin/ApprovalList.do";
 	}
+
+	@Override
+	public ModelAndView inquiry(HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

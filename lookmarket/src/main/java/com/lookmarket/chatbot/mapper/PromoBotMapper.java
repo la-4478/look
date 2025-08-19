@@ -3,8 +3,10 @@ package com.lookmarket.chatbot.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
+import org.springframework.stereotype.Repository;
+@Mapper
 public interface PromoBotMapper {
 	 // ① 진행중 프로모션
     List<Map<String,Object>> findActivePromotions(

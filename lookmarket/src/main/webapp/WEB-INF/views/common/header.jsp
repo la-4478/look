@@ -62,7 +62,7 @@
 									<li><a href="${contextPath}/mypage/mypageInfo.do">마이페이지</a></li>
 									<li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
 									<li><a href="#">주문내역</a></li>
-									<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
+									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 2}">
 									<li><a href="${contextPath}/business/businessMain.do">사업자
@@ -77,13 +77,14 @@
 									<li><a href="#">상품관리</a></li>
 									<li><a href="#">회원관리</a></li>
 									<li><a href="${contextPath}/chatbot/chatbot.do">회계관리</a></li>
+									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
 								</c:when>
 							</c:choose>
 						</c:when>
 						<c:otherwise>
 							<li><a href="${contextPath}/member/loginForm.do">로그인</a></li>
 							<li><a href="${contextPath}/member/memberSelect.do">회원가입</a></li>
-							<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
+
 						</c:otherwise>
 					</c:choose>
 				</ul>

@@ -3,8 +3,10 @@ package com.lookmarket.chatbot.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface BoardBotMapper {
 	// 정확 일치로 리뷰/통계
     List<Map<String,Object>> findLatestReviewsByGoodsName(
