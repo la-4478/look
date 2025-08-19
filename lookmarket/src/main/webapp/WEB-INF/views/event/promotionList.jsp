@@ -19,7 +19,7 @@
                         <div class="promotion-card">
                 <c:choose>
                     <c:when test="${not empty promo.promoBannerImg}">
-                        <img src="${contextPath}/event_banners/${promo.promoBannerImg}" alt="프로모션 이미지" />
+                        <img src="${contextPath}/resources/image/${promo.promoBannerImg}" alt="프로모션 이미지" />
                     </c:when>
                     <c:otherwise>
                         <div class="promotion-no-image">이미지 없음</div>

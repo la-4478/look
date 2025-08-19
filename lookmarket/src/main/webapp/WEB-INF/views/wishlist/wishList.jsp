@@ -20,8 +20,8 @@
     <link rel="stylesheet" href="${contextPath}/resources/css/mypage.css"/>
 </head>
 <body>
-<div class="wish-list">
-    <h2>나의 찜목록</h2>
+<div class="container mt-4">
+    <h2>내 찜 목록</h2>
 
     <div class="row">
         <c:choose>
@@ -29,18 +29,25 @@
                 <c:forEach var="wish" items="${wishlist}">
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
-                            <img src="${contextPath}/resources/image/${wish.g_image}" alt="${wish.g_name}" class="product-image" />
+                            <!-- 상품 이미지 -->
+                            <img src="${contextPath}/resources/image/${wish.gThumbnail}" 
+                                 alt="${wish.gName}" class="product-image" />
 
-                            <div class="product-name">${wish.g_name}</div>
+                            <!-- 상품명 -->
+                            <div class="product-name">${wish.gName}</div>
+
+                            <!-- 상품 가격 -->
                             <div class="product-price">
-                                <fmt:formatNumber value="${wish.price}" type="currency" currencySymbol="₩" />
+                                <fmt:formatNumber value="${wish.gPrice}" type="currency" currencySymbol="₩" />
                             </div>
 
+                            <!-- 상세보기 / 삭제 버튼 -->
                             <div class="mt-2 d-flex justify-content-center gap-2">
-                                <a href="${contextPath}/goodsDetail.do?g_id=${wish.g_id}" class="btn btn-primary btn-small">상세보기</a>
+                                <a href="${contextPath}/goodsDetail.do?g_id=${wish.gId}" 
+                                   class="btn btn-primary btn-small">상세보기</a>
 
-                                <form action="${contextPath}/wishlist/removeWish.do" method="post" style="display:inline;">
-                                    <input type="hidden" name="g_id" value="${wish.g_id}" />
+                                <form action="${contextPath}/wishlist/delete.do" method="post" style="display:inline;">
+                                    <input type="hidden" name="wId" value="${wish.wId}" />
                                     <button type="submit" class="btn btn-danger btn-small">삭제</button>
                                 </form>
                             </div>

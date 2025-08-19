@@ -1,11 +1,16 @@
 package com.lookmarket.event.controller;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lookmarket.event.service.EventService;
+import com.lookmarket.event.vo.CouponVO;
 import com.lookmarket.event.vo.EventPostVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +31,7 @@ import jakarta.servlet.http.HttpSession;
 public class EventControllerImpl implements EventController{
 	@Autowired
     private EventService eventService;
-
+	    
 	@Override
 	@RequestMapping(value="/promotionList.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView promotionList(HttpServletRequest request, HttpServletResponse response) throws Exception{
@@ -104,17 +110,15 @@ public class EventControllerImpl implements EventController{
 	            extension = originalFilename.substring(dotIndex).toLowerCase();
 	        }
 
-	        // UUID 기반 고유 파일명 생성
-	        String storedFileName = UUID.randomUUID().toString() + extension;
 
 	        // 저장할 파일 객체 생성
-	        File destFile = new File(uploadPath, storedFileName);
+	        File destFile = new File(uploadPath, originalFilename);
 
 	        // 파일 저장
 	        imageFile.transferTo(destFile);
 
 	        // VO에 저장된 파일명 세팅
-	        eventPostVO.setPromoBannerImg(storedFileName);
+	        eventPostVO.setPromoBannerImg(originalFilename);
 	    }
 
 	    // 서비스 호출 (DB insert)
@@ -163,11 +167,10 @@ public class EventControllerImpl implements EventController{
 	            extension = originalFilename.substring(dotIndex).toLowerCase();
 	        }
 
-	        String storedFileName = UUID.randomUUID().toString() + extension;
-	        File destFile = new File(uploadPath, storedFileName);
+	        File destFile = new File(uploadPath, originalFilename);
 	        imageFile.transferTo(destFile);
 
-	        eventPostVO.setPromoBannerImg(storedFileName);
+	        eventPostVO.setPromoBannerImg(originalFilename);
 	    } else {
 	        // 이미지 변경 없으면 기존 이미지 유지 필요 → DB에서 기존값 조회 후 세팅하거나 폼에서 hidden으로 받기
 	        EventPostVO existing = eventService.selectPromotionPostById(eventPostVO.getPostId());
@@ -190,5 +193,109 @@ public class EventControllerImpl implements EventController{
 	    // 삭제 후 목록 페이지로 리다이렉트
 	    return new ModelAndView("redirect:/event/promotionList.do");
 	}
+	
+	// 쿠폰 목록 조회
+	@Override
+	@RequestMapping(value="/couponList.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView couponList(@RequestParam(value="postId", required=false) Integer postId,
+	                               HttpServletRequest request,
+	                               HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    ModelAndView mav = new ModelAndView("common/layout");
 
+	    List<CouponVO> couponList = eventService.selectCouponListByPostId(postId);
+	    mav.addObject("couponList", couponList);
+	    mav.addObject("postId", postId);
+	    mav.addObject("viewName", "event/couponList");
+
+	    // 사이드 메뉴 세팅 (너가 다른 메서드들에서 일관적으로 쓰는 세션 세팅 포함)
+	    session.setAttribute("sideMenu", "reveal");
+	    session.setAttribute("sideMenu_option", "event");
+
+	    return mav;
+	}
+
+
+	// 쿠폰 등록 폼
+	@RequestMapping(value="/couponAddForm.do", method = RequestMethod.GET)
+	public ModelAndView couponAddForm(HttpServletRequest request,
+	                                  HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView("common/layout");
+
+	    mav.addObject("viewName", "event/couponAddForm");
+
+	    return mav;
+	}
+
+	// 쿠폰 등록 처리
+	@RequestMapping(value="/insertCoupon.do", method = RequestMethod.POST)
+	public ModelAndView insertCoupon(@ModelAttribute CouponVO couponVO,
+	                                 HttpServletRequest request,
+	                                 HttpServletResponse response) throws Exception {
+	    request.setCharacterEncoding("utf-8");
+
+	    eventService.insertCoupon(couponVO);
+
+	    return new ModelAndView("redirect:/event/couponList.do?postId=" + couponVO.getPostId());
+	}
+
+	// 쿠폰 상세 보기
+	@RequestMapping(value="/couponDetail.do", method = RequestMethod.GET)
+	public ModelAndView couponDetail(@RequestParam("promoId") int promoId,
+	                                 HttpServletRequest request,
+	                                 HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView("common/layout");
+
+	    CouponVO coupon = eventService.selectCouponById(promoId); // 상세 조회
+	    mav.addObject("coupon", coupon);
+	    mav.addObject("viewName", "event/couponDetail");
+
+	    return mav;
+	}
+
+	// 쿠폰 수정 폼
+	@RequestMapping(value="/couponUpdateForm.do", method = RequestMethod.GET)
+	public ModelAndView couponUpdateForm(@RequestParam("promoId") int promoId,
+	                                     HttpServletRequest request,
+	                                     HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView("common/layout");
+
+	    CouponVO coupon = eventService.selectCouponById(promoId);
+	    mav.addObject("coupon", coupon);
+	    mav.addObject("viewName", "event/couponUpdateForm");
+
+	    return mav;
+	}
+
+	// 쿠폰 수정 처리
+	@RequestMapping(value="/updateCoupon.do", method = RequestMethod.POST)
+	public ModelAndView updateCoupon(@ModelAttribute CouponVO couponVO,
+	                                 HttpServletRequest request,
+	                                 HttpServletResponse response) throws Exception {
+	    request.setCharacterEncoding("utf-8");
+
+	    eventService.updateCoupon(couponVO);
+
+	    return new ModelAndView("redirect:/event/couponList.do?postId=" + couponVO.getPostId());
+	}
+
+	// 쿠폰 삭제
+	@RequestMapping(value="/deleteCoupon.do", method = RequestMethod.GET)
+	public ModelAndView deleteCoupon(@RequestParam("promoId") int promoId,
+	                                 @RequestParam("postId") int postId,
+	                                 HttpServletRequest request,
+	                                 HttpServletResponse response) throws Exception {
+
+	    eventService.deleteCoupon(promoId);
+
+	    return new ModelAndView("redirect:/event/couponList.do?postId=" + postId);
+	}
+
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    dateFormat.setLenient(false);
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 }

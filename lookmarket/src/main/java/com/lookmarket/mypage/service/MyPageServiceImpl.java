@@ -4,12 +4,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.mypage.dao.MyPageDAO;
 import com.lookmarket.mypage.vo.MyPageVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.wishlist.vo.WishListVO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Service("myPageService")
 public class MyPageServiceImpl implements MyPageService{
@@ -47,5 +52,10 @@ public class MyPageServiceImpl implements MyPageService{
 	@Override
 	public List<OrderItemVO> getOrderItemsByOrderId(int oId) throws Exception {
 	    return myPageDAO.getOrderItemsByOrderId(oId);
+	}
+	
+	@Override
+	public List<WishListVO> getMyWishList(String m_id) throws Exception {
+		return myPageDAO.getMyWishList(m_id);
 	}
 }

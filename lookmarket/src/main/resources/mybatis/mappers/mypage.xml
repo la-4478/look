@@ -85,6 +85,7 @@
 			SET m_outdate = CURDATE() WHERE m_id = #{m_id}
 		]]>
 	</update>
+	
 	<select id="selectMyCommunityList" parameterType="String" resultType="com.lookmarket.community.vo.ReviewVO">
     	<![CDATA[
         	SELECT r_id, m_id, r_title, g_id, r_star, r_content,
@@ -115,7 +116,7 @@
         WHERE m_id = #{m_id}
         ORDER BY oi_date DESC
     ]]>
-</select>
+	</select>
     
     <!-- 주문 상세 조회 -->
     <select id="getOrderById" parameterType="int" resultType="OrderVO">
@@ -136,7 +137,7 @@
         FROM order_info
         WHERE o_id = #{oId}
     ]]>
-</select>
+	</select>
     
     <!-- 주문 상품목록 조회 -->
     <select id="getOrderItemsByOrderId" parameterType="int" resultType="OrderItemVO">
@@ -152,6 +153,32 @@
         FROM order_item
         WHERE o_id = #{oId}
     ]]>
-</select>
-	
+	</select>
+
+	<!-- 회원별 배송내역 조회 -->
+	<select id="selectDeliveryListByMember" 
+	        parameterType="string" 
+	        resultType="com.lookmarket.order.vo.DeliveryVO">
+	    SELECT 
+	        d_id, o_id, d_status, d_company, d_transport_num,
+	        d_shipped_date, d_delivery_date, d_m_id
+	    FROM delivery
+	    WHERE d_m_id = #{d_m_id}
+	    ORDER BY d_id DESC
+	</select>
+
+	<!-- 찜목록 조회 -->
+    <select id="getMyWishList" parameterType="string" resultType="com.lookmarket.wishlist.vo.WishListVO">
+        SELECT 
+            w.w_id AS wId,
+            w.g_id AS gId,
+            w.m_id AS mId,
+            g.g_name AS gName,
+            g.g_price AS gPrice,
+            g.i_filename AS gThumbnail
+        FROM wishlist w
+        JOIN goods g ON w.g_id = g.g_id
+        WHERE w.m_id = #{m_id}
+        ORDER BY w.w_id DESC
+    </select>
 </mapper>

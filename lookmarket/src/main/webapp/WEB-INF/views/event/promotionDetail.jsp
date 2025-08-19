@@ -33,7 +33,7 @@
             <label>이미지</label><br />
             <c:choose>
                 <c:when test="${not empty promo.promoBannerImg}">
-                    <img src="${contextPath}/event_banners/${promo.promoBannerImg}" alt="프로모션 이미지" style="max-width: 100%; height: auto;" />
+                    <img src="${contextPath}/resources/image/${promo.promoBannerImg}" alt="프로모션 이미지" style="max-width: 100%; height: auto;" />
                 </c:when>
                 <c:otherwise>
                     <div class="text-secondary">이미지 없음</div>

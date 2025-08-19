@@ -11,6 +11,7 @@ import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.mypage.vo.MyPageVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.wishlist.vo.WishListVO;
 
 @Repository("myPageDAO")
 public class MyPageDAOImpl implements MyPageDAO{
@@ -54,5 +55,10 @@ public class MyPageDAOImpl implements MyPageDAO{
     @Override
     public List<OrderItemVO> getOrderItemsByOrderId(int oId) throws DataAccessException {
         return sqlSession.selectList("mapper.mypage.getOrderItemsByOrderId", oId);
+    }
+    
+    @Override
+    public List<WishListVO> getMyWishList(String m_id) throws DataAccessException {
+		return sqlSession.selectList("mapper.mypage.getMyWishList", m_id);
     }
 }

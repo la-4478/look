@@ -17,5 +17,6 @@ public interface MyPageController {
 	public ModelAndView myOrderDetail(@RequestParam("oId") int oId, HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView myWishList(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView myCommunity(HttpServletRequest request, HttpServletResponse response)  throws Exception;
-	public ModelAndView updateMyInfo(@ModelAttribute MyPageVO myPageVO, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception ;
+	public ModelAndView updateMyInfo(@ModelAttribute MyPageVO myPageVO, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;
+	public ModelAndView listMyDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

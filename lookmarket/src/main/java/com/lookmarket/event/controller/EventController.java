@@ -28,4 +28,8 @@ public interface EventController {
 	public ModelAndView deletePromotionPost(@RequestParam("postId") int postId,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception;
+	public ModelAndView couponList(@RequestParam(value="postId", required=false) Integer postId,
+            HttpServletRequest request,
+            HttpServletResponse response) throws Exception;
+
 }

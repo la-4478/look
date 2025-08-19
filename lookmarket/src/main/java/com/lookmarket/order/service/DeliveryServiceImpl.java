@@ -1,5 +1,7 @@
 package com.lookmarket.order.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +27,9 @@ public class DeliveryServiceImpl implements DeliveryService {
 		
 	}
 	
-
+	@Override
+    public List<DeliveryVO> getDeliveryList(String d_m_id) {
+        return deliveryDAO.selectDeliveryListByMember(d_m_id);
+    }
+	
 }

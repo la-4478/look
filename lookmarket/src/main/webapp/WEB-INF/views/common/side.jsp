@@ -18,7 +18,7 @@
 						<ul>
 							<li><a href="${contextPath}/mypage/mypageInfo.do">내정보</a></li>
 							<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역</a></li>
-							<li><a href="#">배송조회</a></li>
+							<li><a href="${contextPath}/mypage/listMyDelivery.do">배송조회</a></li>
 							<li><a href="${contextPath}/mypage/myWishList.do">찜목록</a></li>
 							<li><a href="${contextPath}/mypage/myCommunity.do">커뮤니티</a></li>
 						</ul>

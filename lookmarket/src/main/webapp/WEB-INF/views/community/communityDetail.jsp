@@ -30,7 +30,7 @@
 
     <!-- 이미지 출력 (있을 경우만) -->
     <c:if test="${not empty review.r_filename}">
-        <img class="review-image" src="/upload/${review.r_filename}" alt="리뷰 이미지" />
+        <img class="review-image" src="${contextPath}/resources/image/${review.r_filename}" alt="리뷰 이미지" />
     </c:if>
 
     <!-- 내용 -->

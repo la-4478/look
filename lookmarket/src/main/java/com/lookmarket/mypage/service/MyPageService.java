@@ -2,10 +2,16 @@ package com.lookmarket.mypage.service;
 
 import java.util.List;
 
+import org.springframework.web.servlet.ModelAndView;
+
 import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.mypage.vo.MyPageVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.wishlist.vo.WishListVO;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface MyPageService {
 	public MyPageVO getMyPageInfo(String current_id) throws Exception;
@@ -18,5 +24,8 @@ public interface MyPageService {
 	public OrderVO getOrderById(int oId) throws Exception;
 	// 특정 주문의 상품 목록 조회
 	public List<OrderItemVO> getOrderItemsByOrderId(int oId) throws Exception;
+	
+	public List<WishListVO> getMyWishList(String m_id) throws Exception;
+
 	
 }

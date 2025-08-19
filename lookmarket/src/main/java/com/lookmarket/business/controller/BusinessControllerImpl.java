@@ -18,6 +18,7 @@ import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 import com.lookmarket.order.service.DeliveryService;
+import com.lookmarket.order.vo.DeliveryVO;
 import com.lookmarket.order.vo.OrderItemVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -263,4 +264,6 @@ public class BusinessControllerImpl implements BusinessController{
 	    }
 	    return res;
 	}
+	
+	
 }
