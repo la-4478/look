@@ -36,6 +36,7 @@ import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.goods.vo.ImageFileVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.MemberVO;
+import com.lookmarket.wishlist.service.WishListService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,6 +50,8 @@ public class GoodsControllerImpl implements GoodsController{
 	private GoodsService goodsService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private WishListService wishListService;
 	
 	@Override
 	@RequestMapping(value="/goodsList.do", method=RequestMethod.GET)
@@ -74,9 +77,21 @@ public class GoodsControllerImpl implements GoodsController{
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
+		
 		mav.addObject("goods", goods);
 		mav.addObject("goodsList", goodsList);
-		return mav;
+		
+		//찜목록 유지(새로고침 후에도)
+	    HttpSession session = request.getSession();
+	    String mId = (String) session.getAttribute("loginUserId");
+
+	    if (mId != null) {
+	        List<Integer> myWishList = wishListService.getWishlistIdsByMember(mId); 
+	        
+	        mav.addObject("myWishList", myWishList);
+	    }
+
+	    return mav;
 	}
 	
 	@Override
@@ -115,6 +130,16 @@ public class GoodsControllerImpl implements GoodsController{
 	    mav.addObject("goods", goods);
 	    mav.addObject("detailImageList", detailImageList);
 	    mav.addObject("Mainimage", mainimage);
+	    
+	  //찜목록 유지(새로고침 후에도)
+	    HttpSession session = request.getSession();
+	    String mId = (String) session.getAttribute("loginUserId");
+
+	    if (mId != null) {
+	        List<Integer> myWishList = wishListService.getWishlistIdsByMember(mId); 
+	        
+	        mav.addObject("myWishList", myWishList);
+	    }
 
 	    return mav;
 	}

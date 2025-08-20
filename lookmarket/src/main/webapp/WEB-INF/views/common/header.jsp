@@ -243,23 +243,6 @@
 
 								<li class="menu">
 									<div>
-										<a href="${contextPath}/order/orderForm.do"
-											class="menu__title">주문</a>
-									</div>
-									<ul id="tipSybm1" class="navbar__submenuu">
-										<li><a href="${contextPath}/order/orderForm.do"
-											class="menu__title">주문정보</a></li>
-										<li><a href="${contextPath}/order/orderResult.do"
-											class="menu__title">주문결과</a></li>
-										<li><a href="${contextPath}/member/memberList.do"
-											class="menu__title">회원관리</a></li>
-										<li><a href="${contextPath}/member/businessMemberList.do"
-											class="menu__title">사업자목록</a></li>
-									</ul>
-								</li>
-
-								<li class="menu">
-									<div>
 										<a href="${contextPath}/main/sijangbajoMain.do"
 											class="menu__title">시장봐조</a>
 									</div>

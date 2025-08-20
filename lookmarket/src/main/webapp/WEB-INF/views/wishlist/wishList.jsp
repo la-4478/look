@@ -25,8 +25,8 @@
 
     <div class="row">
         <c:choose>
-            <c:when test="${not empty wishlist}">
-                <c:forEach var="wish" items="${wishlist}">
+            <c:when test="${not empty wishList}">
+                <c:forEach var="wish" items="${wishList}">
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
                             <!-- 상품 이미지 -->

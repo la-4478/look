@@ -77,9 +77,11 @@ public class CartControllerImpl extends BaseController implements CartController
 	@ResponseBody
 	public ResponseEntity<String> addCartItem(CartVO cartVO, HttpServletRequest request) {
 	    try {
-	        String current_id = (String) request.getSession().getAttribute("current_id");
-	        cartVO.setM_id(current_id); // 세션에서 회원 ID 설정
-	        cartVO.setC_qty(1);
+	        String loginUserId = (String) request.getSession().getAttribute("loginUserId");
+	        cartVO.setM_id(loginUserId); // 세션에서 회원 ID 설정
+	        if (cartVO.getC_qty() <= 0) {
+	            cartVO.setC_qty(1);
+	        }
 	        cartService.addCartItem(cartVO);
 	        return ResponseEntity.ok("success");
 	    } catch (Exception e) {

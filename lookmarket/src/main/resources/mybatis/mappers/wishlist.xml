@@ -20,7 +20,7 @@
         FROM wishlist w
         JOIN goods g ON w.g_id = g.g_id
         LEFT JOIN goods_image gi ON g.g_id = gi.g_id
-        WHERE w.m_id = #{m_id}
+        WHERE w.m_id = #{mId}
         ORDER BY w.w_id DESC
     </select>
 
@@ -28,5 +28,35 @@
     <delete id="deleteWishList" parameterType="int">
         DELETE FROM wishlist WHERE w_id = #{wId}
     </delete>
+    
+    <!-- 찜 여부 확인 -->
+    <select id="isWished" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM wishlist 
+        WHERE m_id = #{mId} 
+          AND g_id = #{gId}
+    </select>
+
+    <!-- 찜 추가 -->
+    <insert id="insertWish" parameterType="map">
+	    INSERT INTO wishlist (m_id, g_id)
+	    VALUES (#{mId}, #{gId})
+	</insert>
+
+    <!-- 찜 제거 -->
+    <delete id="deleteWish" parameterType="map">
+        DELETE FROM wishlist 
+        WHERE m_id = #{mId} 
+          AND g_id = #{gId}
+    </delete>
+    
+    <!-- 새로고침 찜목록 유지 -->
+    <select id="selectWishlistIdsByMember" parameterType="string" resultType="int">
+        <![CDATA[
+            SELECT g_id
+            FROM wishlist
+            WHERE m_id = #{mId}
+        ]]>
+    </select>
 
 </mapper>

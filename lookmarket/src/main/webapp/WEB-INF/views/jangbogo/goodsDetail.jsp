@@ -72,23 +72,29 @@
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="http://localhost:8090/lookmarket/file/${goods.g_id}/${goods.i_filename}" alt="${goods.g_name}" />
+        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" />
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
 
             <!-- 찜 버튼 -->
-            <button
-                id="wishBtn"
-                data-gid="${goods.g_id}"
-                <c:if test="${empty m_id}">disabled class="disabled" title="로그인 후 이용 가능"</c:if>>
-					<c:choose>
-						<c:when test="${fn:contains(myWishList, goods.g_id)}">❤️</c:when>
-						<c:otherwise>🤍</c:otherwise>
+			<button class="wish-btn ${empty m_id == 'disabled'}"
+				data-gid="${goods.g_id}" ${empty m_id}>
+				<span class="wish-icon"> <c:choose>
+						<c:when
+							test="${myWishList != null && myWishList.contains(goods.g_id)}">
+							<img src="${contextPath}/resources/image/like_on.png"
+								alt="찜목록 추가됨">
+						</c:when>
+						<c:otherwise>
+							<img src="${contextPath}/resources/image/like.png"
+								alt="찜목록 추가하기">
+						</c:otherwise>
 					</c:choose>
-				</button>
+				</span>
+			</button>
 
-            <p><strong>브랜드:</strong> ${goods.g_brand}</p>
+				<p><strong>브랜드:</strong> ${goods.g_brand}</p>
 
             <div class="price">
                 <del><fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩" /></del>
@@ -137,31 +143,54 @@
 
 </div>
 
-<script>
-    $(function() {
-        $('#wishBtn').click(function() {
-            if ($(this).prop('disabled')) return;
+	<script>
+$(document).ready(function() {
+    $('.wish-btn').click(function() {
+    	console.log('버튼 클릭 감지');
+        if ($(this).prop('disabled')) {
+            console.log('찜 버튼 클릭 불가: 로그인 필요');
+            return;
+        }
 
-            const btn = $(this);
-            const g_id = btn.data('gid');
+        const btn = $(this);
+        const g_id = btn.data('gid');
+        console.log('찜 버튼 클릭됨, g_id:', g_id);
 
-            $.ajax({
-                url: '${contextPath}/wishlist/toggle.do',
-                method: 'POST',
-                data: { g_id: g_id },
-                success: function(result) {
-                    if (result === 'added') {
-                        btn.html('❤️');
-                    } else if (result === 'removed') {
-                        btn.html('🤍');
-                    }
-                },
-                error: function() {
-                    alert('찜 처리 중 오류 발생');
+        $.ajax({
+            url: '${contextPath}/wishlist/toggle.do',
+            method: 'POST',
+            data: { gId: g_id },
+            beforeSend: function() {
+                console.log('AJAX 요청 전송 준비 중...');
+            },
+            success: function(result) {
+                console.log('서버 응답:', result);
+
+                if (result === 'login_required') {
+                    alert('로그인 후 이용 가능합니다.');
+                    return;
                 }
-            });
+
+                const img = btn.find('.wish-icon img');
+                if (result === 'added') {
+                	img.attr('src', '${contextPath}/resources/image/like_on.png');
+                    console.log('찜 추가 완료');
+                    alert('찜목록에 추가완료')
+                } else if (result === 'removed') {
+                	img.attr('src', '${contextPath}/resources/image/like.png');
+                    console.log('찜 제거 완료');
+                    alert('찜목록 삭제완료')
+                } else {
+                    console.warn('알 수 없는 서버 응답:', result);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX 요청 실패', status, error);
+                alert('찜 처리 중 오류 발생');
+            }
         });
     });
+});
 </script>
 
 </body>

@@ -1,9 +1,14 @@
 package com.lookmarket.wishlist.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
 import com.lookmarket.wishlist.vo.WishListVO;
 
 @Repository
@@ -16,9 +21,37 @@ public class WishListDAOImpl implements WishListDAO {
     public List<WishListVO> selectWishListByMember(String mId) {
         return sqlSession.selectList("mapper.wishlist.selectWishListByMember", mId);
     }
+    @Override
+    public List<Integer> selectWishlistIdsByMember(String mId) {
+    	return sqlSession.selectList("mapper.wishlist.selectWishlistIdsByMember", mId);
+    }
 
     @Override
     public int deleteWishList(int wId) {
         return sqlSession.delete("mapper.wishlist.deleteWishList", wId);
+    }
+
+    @Override
+    public int isWished(String mId, int gId) throws DataAccessException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("mId", mId);
+        map.put("gId", gId);
+        return sqlSession.selectOne("mapper.wishlist.isWished", map);
+    }
+
+    @Override
+    public void insertWish(String mId, int gId) throws DataAccessException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("mId", mId);
+        map.put("gId", gId);
+        sqlSession.insert("mapper.wishlist.insertWish", map);
+    }
+
+    @Override
+    public void deleteWish(String mId, int gId) throws DataAccessException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("mId", mId);
+        map.put("gId", gId);
+        sqlSession.delete("mapper.wishlist.deleteWish", map);
     }
 }
