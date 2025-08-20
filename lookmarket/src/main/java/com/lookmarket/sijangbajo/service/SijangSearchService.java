@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-@Service("sijangSearchService")
+//@Service("sijangSearchService")
 public class SijangSearchService {
 	
 	public List<Map<String, String>> fetchAllDataFromApi(String apiUrl) {

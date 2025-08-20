@@ -105,11 +105,11 @@
 								</li>
 								<li class="menu">
 									<div>
-										<a href="${contextPath}/sijangbajo/nearby/nearby.do"
+										<a href="${contextPath}/sijangbajo/nearby/nearby3.do"
 											class="menu__title">주변상권</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/sijangbajo/nearby/nearby.do">주변상권</a></li>
+										<li><a href="${contextPath}/sijangbajo/nearby/nearby3.do">주변상권</a></li>
 										<li><a
 											href="${contextPath}/sijangbajo/nearby/nearCourse.do">추천코스</a></li>
 										<li><a href="#">지역축제</a></li>
