@@ -12,4 +12,6 @@ public interface DeliveryService {
 	
 	public List<DeliveryVO> getDeliveryList(String d_m_id) throws Exception;
 
+	public void cencelDelivery(int o_id) throws Exception;
+
 }

@@ -23,4 +23,9 @@ public interface GoodsDAO {
 	public List<GoodsVO> myGoodsList(String m_id) throws DataAccessException;
 	public List<OrderItemVO> selectBizOrderItems(Map<String, Object> params) throws DataAccessException;
 	public int countBizOrderItems(String mId) throws DataAccessException;
+	public List<GoodsVO> getFreshGoods(int category) throws DataAccessException;
+	public List<GoodsVO> getProcessed(int category) throws DataAccessException;
+	public List<GoodsVO> getLiving(int category) throws DataAccessException;
+	public List<GoodsVO> getFashion(int category) throws DataAccessException;
+	public List<GoodsVO> getLocal(int category) throws DataAccessException;
 }

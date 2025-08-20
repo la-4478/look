@@ -9,11 +9,11 @@ import com.lookmarket.order.vo.OrderItemVO;
 
 public interface GoodsService {
 	public List<GoodsVO> getAllGoods() throws Exception;
-	public List<GoodsVO> getFreshGoods() throws Exception;
-	public List<GoodsVO> getProcessed() throws Exception;
-	public List<GoodsVO> getLiving() throws Exception;
-	public List<GoodsVO> getFashion() throws Exception;
-	public List<GoodsVO> getLocal() throws Exception;
+	public List<GoodsVO> getFreshGoods(int category) throws Exception;
+	public List<GoodsVO> getProcessed(int category) throws Exception;
+	public List<GoodsVO> getLiving(int category) throws Exception;
+	public List<GoodsVO> getFashion(int category) throws Exception;
+	public List<GoodsVO> getLocal(int category) throws Exception;
 	public GoodsVO getGoodsDetail(int g_id) throws Exception;
 	public int addNewGoods(Map<String, Object> newGoodsMap) throws Exception;
 	public int updateGoods(Map<String, Object> goodsMap) throws Exception;

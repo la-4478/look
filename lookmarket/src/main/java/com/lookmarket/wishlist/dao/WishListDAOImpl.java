@@ -32,19 +32,13 @@ public class WishListDAOImpl implements WishListDAO {
     }
 
     @Override
-    public int isWished(String mId, int gId) throws DataAccessException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("mId", mId);
-        map.put("gId", gId);
-        return sqlSession.selectOne("mapper.wishlist.isWished", map);
+    public int isWished(WishListVO wishVO) throws DataAccessException {
+        return sqlSession.selectOne("mapper.wishlist.isWished", wishVO);
     }
 
     @Override
-    public void insertWish(String mId, int gId) throws DataAccessException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("mId", mId);
-        map.put("gId", gId);
-        sqlSession.insert("mapper.wishlist.insertWish", map);
+    public void insertWish(WishListVO wishVO) throws DataAccessException {
+        sqlSession.insert("mapper.wishlist.insertWish", wishVO);
     }
 
     @Override

@@ -236,11 +236,19 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
 		
-		String memberId = (String) session.getAttribute("m_id"); // 로그인된 회원 ID
-		
+		String memberId = (String) session.getAttribute("loginUserId"); // 로그인된 회원 ID
+		System.out.println("memberId : " + memberId);
         List<DeliveryVO> listMyDelivery = deliveryService.getDeliveryList(memberId);
+        System.out.println("listMy : " + listMyDelivery);
         
         mav.addObject("listMyDelivery", listMyDelivery);
         return mav;
     }
+	@Override
+	@RequestMapping(value="/cencelDelivery.do", method= {RequestMethod.GET,RequestMethod.POST})
+	public String cencelMyDelivery(@RequestParam("o_id") int o_id, HttpServletRequest request ) throws Exception{
+		deliveryService.cencelDelivery(o_id);
+
+		return "redirect:/mypage/listMyDelivery.do";
+	}
 }

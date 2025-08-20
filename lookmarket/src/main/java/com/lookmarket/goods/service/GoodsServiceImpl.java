@@ -25,28 +25,33 @@ public class GoodsServiceImpl implements GoodsService {
 	}
 	
 	@Override
-	public List<GoodsVO> getFreshGoods() throws Exception{
-		return goodsDAO.selectAllGoodsList();
+	public List<GoodsVO> getFreshGoods(int category) throws Exception{
+		System.out.println("서비스카테고리 값 : " + category);
+		return goodsDAO.getFreshGoods(category);
 	}
 	
 	@Override
-	public List<GoodsVO> getProcessed() throws Exception{
-		return goodsDAO.selectAllGoodsList();
+	public List<GoodsVO> getProcessed(int category) throws Exception{
+		System.out.println("서비스카테고리 값 : " + category);
+		return goodsDAO.getProcessed(category);
 	}
 	
 	@Override
-	public List<GoodsVO> getLiving() throws Exception{
-		return goodsDAO.selectAllGoodsList();
+	public List<GoodsVO> getLiving(int category) throws Exception{
+		System.out.println("서비스카테고리 값 : " + category);
+		return goodsDAO.getLiving(category);
 	}
 	
 	@Override
-	public List<GoodsVO> getFashion() throws Exception{
-		return goodsDAO.selectAllGoodsList();
+	public List<GoodsVO> getFashion(int category) throws Exception{
+		System.out.println("서비스카테고리 값 : " + category);
+		return goodsDAO.getFashion(category);
 	}
 	
 	@Override
-	public List<GoodsVO> getLocal() throws Exception{
-		return goodsDAO.selectAllGoodsList();
+	public List<GoodsVO> getLocal(int category) throws Exception{
+		System.out.println("서비스카테고리 값 : " + category);
+		return goodsDAO.getLocal(category);
 	}
 	
 	@Override

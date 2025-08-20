@@ -19,4 +19,5 @@ public interface MyPageController {
 	public ModelAndView myCommunity(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView updateMyInfo(@ModelAttribute MyPageVO myPageVO, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;
 	public ModelAndView listMyDelivery(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public String cencelMyDelivery(int o_id, HttpServletRequest request) throws Exception;
 }

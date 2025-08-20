@@ -61,15 +61,15 @@ public class GoodsControllerImpl implements GoodsController{
 		if(category.equals("all")) {
 			goodsList = goodsService.getAllGoods();
 		} else if(category.equals("fresh")) {
-			goodsList = goodsService.getFreshGoods();
+			goodsList = goodsService.getFreshGoods(1);
 		} else if(category.equals("processed")) {
-				goodsList = goodsService.getProcessed();
+				goodsList = goodsService.getProcessed(2);
 			} else if(category.equals("living")) {
-				goodsList = goodsService.getLiving();
+				goodsList = goodsService.getLiving(3);
 			} else if(category.equals("fashion")) {
-				goodsList = goodsService.getFashion();
+				goodsList = goodsService.getFashion(4);
 			} else if(category.equals("local")) {
-				goodsList = goodsService.getLocal();			
+				goodsList = goodsService.getLocal(5);			
 		}
 		List<GoodsVO> goods = goodsService.getAllGoods();
 		ModelAndView mav = new ModelAndView();
@@ -238,12 +238,11 @@ public class GoodsControllerImpl implements GoodsController{
 	        int dot = originalName.lastIndexOf(".");
 	        if (dot >= 0) ext = originalName.substring(dot).toLowerCase(); // .jpg …
 
-	        String newFileName = UUID.randomUUID().toString() + ext;
-	        File destFile = new File(tempDirFile, newFileName);
+	        File destFile = new File(tempDirFile, originalName);
 	        multipartFile.transferTo(destFile); // 실제 파일 저장
 
 	        ImageFileVO imageFileVO = new ImageFileVO();
-	        imageFileVO.setI_filename(newFileName);
+	        imageFileVO.setI_filename(originalName);
 	        imageFileVO.setI_filetype(ext.matches("\\.(jpg|jpeg|png|gif|webp|bmp)") ? "image" : "etc");
 	        imageFileList.add(imageFileVO);
 	    }
@@ -353,12 +352,11 @@ public class GoodsControllerImpl implements GoodsController{
 	        int dot = originalName.lastIndexOf(".");
 	        if (dot >= 0) ext = originalName.substring(dot).toLowerCase(); // .jpg …
 
-	        String newFileName = UUID.randomUUID().toString() + ext;
-	        File destFile = new File(tempDirFile, newFileName);
+	        File destFile = new File(tempDirFile, originalName);
 	        multipartFile.transferTo(destFile); // 실제 파일 저장
 
 	        ImageFileVO imageFileVO = new ImageFileVO();
-	        imageFileVO.setI_filename(newFileName);
+	        imageFileVO.setI_filename(originalName);
 	        imageFileVO.setI_filetype(ext.matches("\\.(jpg|jpeg|png|gif|webp|bmp)") ? "image" : "etc");
 	        imageFileList.add(imageFileVO);
 	    }
@@ -472,7 +470,7 @@ public class GoodsControllerImpl implements GoodsController{
 	        int dot = original.lastIndexOf('.');
 	        if (dot >= 0) ext = original.substring(dot).toLowerCase(); // .jpg ...
 
-	        newFileName = java.util.UUID.randomUUID().toString() + ext;
+	        newFileName = original+ ext;
 	        hasNewImage = true;
 
 	        // 임시 저장: {CURR_IMAGE_REPO_PATH}/temp

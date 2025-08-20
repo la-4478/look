@@ -25,15 +25,15 @@
 
     <div class="row">
         <c:choose>
-            <c:when test="${not empty wishlist}">
-                <c:forEach var="wish" items="${wishlist}">
+            <c:when test="${not empty wishList}">
+                <c:forEach var="wish" items="${wishList}">
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
                             <img src="${contextPath}/resources/image/${wish.g_image}" alt="${wish.g_name}" class="product-image" />
 
                             <div class="product-name">${wish.g_name}</div>
                             <div class="product-price">
-                                <fmt:formatNumber value="${wish.price}" type="currency" currencySymbol="₩" />
+                                <fmt:formatNumber value="${wish.g_price}" type="currency" currencySymbol="₩" />
                             </div>
 
                             <div class="mt-2 d-flex justify-content-center gap-2">

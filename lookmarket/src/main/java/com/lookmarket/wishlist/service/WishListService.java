@@ -8,8 +8,8 @@ public interface WishListService {
     List<WishListVO> getWishListByMember(String mId) throws Exception;
     public List<Integer> getWishlistIdsByMember(String mId) throws Exception;
     int removeWishList(int wId) throws Exception;
-    boolean isWished(String m_id, int gId) throws Exception;
-    void addWish(String m_id, int gId) throws Exception;
+    boolean isWished(WishListVO wishVO) throws Exception;
+    void addWish(WishListVO wishVO) throws Exception;
     void removeWish(String m_id, int gId) throws Exception;
 
 }

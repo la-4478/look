@@ -27,7 +27,14 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 	
 	@Override
     public List<DeliveryVO> selectDeliveryListByMember(String d_m_id) {
+		System.out.println("DAO에서 받은 id : " + d_m_id);
         return sqlSession.selectList("mapper.mypage.selectDeliveryListByMember", d_m_id);
     }
+
+	@Override
+	public void cencelDlivery(int o_id) throws DataAccessException {
+			sqlSession.update("mapper.mypage.cencelDelivery", o_id);
+		
+	}
 
 }

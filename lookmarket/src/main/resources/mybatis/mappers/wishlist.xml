@@ -38,9 +38,9 @@
     </select>
 
     <!-- 찜 추가 -->
-    <insert id="insertWish" parameterType="map">
-	    INSERT INTO wishlist (m_id, g_id)
-	    VALUES (#{mId}, #{gId})
+    <insert id="insertWish" parameterType="WishListVO">
+	    INSERT INTO wishlist (m_id, g_id, g_name, g_price, g_image)
+	    VALUES (#{mId}, #{gId}, #{g_name}, #{g_price}, #{g_image})
 	</insert>
 
     <!-- 찜 제거 -->

@@ -29,7 +29,14 @@ public class DeliveryServiceImpl implements DeliveryService {
 	
 	@Override
     public List<DeliveryVO> getDeliveryList(String d_m_id) {
+		System.out.println("서비스에서 받은 ID : " + d_m_id);
         return deliveryDAO.selectDeliveryListByMember(d_m_id);
     }
+
+	@Override
+	public void cencelDelivery(int o_id) throws Exception {
+		deliveryDAO.cencelDlivery(o_id);
+		
+	}
 	
 }

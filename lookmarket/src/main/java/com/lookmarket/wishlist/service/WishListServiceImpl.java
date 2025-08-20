@@ -33,13 +33,13 @@ public class WishListServiceImpl implements WishListService  {
     }
     
     @Override
-    public boolean isWished(String mId, int gId) throws Exception {
-        return wishListDAO.isWished(mId, gId) > 0;
+    public boolean isWished(WishListVO wishVO) throws Exception {
+        return wishListDAO.isWished(wishVO) > 0;
     }
 
     @Override
-    public void addWish(String mId, int gId) throws Exception {
-        wishListDAO.insertWish(mId, gId);
+    public void addWish(WishListVO wishVO) throws Exception {
+        wishListDAO.insertWish(wishVO);
     }
 
     @Override
