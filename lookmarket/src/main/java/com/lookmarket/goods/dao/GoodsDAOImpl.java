@@ -31,6 +31,31 @@ public class GoodsDAOImpl implements GoodsDAO{
 	public List<GoodsVO> selectAllGoodsList() throws DataAccessException{
 		return sqlSession.selectList("mapper.goods.selectAllGoodsList");
 	}
+	@Override
+	public List<GoodsVO> getFreshGoods(int category) throws DataAccessException{
+		System.out.println("DAO카테고리 값 : " + category);
+		return sqlSession.selectList("mapper.goods.getFreshGoods", category);
+	}
+	@Override
+	public List<GoodsVO> getProcessed(int category) throws DataAccessException{
+		System.out.println("DAO카테고리 값 : " + category);
+		return sqlSession.selectList("mapper.goods.getProcessed", category);
+	}
+	@Override
+	public List<GoodsVO> getLiving(int category) throws DataAccessException{
+		System.out.println("DAO카테고리 값 : " + category);
+		return sqlSession.selectList("mapper.goods.getLiving", category);
+	}
+	@Override
+	public List<GoodsVO> getFashion(int category) throws DataAccessException{
+		System.out.println("DAO카테고리 값 : " + category);
+		return sqlSession.selectList("mapper.goods.getFashion", category);
+	}
+	@Override
+	public List<GoodsVO> getLocal(int category) throws DataAccessException{
+		System.out.println("DAO카테고리 값 : " + category);
+		return sqlSession.selectList("mapper.goods.getLocal", category);
+	}
 	
 	
 	@Override

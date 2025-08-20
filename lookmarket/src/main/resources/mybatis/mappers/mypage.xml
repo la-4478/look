@@ -181,4 +181,10 @@
         WHERE w.m_id = #{m_id}
         ORDER BY w.w_id DESC
     </select>
+    <update id="cencelDelivery" parameterType="int">
+    	<![CDATA[
+    		update delivery set
+    		d_status = 4 where o_id = #{oId}
+    	]]>
+    </update>
 </mapper>

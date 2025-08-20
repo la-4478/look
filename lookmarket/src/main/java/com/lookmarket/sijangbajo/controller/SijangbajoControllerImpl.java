@@ -47,11 +47,42 @@ public class SijangbajoControllerImpl implements SijangbajoController {
     @Autowired
     ObjectMapper om;
 
-    // ✅ 카카오 JS 키를 JSP로 내려주기 위해 주입 (도메인 제한 필수)
     @Value("${kakao.js-key:}")
     private String kakaoJsKey;
     @Value("${kakao.rest-key:}")
     private String kakaoRestKey;
+
+    // ================== ✅ 시/도 정규화 맵 & 유틸 ==================
+    private static final Map<String, String> SIDO_MAP = new HashMap<>();
+    static {
+        SIDO_MAP.put("서울", "서울특별시");
+        SIDO_MAP.put("부산", "부산광역시");
+        SIDO_MAP.put("대구", "대구광역시");
+        SIDO_MAP.put("인천", "인천광역시");
+        SIDO_MAP.put("광주", "광주광역시");
+        SIDO_MAP.put("대전", "대전광역시");
+        SIDO_MAP.put("울산", "울산광역시");
+        SIDO_MAP.put("세종", "세종특별자치시");
+        SIDO_MAP.put("경기", "경기도");
+        SIDO_MAP.put("강원", "강원특별자치도");   // 변경됨
+        SIDO_MAP.put("충북", "충청북도");
+        SIDO_MAP.put("충남", "충청남도");
+        SIDO_MAP.put("전북", "전북특별자치도");  // 변경됨
+        SIDO_MAP.put("전남", "전라남도");
+        SIDO_MAP.put("경북", "경상북도");
+        SIDO_MAP.put("경남", "경상남도");
+        SIDO_MAP.put("제주", "제주특별자치도");
+    }
+
+    private static String normalizeSido(String input) {
+        if (isEmpty(input)) return null;
+        String key = input.trim();
+        // 이미 풀네임이면 그대로
+        if (SIDO_MAP.containsValue(key)) return key;
+        // 축약형이면 풀네임으로
+        return SIDO_MAP.getOrDefault(key, key);
+    }
+    // =====================================================
 
     @Override
     @RequestMapping(value="/sijangSearch/search.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -63,15 +94,14 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
         String apiUrl1 = "https://api.odcloud.kr/api/15052837/v1/uddi:8e90c34b-c086-422f-882a-d3c15efd101f?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
         String apiUrl2 = "https://api.odcloud.kr/api/15052836/v1/uddi:2253111c-b6f3-45ad-9d66-924fd92dabd7?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
-
         List<Map<String, String>> sijangList1 = sijangService.fetchAllDataFromApi(apiUrl1);
         List<Map<String, String>> sijangList2 = sijangService.fetchAllDataFromApi(apiUrl2);
 
         List<Map<String, String>> allSijangList = new ArrayList<>();
         if (sijangList1 != null) allSijangList.addAll(sijangList1);
         if (sijangList2 != null) allSijangList.addAll(sijangList2);
-
-        // 2) 서울 필터 + 좌표 부여
+        
+        // 서울만 좌표 부여 테스트 (그대로 유지)
         List<Map<String, Object>> seoulWithCoord = new ArrayList<>();
         for (Map<String, String> item : allSijangList) {
             String addr = item.get("지번주소");
@@ -85,17 +115,14 @@ public class SijangbajoControllerImpl implements SijangbajoController {
             }
         }
 
-        // 3) 모델에 전달 (리스트 + JSON)
         mav.addObject("seoulSijangList", seoulWithCoord);
         mav.addObject("seoulSijangListJson", om.writeValueAsString(seoulWithCoord));
 
         mav.addObject("sijangList1", sijangList1);
         mav.addObject("sijangList2", sijangList2);
 
-        // ✅ 카카오 JS 키 JSP로 전달 (스크립트 로딩에 사용)
         mav.addObject("kakaoJsKey", kakaoJsKey);
 
-        // 사이드메뉴 유지
         HttpSession session = request.getSession();
         session.setAttribute("sideMenu", "reveal");
         session.setAttribute("sideMenu_option", "search");
@@ -109,81 +136,95 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         produces = "application/json; charset=UTF-8"
     )
     public List<Map<String, String>> searchAjax(HttpServletRequest request) throws Exception {
-        String sido = request.getParameter("sido");          // 예: "서울"
-        String sigungu = request.getParameter("sigungu");    // 예: "강남구" 또는 "전체"
-        String marketName = request.getParameter("marketName");
+        String sido = trim(request.getParameter("sido"));          // "부산" / "부산광역시" / null
+        String sigungu = trim(request.getParameter("sigungu"));    // "부산진구" / "전체" / null
+        String marketName = trim(request.getParameter("marketName"));
+        
+
+        // ✅ 입력 정규화
+        String sidoNorm = normalizeSido(sido);
+        String sigunguNorm = "전체".equals(sigungu) ? null : sigungu;
 
         String apiUrl1 = "https://api.odcloud.kr/api/15052837/v1/uddi:8e90c34b-c086-422f-882a-d3c15efd101f?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
         String apiUrl2 = "https://api.odcloud.kr/api/15052836/v1/uddi:2253111c-b6f3-45ad-9d66-924fd92dabd7?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
-
+        var ping1 = rawGet(apiUrl1);
+        var ping2 = rawGet(apiUrl2);
+        System.out.println("[PING1] code=" + ping1.get("code") + " body.head=" + String.valueOf(ping1.get("body")).substring(0, Math.min(200, String.valueOf(ping1.get("body")).length())));
+        System.out.println("[PING2] code=" + ping2.get("code") + " body.head=" + String.valueOf(ping2.get("body")).substring(0, Math.min(200, String.valueOf(ping2.get("body")).length())));
         List<Map<String, String>> list1 = sijangService.fetchAllDataFromApi(apiUrl1);
         List<Map<String, String>> list2 = sijangService.fetchAllDataFromApi(apiUrl2);
 
-        // 두 리스트 병합 (null-safe)
         List<Map<String, String>> merged = new ArrayList<>();
         if (list1 != null) merged.addAll(list1);
         if (list2 != null) merged.addAll(list2);
 
-        // 디버그: 사이즈/샘플 확인
         System.out.println("[searchDetail] total=" + merged.size()
-                + " sido=" + sido + " sigungu=" + sigungu + " marketName=" + marketName);
+                + " sidoIn=" + sido + " => norm=" + sidoNorm
+                + " sigunguIn=" + sigungu + " => norm=" + sigunguNorm
+                + " marketName=" + marketName);
 
-        // 조건 필터링 (여러 키명 지원 + 주소 파싱 폴백 + contains 대소문자 무시)
+        // ✅ 컬럼 키 후보들 한 번에 정의
+        final String[] SIDO_KEYS = { "시도", "시도명", "소재지 시도", "소재지(시도)" };
+        final String[] SIGUNGU_KEYS = { "시군구", "시군구명", "소재지 시군구", "소재지(시군/구)" };
+        final String[] ADDR_JIBUN_KEYS = { "지번주소", "소재지지번주소", "소재지 주소", "주소", "소재지주소" };
+        final String[] ADDR_ROAD_KEYS  = { "도로명주소", "소재지도로명주소" };
+        final String[] MARKET_KEYS     = { "시장명", "시장명칭", "전통시장명" };
+
+        // ✅ 필터링
         return merged.stream().filter(item -> {
-            String addr = trim(item.get("지번주소"));
+            String addrJibun = firstNonEmptyFrom(item, ADDR_JIBUN_KEYS);
+            String addrRoad  = firstNonEmptyFrom(item, ADDR_ROAD_KEYS);
+            String addrAny   = firstNonEmpty(addrRoad, addrJibun);
 
-            // 시/도 후보 키들
-            String itemSido = firstNonEmpty(
-                    trim(item.get("시도")),
-                    trim(item.get("시도명")),
-                    trim(item.get("소재지 시도")),
-                    trim(item.get("소재지(시도)")),
-                    extractSidoFromAddress(addr)
-            );
+            String itemSidoRaw    = firstNonEmptyFrom(item, SIDO_KEYS);
+            String itemSigunguRaw = firstNonEmptyFrom(item, SIGUNGU_KEYS);
+            String itemMarket     = firstNonEmptyFrom(item, MARKET_KEYS);
 
-            // 시/군/구 후보 키들
-            String itemSigungu = firstNonEmpty(
-                    trim(item.get("시군구")),
-                    trim(item.get("시군구명")),
-                    trim(item.get("소재지 시군구")),
-                    trim(item.get("소재지(시군/구)")),
-                    extractSigunguFromAddress(addr)
-            );
+            String itemSidoNorm    = normalizeSido(itemSidoRaw);
+            String itemSigunguNorm = itemSigunguRaw;
 
-            String itemMarket = trim(item.get("시장명"));
+            // 주소 폴백 파싱
+            if (isEmpty(itemSidoNorm)) {
+                itemSidoNorm = normalizeSido(extractSidoFromAddress(addrAny));
+            }
+            if (isEmpty(itemSigunguNorm)) {
+                itemSigunguNorm = extractSigunguFromAddress(addrAny);
+            }
 
+            // 조건
             boolean passSido =
-                    isEmpty(sido) ||
-                    containsIgnoreCase(itemSido, sido) ||
-                    containsIgnoreCase(addr, sido); // 주소로도 매칭
+                isEmpty(sidoNorm) ||
+                containsIgnoreCase(itemSidoNorm, sidoNorm) ||
+                containsIgnoreCase(addrAny, sidoNorm);
 
             boolean passSigungu =
-                    isEmpty(sigungu) || "전체".equals(sigungu) ||
-                    containsIgnoreCase(itemSigungu, sigungu) ||
-                    containsIgnoreCase(addr, sigungu);
+                isEmpty(sigunguNorm) ||
+                containsIgnoreCase(itemSigunguNorm, sigunguNorm) ||
+                containsIgnoreCase(addrAny, sigunguNorm);
 
             boolean passMarket =
-                    isEmpty(marketName) || containsIgnoreCase(itemMarket, marketName);
+                isEmpty(marketName) ||
+                containsIgnoreCase(itemMarket, marketName);
+
+            // 디버그 찍고 싶으면 주석 해제
+            // System.out.println("DBG :: " + itemMarket + " | " + itemSidoNorm + " | " + itemSigunguNorm + " | " + addrAny);
 
             return passSido && passSigungu && passMarket;
         }).collect(Collectors.toList());
     }
 
-    /* ================== 아래는 컨트롤러 내부 private 헬퍼 ================== */
+    /* ================== 컨트롤러 내부 private 헬퍼 ================== */
 
     private static String trim(String s) {
         return s == null ? null : s.trim();
     }
-
     private static boolean isEmpty(String s) {
         return s == null || s.isEmpty();
     }
-
     private static boolean containsIgnoreCase(String haystack, String needle) {
         if (isEmpty(haystack) || isEmpty(needle)) return false;
         return haystack.toLowerCase().contains(needle.toLowerCase());
     }
-
     @SafeVarargs
     private static <T> T firstNonEmpty(T... vals) {
         for (T v : vals) {
@@ -195,45 +236,43 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         }
         return null;
     }
+    // ✅ 맵에서 여러 후보 키 중 첫 값
+    private static String firstNonEmptyFrom(Map<String, String> map, String... keys) {
+        if (map == null) return null;
+        for (String k : keys) {
+            String v = trim(map.get(k));
+            if (!isEmpty(v)) return v;
+        }
+        return null;
+    }
 
     /** 주소에서 시/도를 추정 (예: "서울특별시 강남구 …" → "서울특별시") */
     private static String extractSidoFromAddress(String addr) {
         if (isEmpty(addr)) return null;
         String[] tok = addr.split("\\s+");
         if (tok.length == 0) return null;
-        // 첫 토큰이 보통 시/도 ("서울특별시","경기도","부산광역시","세종특별자치시" 등)
         return tok[0];
     }
 
-    /** 주소에서 시/군/구를 추정 (예: "경기도 수원시 장안구 …" → "수원시 장안구" 또는 "장안구") */
+    /** 주소에서 시/군/구를 추정 (예: "경기도 수원시 장안구 …" → "장안구" 우선, 없으면 "수원시") */
     private static String extractSigunguFromAddress(String addr) {
         if (isEmpty(addr)) return null;
         String[] tok = addr.split("\\s+");
         if (tok.length < 2) return null;
 
-        // 보편: 두 번째 토큰이 "강남구/중구/수원시" 등
-        String t1 = tok[1];
-        // 세종특별자치시는 구/군 없이 단일 도시이므로 그대로 반환
-        if (tok[0].contains("세종")) return t1;
+        String t1 = tok[1]; // 보통 시/군/구 or 시
+        if (tok[0].contains("세종")) return t1; // 세종시 특례
 
-        // "수원시 장안구" 같은 2단계일 때는 2번째 또는 3번째가 구/군
-        if (t1.endsWith("구") || t1.endsWith("군") || t1.endsWith("시")) {
-            // 가능하면 세 번째 토큰이 구/군이면 그걸 사용
-            if (tok.length >= 3 && (tok[2].endsWith("구") || tok[2].endsWith("군"))) {
-                return tok[2];
-            }
-            return t1;
+        // 2단계(시 다음 구/군)까지 있을 때는 구/군을 우선 반환
+        if (tok.length >= 3 && (tok[2].endsWith("구") || tok[2].endsWith("군"))) {
+            return tok[2];
         }
-        // 그 외엔 3번째를 시도
-        if (tok.length >= 3) return tok[2];
-        return null;
+        return t1;
     }
-
 
     @Override
     @RequestMapping(value="/nearby/nearby.do", method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView nearby(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        //숙박정보
         HttpSession session;
         ModelAndView mav = new ModelAndView();
         String layout = "common/layout";
@@ -253,7 +292,6 @@ public class SijangbajoControllerImpl implements SijangbajoController {
     @Override
     @RequestMapping(value="/nearby/nearCourse.do", method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        //추천 코스
         HttpSession session;
         ModelAndView mav = new ModelAndView();
         String layout = "common/layout";
@@ -271,7 +309,6 @@ public class SijangbajoControllerImpl implements SijangbajoController {
     @Override
     @RequestMapping(value="/clean/clean.do", method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView clean(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        //클린업체
         HttpSession session;
         ModelAndView mav = new ModelAndView();
         String layout = "common/layout";
@@ -287,7 +324,7 @@ public class SijangbajoControllerImpl implements SijangbajoController {
     }
 
     // =========================
-    // ✅ 추가: 시장명 → 좌표 조회 (JSP의 viewMarketDetail()이 호출)
+    // 시장명 → 좌표 조회 (기존 유지)
     // =========================
     @GetMapping(value="/sijangSearch/getMarketCoords.do", produces="application/json;charset=UTF-8")
     @ResponseBody
@@ -300,7 +337,6 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         HttpURLConnection conn = null;
 
         try {
-            // 1) 주소 우선 쿼리
             String query = (addr != null && !addr.isBlank()) ? addr : marketName;
             String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" 
                          + URLEncoder.encode(query, StandardCharsets.UTF_8.name());
@@ -309,7 +345,6 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
             conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
-            // ✅ 줄바꿈 없이 정확히 세팅
             conn.setRequestProperty("Authorization", "KakaoAK " + kakaoRestKey);
             conn.setConnectTimeout(5000);
             conn.setReadTimeout(5000);
@@ -327,14 +362,12 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
             if (docs != null && docs.length() > 0) {
                 JSONObject first = docs.getJSONObject(0);
-                // ✅ 프론트가 기대하는 키명으로 내려줌
-                result.put("longitude", Double.parseDouble(first.getString("x"))); // 경도
-                result.put("latitude",  Double.parseDouble(first.getString("y"))); // 위도
+                result.put("longitude", Double.parseDouble(first.getString("x")));
+                result.put("latitude",  Double.parseDouble(first.getString("y")));
                 result.put("marketName", marketName);
                 return result;
             }
 
-            // 2) 주소검색 실패 시: 키워드 검색으로 폴백 (시장명 + 시군구 일부)
             String keyword = (addr != null && !addr.isBlank()) ? (marketName + " " + addr) : marketName;
             String url2 = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" 
                           + URLEncoder.encode(keyword, StandardCharsets.UTF_8.name());
@@ -373,15 +406,8 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         return result;
     }
 
-    // 유틸
     private static void closeQuietly(Closeable c) { try { if (c != null) c.close(); } catch (IOException ignore) {} }
 
-
-
-    // =========================
-    // ✅ 추가: 주변 상권 카테고리 검색 (FD6 음식점, CE7 카페 등)
-    // 프론트: /sijangSearch/nearby.json?x={lng}&y={lat}&code=FD6&radius=500&size=15
-    // =========================
     @GetMapping(value="/sijangSearch/nearby.json", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public List<Map<String, Object>> nearbyCategory(
@@ -392,5 +418,32 @@ public class SijangbajoControllerImpl implements SijangbajoController {
             @RequestParam(value="size", defaultValue="15") int size) {
 
         return kakaoLocalClient.searchCategory(lng, lat, categoryCode, radius, size);
+    }
+    
+    private static Map<String, Object> rawGet(String urlStr) {
+        Map<String, Object> out = new HashMap<>();
+        try {
+            var url = new URL(urlStr);
+            var conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(10000);
+
+            int code = conn.getResponseCode();
+            out.put("code", code);
+
+            try (var br = new BufferedReader(new InputStreamReader(
+                    (code >= 200 && code < 300) ? conn.getInputStream() : conn.getErrorStream(),
+                    StandardCharsets.UTF_8))) {
+                var sb = new StringBuilder();
+                for (String line; (line = br.readLine()) != null; ) sb.append(line);
+                out.put("body", sb.toString());
+            }
+            conn.disconnect();
+        } catch (Exception e) {
+            out.put("error", e.toString());
+        }
+        return out;
     }
 }

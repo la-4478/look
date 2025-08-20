@@ -153,6 +153,9 @@ String m_id = (String) session.getAttribute("loginUserId");
 									class="mt-2 d-flex justify-content-center align-items-center gap-2">
 									<button class="wish-btn ${empty m_id == 'disabled'}" 
 								        data-gid="${goods.g_id}" 
+								        data-gname="${goods.g_name}"
+								        data-gprice="${goods.g_price}"
+								        data-gimage="${goods.i_filename}"
 								        ${empty m_id}>
 										<span class="wish-icon"> <c:choose>
 												<c:when test="${myWishList != null && myWishList.contains(goods.g_id)}">
@@ -180,7 +183,7 @@ String m_id = (String) session.getAttribute("loginUserId");
 										</form>
 									</div>
 								</c:if>
-
+									
 							</div>
 						</div>
 					</c:forEach>
@@ -203,12 +206,15 @@ $(document).ready(function() {
 
         const btn = $(this);
         const g_id = btn.data('gid');
+        const g_name = btn.data('gname');
+        const g_price = btn.data('gprice');
+        const g_image = btn.data('gimage');
         console.log('찜 버튼 클릭됨, g_id:', g_id);
 
         $.ajax({
             url: '${contextPath}/wishlist/toggle.do',
             method: 'POST',
-            data: { gId: g_id },
+            data: { g_id: g_id, g_name:g_name, g_price:g_price, g_image:g_image },
             beforeSend: function() {
                 console.log('AJAX 요청 전송 준비 중...');
             },

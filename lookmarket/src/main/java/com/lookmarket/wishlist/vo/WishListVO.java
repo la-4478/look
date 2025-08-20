@@ -2,30 +2,30 @@ package com.lookmarket.wishlist.vo;
 
 public class WishListVO {
     private int wId;      // 찜 아이디
-    private int gId;      // 상품 번호
+    private int g_id;      // 상품 번호
     private String mId;   // 회원 아이디
 
     // 상품 관련 추가 정보 (옵션)
-    private String gName;       // 상품명
-    private int gPrice;         // 상품 가격
-    private String gThumbnail;  // 상품 대표 이미지
+    private String g_name;       // 상품명
+    private int g_price;         // 상품 가격
+    private String g_image;  // 상품 대표 이미지
 
     // Getter / Setter
     public int getWId() { return wId; }
     public void setWId(int wId) { this.wId = wId; }
 
-    public int getGId() { return gId; }
-    public void setGId(int gId) { this.gId = gId; }
+    public int getGId() { return g_id; }
+    public void setGId(int g_id) { this.g_id = g_id; }
 
     public String getMId() { return mId; }
     public void setMId(String mId) { this.mId = mId; }
 
-    public String getGName() { return gName; }
-    public void setGName(String gName) { this.gName = gName; }
+    public String getG_name() { return g_name; }
+    public void setG_name(String g_name) { this.g_name = g_name; }
 
-    public int getGPrice() { return gPrice; }
-    public void setGPrice(int gPrice) { this.gPrice = gPrice; }
+    public int getG_price() { return g_price; }
+    public void setG_price(int g_price) { this.g_price = g_price; }
 
-    public String getGThumbnail() { return gThumbnail; }
-    public void setGThumbnail(String gThumbnail) { this.gThumbnail = gThumbnail; }
+    public String getG_image() { return g_image; }
+    public void setG_image(String g_image) { this.g_image = g_image; }
 }

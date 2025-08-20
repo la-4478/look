@@ -30,6 +30,7 @@
   		<typeAlias type="com.lookmarket.kb.vo.KbDocumentVO" alias="kbDocumentVO"/>
 	    <typeAlias type="com.lookmarket.kb.vo.KbChunkVO" alias="kbChunkVO"/>
 	    <typeAlias type="com.lookmarket.inquiry.vo.InquiryVO" alias="inquiryVO"/>
+	    <typeAlias type="com.lookmarket.wishlist.vo.WishListVO" alias="wishListVO"/>
   	</typeAliases>
 
 

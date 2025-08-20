@@ -17,10 +17,10 @@ public interface WishListDAO {
     int deleteWishList(int wId) throws DataAccessException;
     
     // 이미 찜했는지 확인
-    int isWished(String mId, int gId) throws DataAccessException;
+    int isWished(WishListVO wishVO) throws DataAccessException;
     
     // 찜 추가
-    void insertWish(String mId, int gId) throws DataAccessException;
+    void insertWish(WishListVO wishVO) throws DataAccessException;
     
     // 찜 해제
     void deleteWish(String mId, int gId) throws DataAccessException;

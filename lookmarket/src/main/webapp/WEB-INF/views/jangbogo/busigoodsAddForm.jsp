@@ -14,7 +14,7 @@
 
 <div class="form-card">
   <h2>상품 등록</h2>
-  <form action="${contextPath}/jangbogo/goodsAdd.do" method="post" enctype="multipart/form-data">
+  <form action="${contextPath}/jangbogo/busigoodsAdd.do" method="post" enctype="multipart/form-data">
     <!-- g_name -->
     <div class="mb-3">
       <label for="g_name" class="form-label">상품명</label>

@@ -32,6 +32,21 @@
     <select id="selectAllGoodsList" resultMap="goodsResultMap">
         SELECT * FROM goods ORDER BY g_id DESC
     </select>
+    <select id="getFreshGoods" resultMap="goodsResultMap">
+        SELECT * FROM goods where g_category = #{g_category} ORDER BY g_id DESC
+    </select>
+    <select id="getProcessed" resultMap="goodsResultMap">
+        SELECT * FROM goods where g_category = #{g_category} ORDER BY g_id DESC
+    </select>
+    <select id="getLiving" resultMap="goodsResultMap">
+        SELECT * FROM goods where g_category = #{g_category} ORDER BY g_id DESC
+    </select>
+    <select id="getFashion" resultMap="goodsResultMap">
+        SELECT * FROM goods where g_category = #{g_category} ORDER BY g_id DESC
+    </select>
+    <select id="getLocal" resultMap="goodsResultMap">
+        SELECT * FROM goods where g_category = #{category} ORDER BY g_id DESC
+    </select>
     <select id="selectAllMyGoodsList" parameterType="map" resultType="GoodsVO">
 	SELECT g_id, g_category, g_name, g_brand, g_price, g_stock, g_status FROM goods WHERE cre_m_id = #{mId}
   <if test="category != null">

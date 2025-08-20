@@ -30,6 +30,9 @@
                     </div>
                     <div>배송업체 / 운송장: ${delivery.d_company} / ${delivery.d_transport_num}</div>
                     <div>배송시작일: ${delivery.d_shipped_date}, 배송완료일: ${delivery.d_delivery_date}</div>
+                    <form action="${contextPath}/mypage/cencelDelivery.do?o_id=${delivery.o_id}" method="POST" onsubmit="return confirm('주문을 취소하시겠습니까?');">
+                    	<input type="submit" value="주문 취소">
+                    </form>
                 </div>
             </c:forEach>
         </c:when>
