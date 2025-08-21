@@ -175,7 +175,7 @@ public class SijangSearchService {
 	    	    + "&MobileApp=SijangBajo"
 	    	    + "&contentTypeId=39"
 	    	    + "&_type=json"
-	    	    + "&numOfRows=10"
+	    	    + "&numOfRows=20"
 	    	    + "&pageNo=1";
 
 	    	// areaCode가 있을 때만 붙임

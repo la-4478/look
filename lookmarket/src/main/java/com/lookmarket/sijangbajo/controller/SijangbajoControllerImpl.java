@@ -344,20 +344,22 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 	
 	@Override
 	@RequestMapping(value="/nearby/nearCourse.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//추천 코스
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
+	public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    ModelAndView mav = new ModelAndView();
 
-		session = request.getSession();
-		session.setAttribute("sideMenu", "reveal");
-		session.setAttribute("sideMenu_option", "nearby");
-		
-		return mav;
+	    mav.setViewName("common/layout");
+	    mav.addObject("viewName", "sijangbajo/nearby/nearCourse");  // JSP 파일 경로에 맞게 수정
+	    mav.addObject("pageType", "sijangbajo");
+
+	    List<Map<String, Object>> courseList = sijangService.fetchTourCourses("1"); // 서울
+	    System.out.println("courseList size: " + courseList.size()); // 확인용 로그
+	    mav.addObject("courseList", courseList);
+
+	    session.setAttribute("sideMenu", "reveal");
+	    session.setAttribute("sideMenu_option", "nearby");
+
+	    return mav;
 	}
 
 
