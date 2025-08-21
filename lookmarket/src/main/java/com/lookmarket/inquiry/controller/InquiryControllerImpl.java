@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,7 +31,7 @@ public class InquiryControllerImpl implements InquiryController {
 	
 	 // 1. 문의 작성 페이지 이동
     @GetMapping("/inquiryAddForm.do")
-    public ModelAndView newInquiryForm(HttpSession session,HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView newInquiryForm(HttpSession session,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
@@ -99,18 +100,16 @@ public class InquiryControllerImpl implements InquiryController {
         mav.addObject("role", role);
         return mav;
     }
-//
-//    // 5. 관리자 답변 등록
-//    @PostMapping("/{id}/answer")
-//    public ModelAndView answerInquiry(@PathVariable("id") long inquiryId,
-//                                      @RequestParam("answer") String answer,
-//                                      HttpSession session) {
-//        String adminId = (String) session.getAttribute("loginUserId");
-//        int role = (int) session.getAttribute("loginUserRole");
-//
-//        inquiryService.answerInquiry(inquiryId, adminId, role, answer);
 
-//        return new ModelAndView("redirect:/inquiry/" + inquiryId);
-//    }
+    // 5. 관리자 답변 등록
+    @PostMapping("/answer.do")
+    public ModelAndView answerInquiry(@PathVariable("id") long inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
+        String adminId = (String) session.getAttribute("loginUserId");
+        int role = (int) session.getAttribute("loginUserRole");
+
+        inquiryService.answerInquiry(inquiryId, adminId, role, answer);
+
+        return new ModelAndView("redirect:/inquiry/" + inquiryId);
+    }
 }
 

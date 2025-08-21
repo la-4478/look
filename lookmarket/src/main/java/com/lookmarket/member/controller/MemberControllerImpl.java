@@ -345,7 +345,7 @@ public class MemberControllerImpl implements MemberController {
 				
 				
 				//회원등급
-				memberVO.setM_role(3);
+				memberVO.setM_role(2);
 				
 				//가입일
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

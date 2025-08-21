@@ -333,10 +333,12 @@
 		<input type="hidden" id="deliveryFeeVal"    value="${deliveryFee     != null ? deliveryFee     : 0}">
 		<input type="hidden" id="finalTotalPrice"   value="${finalTotalPrice != null ? finalTotalPrice : 0}">
       <div style="margin-top: 10px;">
-        <label><input type="checkbox" required> 전체 동의 및 결제 진행</label>
+        <label> 전체 동의 및 결제 진행</label>
+        <input type="checkbox" required>
+              <input type="button" class="submit-btn" value="결제하기" />
       </div>
 
-      <input type="button" class="submit-btn" value="결제하기" />
+
     </div>
   </div>
 </body>

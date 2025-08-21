@@ -20,8 +20,10 @@
 
 <!-- 관리자만 답변 입력 -->
 <c:if test="${role == 3}">
-  <form method="post" action="${pageContext.request.contextPath}/inquiry/${inquiry.inquiryId}/answer">
+<c:if test="${not empty inquiry.answer}">
+  <form method="post" action="${pageContext.request.contextPath}/inquiry/answer.do?inquiryId=#{inquiry.InquiryId}">
     <textarea name="answer" rows="5" cols="50"></textarea><br>
     <button type="submit">답변 등록</button>
   </form>
+  </c:if>
 </c:if>

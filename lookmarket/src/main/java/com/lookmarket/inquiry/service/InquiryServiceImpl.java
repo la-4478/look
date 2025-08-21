@@ -51,14 +51,14 @@ public class InquiryServiceImpl implements InquiryService {
 	
 
 	
-//	@Override
-//	public void answerInquiry(long id, String adminId, int loginRole, String answer) throws Exception {
-//        if (loginRole != 3) throw new AccessDeniedException("관리자 전용");
-//        InquiryVO vo = new InquiryVO();
-//        vo.setInquiryId(id);
-//        vo.setAnsweredBy(adminId);
-//        vo.setAnswer(answer);
-//        inquirydao.updateAnswer(vo);
-//	}
+	@Override
+	public void answerInquiry(long id, String adminId, int loginRole, String answer) throws Exception {
+        if (loginRole != 3) throw new AccessDeniedException("관리자 전용");
+        InquiryVO vo = new InquiryVO();
+        vo.setInquiryId(id);
+        vo.setAnsweredBy(adminId);
+        vo.setAnswer(answer);
+        inquirydao.updateAnswer(vo);
+	}
 
 }

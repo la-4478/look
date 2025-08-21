@@ -293,7 +293,7 @@ public class GoodsControllerImpl implements GoodsController{
 	
 	//상품 등록 로직
 
-	@RequestMapping(value="/busigoodsAdd.do", method=RequestMethod.POST)
+	@RequestMapping(value="/busigoodsAdd.do", method= {RequestMethod.POST,RequestMethod.GET})
 	public ResponseEntity<String> buisgoodsAdd(MultipartHttpServletRequest multipartRequest,
 	                                       HttpServletResponse response) throws Exception {
 	    multipartRequest.setCharacterEncoding("utf-8");
@@ -385,7 +385,7 @@ public class GoodsControllerImpl implements GoodsController{
 
 	        message  = "<script>";
 	        message += "alert('등록성공.');";
-	        message += "location.href='" + multipartRequest.getContextPath() + "/business/busienssGoodsList.do?category=all';";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/business/businessGoodsList.do?category=all';";
 	        message += "</script>";
 
 	    } catch (Exception e) {
@@ -523,8 +523,7 @@ public class GoodsControllerImpl implements GoodsController{
 
 	        message  = "<script>";
 	        message += "alert('수정 완료되었습니다.');";
-	        message += "location.href='" + multipartRequest.getContextPath()
-	                + "/jangbogo/goodsDetail.do?g_id=" + g_id + "';";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/business/businessGoodsList.do?category=all';";
 	        message += "</script>";
 
 	    } catch (Exception e) {
@@ -567,10 +566,10 @@ public class GoodsControllerImpl implements GoodsController{
 
 	    // 1) DB에서 권한 조회 (세션 신뢰 X)
 	    Integer role = memberService.getRoleById(mId); // null 가능
-	    if (role == null || role.intValue() != 3) {
+	    if (role == null || role.intValue() != 2) {
 	    	System.out.println("권한이 없습니다.");
 	        ra.addFlashAttribute("msg", "권한이 없습니다.");
-	        return "redirect:/jangbogo/goodsList.do?category=all";
+	        return "redirect:/business/businessgoodsList.do?category=all";
 	    }
 
 	    int deleted = goodsService.deleteGoods(gId); // 하드삭제: DELETE FROM goods WHERE g_id = ?
@@ -579,7 +578,7 @@ public class GoodsControllerImpl implements GoodsController{
 	    } else {
 	        ra.addFlashAttribute("msg", "삭제 대상이 없거나 이미 삭제되었습니다.");
 	    }
-	    return "redirect:/jangbogo/goodsList.do?category=all";
+	    return "redirect:/business/businessgoodsList.do?category=all";
 	}
 }
 

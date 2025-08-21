@@ -37,10 +37,10 @@ public class InquiryDAOImpl implements InquiryDAO{
 		return sqlSession.selectOne(NS + "selectInquiryById", inquiryId);
 	}
 	
-//
-//	@Override
-//	public void updateAnswer(InquiryVO vo) throws DataAccessException {
-//        sqlSession.update(NS + "updateAnswer", vo);
-//	}
+
+	@Override
+	public void updateAnswer(InquiryVO vo) throws DataAccessException {
+        sqlSession.update(NS + "updateAnswer", vo);
+	}
 
 }

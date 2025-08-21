@@ -56,10 +56,6 @@
                         <input type="hidden" name="m_id" value="${biz.m_id}">
                         <button class="approval-btn danger" type="submit">거부</button>
                       </form>
-                      <form action="${contextPath}/admin/reversBusiness.do" method="post" style="display:inline">
-                        <input type="hidden" name="m_id" value="${biz.m_id}">
-                        <button class="approval-btn ghost" type="submit">승인 되돌리기</button>
-                      </form>
                     </td>
                   </tr>
                 </c:if>
