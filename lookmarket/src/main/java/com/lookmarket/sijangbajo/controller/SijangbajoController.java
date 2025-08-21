@@ -8,6 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface SijangbajoController {
 	public ModelAndView search(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView nearby(HttpServletRequest request, HttpServletResponse response)  throws Exception;
-	public ModelAndView nearCourse2(HttpServletRequest request, HttpServletResponse response)  throws Exception;
+	public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response)  throws Exception;
 	public ModelAndView festivalList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

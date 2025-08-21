@@ -269,59 +269,97 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         }
         return t1;
     }
+	
+	@Override
+	@RequestMapping(value="/nearby/nearby.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView nearby(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		//숙박정보
+		HttpSession session;
+		ModelAndView mav = new ModelAndView();
+		String layout = "common/layout";
+		mav.setViewName(layout);
+		String viewName = (String)request.getAttribute("viewName");
+		mav.addObject("viewName", viewName);
+		
+		mav.addObject("pageType", "sijangbajo");
+		
+		session = request.getSession();
+		session.setAttribute("sideMenu", "reveal");
+		session.setAttribute("sideMenu_option", "nearby");
+		
+		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/nearby/searchApi.do", method = RequestMethod.GET, produces="application/json; charset=UTF-8")
+	public List<Map<String,String>> searchNearbyAjax(HttpServletRequest request) throws Exception {
 
-    @Override
-    @RequestMapping(value="/nearby/nearby.do", method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView nearby(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session;
-        ModelAndView mav = new ModelAndView();
-        String layout = "common/layout";
-        mav.setViewName(layout);
-        String viewName = (String)request.getAttribute("viewName");
-        mav.addObject("viewName", viewName);
+	    String divId    = request.getParameter("divId");   // ctprvnCd, signguCd, adongCd, indsLclsCd...
+	    String key      = request.getParameter("key");     // 선택한 코드값
+	    String indsLclsCd = request.getParameter("indsLclsCd"); // 업종 대분류
+	    String indsMclsCd = request.getParameter("indsMclsCd"); // 업종 중분류
+	    String indsSclsCd = request.getParameter("indsSclsCd"); // 업종 소분류
+	    String keyword  = request.getParameter("keyword"); // 키워드
 
-        mav.addObject("pageType", "sijangbajo");
+	    String serviceKey = "%2F2vcOHGzNGP%2F8zjFlX1i9QWj9IrvLSYBpKso2R%2FKt8pWEBSSykLBTybHIdCCsK1hS0bQaT8QjWoV11vZLxECMg%3D%3D";
 
-        session = request.getSession();
-        session.setAttribute("sideMenu", "reveal");
-        session.setAttribute("sideMenu_option", "nearby");
+	 // key 값 URL 인코딩
+        String encodedKey = key != null ? URLEncoder.encode(key,"UTF-8") : "";
 
-        return mav;
+        String apiUrl = "https://apis.data.go.kr/B553077/api/open/sdsc2/storeListInDong"
+                + "?ServiceKey=" + serviceKey
+                + "&pageNo=1&numOfRows=10"
+                + (divId != null && key != null ? "&divId=" + divId + "&key=" + key : "")
+                + (indsLclsCd != null && !indsLclsCd.isEmpty() ? "&indsLclsCd=" + indsLclsCd : "")
+                + (indsMclsCd != null && !indsMclsCd.isEmpty() ? "&indsMclsCd=" + indsMclsCd : "")
+                + (indsSclsCd != null && !indsSclsCd.isEmpty() ? "&indsSclsCd=" + indsSclsCd : "")
+                + "&type=json";
+
+        // API 호출 및 응답 처리
+        Map<String, Object> jsonResponse = sijangService.fetchDataFromApi2(apiUrl);
+        JSONObject jsonObj = new JSONObject(jsonResponse);
+        JSONArray items = jsonObj.getJSONObject("body").getJSONArray("items");
+
+        List<Map<String,String>> storeList = new ArrayList<>();
+        for (int i = 0; i < items.length(); i++) {
+            JSONObject obj = items.getJSONObject(i);
+            Map<String,String> map = new HashMap<>();
+            map.put("bizesNm", obj.optString("bizesNm"));
+            map.put("indsMclsNm", obj.optString("indsMclsNm"));
+            map.put("rdnmAdr", obj.optString("rdnmAdr"));
+            map.put("latitude", obj.optString("latitude"));
+            map.put("longitude", obj.optString("longitude"));
+            storeList.add(map);
+        }
+
+        // 키워드 필터링
+        if (keyword != null && !keyword.isEmpty()) {
+            storeList = storeList.stream()
+                                 .filter(item -> item.getOrDefault("bizesNm", "").contains(keyword))
+                                 .collect(Collectors.toList());
+        }
+
+        return storeList;
     }
+	
+	@Override
+	@RequestMapping(value="/nearby/nearCourse.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		//추천 코스
+		HttpSession session;
+		ModelAndView mav = new ModelAndView();
+		String layout = "common/layout";
+		mav.setViewName(layout);
+		String viewName = (String)request.getAttribute("viewName");
+		mav.addObject("viewName", viewName);
 
-    @Override
-    @RequestMapping(value="/nearby/nearCourse.do", method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session;
-        ModelAndView mav = new ModelAndView();
-        String layout = "common/layout";
-        mav.setViewName(layout);
-        String viewName = (String)request.getAttribute("viewName");
-        mav.addObject("viewName", viewName);
+		session = request.getSession();
+		session.setAttribute("sideMenu", "reveal");
+		session.setAttribute("sideMenu_option", "nearby");
+		
+		return mav;
+	}
 
-        session = request.getSession();
-        session.setAttribute("sideMenu", "reveal");
-        session.setAttribute("sideMenu_option", "nearby");
-
-        return mav;
-    }
-
-    @Override
-    @RequestMapping(value="/clean/clean.do", method = { RequestMethod.GET, RequestMethod.POST })
-    public ModelAndView clean(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session;
-        ModelAndView mav = new ModelAndView();
-        String layout = "common/layout";
-        mav.setViewName(layout);
-        String viewName = (String)request.getAttribute("viewName");
-        mav.addObject("viewName", viewName);
-
-        session = request.getSession();
-        session.setAttribute("sideMenu", "reveal");
-        session.setAttribute("sideMenu_option", "clean");
-
-        return mav;
-    }
 
     // =========================
     // 시장명 → 좌표 조회 (기존 유지)
@@ -446,4 +484,24 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         }
         return out;
     }
+    
+	@Override
+	@RequestMapping(value="/nearby/festivalList.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView festivalList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    ModelAndView mav = new ModelAndView();
+	    mav.setViewName("common/layout");
+	    mav.addObject("viewName", "sijangbajo/nearby/festivalList"); // JSP 경로
+	    mav.addObject("pageType", "sijangbajo");
+
+	    // 오늘 날짜 기준 축제
+	    String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+	    List<Map<String, Object>> festivalList = sijangService.fetchFestivals(today);
+	    mav.addObject("festivalList", festivalList);
+
+	    HttpSession session = request.getSession();
+	    session.setAttribute("sideMenu", "reveal");
+	    session.setAttribute("sideMenu_option", "nearby");
+
+	    return mav;
+	}
 }
