@@ -88,7 +88,7 @@
 	
 	<select id="selectMyCommunityList" parameterType="String" resultType="com.lookmarket.community.vo.ReviewVO">
     	<![CDATA[
-        	SELECT r_id, m_id, r_title, g_id, r_star, r_content,
+        	SELECT r_id, m_id, r_title, g_name, r_star, r_content,
                	r_filename, r_filetype, r_secret, r_date, r_hit
         	FROM review
         	WHERE m_id = #{m_id}
