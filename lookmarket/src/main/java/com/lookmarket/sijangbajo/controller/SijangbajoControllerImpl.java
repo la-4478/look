@@ -352,7 +352,7 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 	    mav.addObject("viewName", "sijangbajo/nearby/nearCourse");  // JSP 파일 경로에 맞게 수정
 	    mav.addObject("pageType", "sijangbajo");
 
-	    List<Map<String, Object>> courseList = sijangService.fetchTourCourses(null); // 서울
+	    List<Map<String, Object>> courseList = sijangService.fetchTourCourses(null); // 전국
 	    System.out.println("courseList size: " + courseList.size()); // 확인용 로그
 	    mav.addObject("courseList", courseList);
 
