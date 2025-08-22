@@ -73,7 +73,7 @@
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" style="width:400px; height:200px;" />
+        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}"/>
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
