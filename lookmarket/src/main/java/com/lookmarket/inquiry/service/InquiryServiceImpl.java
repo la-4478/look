@@ -34,10 +34,6 @@ public class InquiryServiceImpl implements InquiryService {
 	    if (role == 1) {
 	        // 회원: 본인 것만
 	        List<InquiryVO> list = inquirydao.selectInquiryById(loginId); // 메서드명/쿼리 변경 권장
-	        // MyBatis selectList는 거의 null 아님. 안전하게 비어있음만 검사.
-	        if (list == null || list.isEmpty()) {
-	        	throw new NotFoundException(loginId);
-	        }
 	        return list;
 	    }
 	    throw new AccessDeniedException("허용되지 않은 역할: " + role);

@@ -11,6 +11,7 @@ public interface AdminController {
 	public ModelAndView allGoodsList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView allOrderList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView allMemberList(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView allCommunityList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView allBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView accountList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView accountDetail(HttpServletRequest request, HttpServletResponse response) throws Exception;
@@ -18,5 +19,6 @@ public interface AdminController {
 	public String approveBusiness(String m_id, RedirectAttributes ra) throws Exception;
 	public String rejectBusiness(String m_id, RedirectAttributes ra) throws Exception;
 	public String reversBusiness(String m_id, RedirectAttributes ra) throws Exception;
-	public ModelAndView inquiry(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	
+	
 }

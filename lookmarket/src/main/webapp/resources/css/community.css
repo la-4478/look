@@ -24,15 +24,15 @@ textarea{height:200px;resize:vertical}
 
 
 /* 고충방 리스트*/
-body{font-family:'맑은 고딕',sans-serif;margin:30px;background-color:#f9f9f9}
-h2{margin-bottom:20px}
-table{width:100%;border-collapse:collapse;background-color:#fff}
-th,td{padding:12px 10px;border:1px solid #ddd;text-align:center}
-th{background-color:#0077cc;color:#fff}
+body .blacklist{font-family:'맑은 고딕',sans-serif;margin:30px;background-color:#f9f9f9}
+h2 .blacklist{margin-bottom:20px}
+table .blacklist{width:100%;border-collapse:collapse;background-color:#fff}
+th,td .blacklist{padding:12px 10px;border:1px solid #ddd;text-align:center}
+th .blacklist{background-color:#0077cc;color:#fff}
 td.title-cell{text-align:left}
 .lock-icon{color:#888;margin-right:5px}
-a{color:#333;text-decoration:none}
-a:hover{text-decoration:underline}
+a .blacklist{color:#333;text-decoration:none}
+a .blacklist:hover{text-decoration:underline}
 
 /* 고충방 수정*/
 .edit-container { max-width: 600px; margin: 50px auto; padding: 30px; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -78,7 +78,7 @@ input[type="file"]{margin-top:5px}
 .back-btn a:hover{background-color:#254a9a}
 
 /* 리뷰 리스트 */
-body{font-family:'맑은 고딕',sans-serif;margin:20px;background-color:#f9f9f9}
+body .reviewList{font-family:'맑은 고딕',sans-serif;margin:20px;background-color:#f9f9f9}
 .news-list{display:flex;flex-wrap:wrap;gap:20px}
 .news-item{background-color:#fff;width:260px;border:1px solid #ddd;border-radius:5px;box-shadow:0 0 5px #ccc;overflow:hidden;display:flex;flex-direction:column}
 .news-image{width:100%;height:150px;object-fit:cover;background-color:#3366cc;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}

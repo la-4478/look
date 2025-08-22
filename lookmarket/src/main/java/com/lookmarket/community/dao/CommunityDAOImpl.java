@@ -76,4 +76,9 @@ public class CommunityDAOImpl implements CommunityDAO{
 	    sqlSession.delete("mapper.community.deleteBlackBoard", b_id);
 	}
 
+	@Override
+	public List<BlackBoardVO> myBlackBoard(String m_id) {
+		return sqlSession.selectList("mapper.community.myblackboardList", m_id);
+	}
+
 }

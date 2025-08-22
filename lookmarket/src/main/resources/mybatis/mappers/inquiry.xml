@@ -26,8 +26,10 @@
   </insert>
 
   <!-- 2) 내 문의 목록 (사용자 전용) -->
-  <select id="selectMyInquiries" resultMap="InquiryResult">
-    SELECT *
+  <select id="selectMyInquiries" resultMap="InquiryResult" parameterType="String">
+    SELECT
+      inquiry_id, m_id, title, question, answer, status,
+      answered_by, created_at, answered_at, updated_at, deleted_at
     FROM inquiry
     WHERE m_id = #{mId}
       AND deleted_at IS NULL
@@ -43,7 +45,7 @@
   <select id="selectInquiriesForAdmin" resultType="InquiryVO" parameterType="String">
     SELECT
       inquiry_id AS inquiryId,
-      m_id 
+      m_id,
       title,
       question,
       status,

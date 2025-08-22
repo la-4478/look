@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lookmarket.community.Service.CommunityService;
+import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.goods.service.GoodsService;
 import com.lookmarket.goods.vo.GoodsVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
 import com.lookmarket.order.service.DeliveryService;
-import com.lookmarket.order.vo.DeliveryVO;
 import com.lookmarket.order.vo.OrderItemVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,13 +31,13 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping(value="/business")
 public class BusinessControllerImpl implements BusinessController{
 	@Autowired
-	private MemberVO memberVO;
-	@Autowired
 	private MemberService memberService;
 	@Autowired
 	private GoodsService goodsService;
 	@Autowired
 	private DeliveryService deliveryService;
+	@Autowired
+	private CommunityService communityService;
 	
 
 	//viewName 수정 필요
@@ -152,11 +153,6 @@ public class BusinessControllerImpl implements BusinessController{
 	    // 주문 아이템 조회 (JOIN X, EXISTS O)
 	    List<OrderItemVO> orders = goodsService.getBizOrderItems(m_id, page, size);
 	    int total = goodsService.countBizOrderItems(m_id);
-	    if(total == 0) {
-	    	System.out.println("주문정보 없음");
-	        mav.setViewName("redirect:/business/businessMain.do");
-	        return mav;
-	    }
 	    int totalPages = (int) Math.ceil(total / (double) size);
 	    System.out.println("orders 가져오고 저장함" + orders.toString());
 	    
@@ -177,53 +173,21 @@ public class BusinessControllerImpl implements BusinessController{
 	}
 	
 	@Override
-	@RequestMapping(value="/member/myMemberList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView myMemberList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//회원 리스트
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
-		
-		session = request.getSession();
-	    session.setAttribute("sideMenu", "reveal");
-		session.setAttribute("sideMenu_option", "myPage_business");
-			
-		return mav;
-	}
-	
-	@Override
-	@RequestMapping(value="/mypage/myCommunityList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView myCommunityList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//커뮤니티
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
-		
-		session = request.getSession();
-	    session.setAttribute("sideMenu", "reveal");
-		session.setAttribute("sideMenu_option", "myPage_business");
-		
-		return mav;
-	}
-	
-	@Override
-	@RequestMapping(value="/myBlackBoardList.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/BlackBoardList.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView myBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		//사장님 고충방
-		HttpSession session;
+		HttpSession session = request.getSession();;
+		
+		String m_id = (String) session.getAttribute("loginUserId");
+		
+		List<BlackBoardVO> myboard = communityService.myBlackBoard(m_id);
+		
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
 		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
+		mav.addObject("viewName", "/business/BlackBoardList");
 		
-		session = request.getSession();
+		mav.addObject("myBoard", myboard);
 	    session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "myPage_business");
 		
@@ -296,6 +260,35 @@ public class BusinessControllerImpl implements BusinessController{
 	        res.put("message", "서버 오류: " + e.getMessage());
 	    }
 	    return res;
+	}
+	
+	@RequestMapping(value="/insertBlackBoard.do", method=RequestMethod.POST)
+	public ModelAndView insertBlackBoard(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+	    HttpSession session = request.getSession();
+	    String current_id = (String) session.getAttribute("current_id");
+	    
+	    if (current_id == null) {
+	        redirectAttributes.addFlashAttribute("message", "로그인이 필요합니다.");
+	        return new ModelAndView("redirect:/member/loginForm.do");
+	    }
+	    
+	    // 파라미터 받아오기
+	    String b_title = request.getParameter("b_title");
+	    String b_content = request.getParameter("b_content");
+	    
+	    // VO 세팅
+	    BlackBoardVO blackBoardVO = new BlackBoardVO();
+	    blackBoardVO.setM_id(current_id);
+	    blackBoardVO.setB_title(b_title);
+	    blackBoardVO.setB_content(b_content);
+	    blackBoardVO.setB_hit("0"); // 초기 조회수 0
+	    // b_date는 DB에서 now() 처리하거나 별도로 세팅
+	    
+	    // 서비스 호출
+	    communityService.insertBlackBoard(blackBoardVO);
+	    
+	    redirectAttributes.addFlashAttribute("message", "고충방 글이 등록되었습니다.");
+	    return new ModelAndView("redirect:/business/blackBoardList.do");
 	}
 	
 	
