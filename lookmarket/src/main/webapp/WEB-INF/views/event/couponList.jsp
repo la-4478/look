@@ -7,13 +7,14 @@
 <head>
     <meta charset="UTF-8">
     <title>쿠폰 리스트</title>
-
+<link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="container">
     <h2>쿠폰 리스트</h2>
 
     <c:if test="${not empty couponList}">
+    <div class="table-wrapper">
         <table class="coupon-table">
             <thead>
                 <tr>
@@ -86,18 +87,17 @@
                 </c:forEach>
             </tbody>
         </table>
+      </div>
     </c:if>
     <c:if test="${empty couponList}">
         <p>등록된 쿠폰이 없습니다.</p>
     </c:if>
-
-    <div style="margin-top:20px;">
-        <a href="${contextPath}/event/promotionList.do">프로모션 목록으로 돌아가기</a>
-    </div>
-    <div style="margin-top:20px;">
-	    <a href="${contextPath}/event/couponAddForm.do?postId=${postId}">쿠폰 등록</a>
-	</div>
-    
+    <c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+        <div class="action-buttons">
+            <a href="${contextPath}/event/promotionList.do" class="btn-return">프로모션 목록으로 돌아가기</a>
+            <a href="${contextPath}/event/couponAddForm.do?postId=${postId}" class="btn-add">쿠폰 등록</a>
+        </div>
+    </c:if>
 </div>
 </body>
 </html>
