@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lookmarket.goods.service.GoodsService;
 import com.lookmarket.goods.vo.GoodsVO;
@@ -81,6 +82,38 @@ public class BusinessControllerImpl implements BusinessController{
 		
 		
 		return mav;
+	}
+	@RequestMapping(value="/busigoodsDelete.do",  method = {RequestMethod.POST,RequestMethod.GET})
+	public String deleteGoodsForm(@RequestParam("g_id") int gId,
+			RedirectAttributes ra, HttpSession session) throws Exception {
+		System.out.println("컨트롤러 진입");
+
+		// 0) 로그인 사용자 확인
+		MemberVO login = (MemberVO) session.getAttribute("memberInfo");
+		if (login == null) {
+			System.out.println("로그인이 필요합니다.");
+			ra.addFlashAttribute("msg", "로그인이 필요합니다.");
+			return "redirect:/member/loginForm.do";
+		}
+
+		String mId = login.getM_id();
+
+		// 1) DB에서 권한 조회 (세션 신뢰 X)
+		Integer role = memberService.getRoleById(mId); // null 가능
+		if (role == null || role.intValue() != 2) {
+			System.out.println("권한이 없습니다.");
+			ra.addFlashAttribute("msg", "권한이 없습니다.");
+			return "redirect:/business/businessgoodsList.do?category=all";
+		}
+
+		int deleted = goodsService.deleteGoods(gId); // 하드삭제: DELETE FROM goods
+														// WHERE g_id = ?
+		if (deleted > 0) {
+			ra.addFlashAttribute("msg", "상품이 삭제되었습니다.");
+		} else {
+			ra.addFlashAttribute("msg", "삭제 대상이 없거나 이미 삭제되었습니다.");
+		}
+		return "redirect:/business/businessGoodsList.do?category=all";
 	}
 	
 	@Override
@@ -180,7 +213,7 @@ public class BusinessControllerImpl implements BusinessController{
 	}
 	
 	@Override
-	@RequestMapping(value="/mypage/myBlackBoardList.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value="/myBlackBoardList.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView myBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		//사장님 고충방
 		HttpSession session;

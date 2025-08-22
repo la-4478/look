@@ -58,11 +58,12 @@
       error: function (xhr) {
         if (xhr.status === 401) {
           alert("로그인이 필요합니다.");
-          // location.href = ctx + "/member/loginForm.do";
+          location.href = ctx + "/member/loginForm.do";
           return;
         }
-        alert("서버 오류로 실패했습니다.");
+        alert("로그인이 필요합니다.");
         console.error("addCartItem error:", xhr);
+        window.location.href = ctx + "/member/loginForm.do";
       }
     });
   });
@@ -73,7 +74,7 @@
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" style="width:400px; height:200px;" />
+        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}"/>
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
