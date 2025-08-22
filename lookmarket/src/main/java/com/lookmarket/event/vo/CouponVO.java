@@ -20,6 +20,7 @@ public class CouponVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date promoUsedDate;
 	private Integer postId;
+	
 	public Integer getPromoId() {
 		return promoId;
 	}

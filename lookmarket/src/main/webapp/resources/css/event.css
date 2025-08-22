@@ -29,14 +29,28 @@ input[type="file"]{margin-top:5px}
 .promotion-btn-delete{flex:1;padding:10px 0;background:#dc3545;color:#fff;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;transition:background-color 0.3s ease;}
 .promotion-btn-delete:hover{background:#a71d2a;}
 
-
-
-
-
-
 /* 이벤트 수정 */
 
 .form-group { margin-bottom: 15px; }
 .submit-btn { margin-top: 20px; }
 .submit-btn a { margin-left: 10px; }
 
+/* 이벤트 상세 */
+ .form-group { margin-bottom: 20px; }
+label { font-weight: bold; }
+input[readonly], textarea[readonly] {background-color: #f8f9fa;}
+
+/*쿠폰 상세 */
+.readonly-field {background-color: #f9f9f9;padding: 8px;border: 1px solid #ddd;border-radius: 4px;}
+.expired {color: red;font-weight: bold;}
+.active {color: green;font-weight: bold;}
+.example-box {background-color: #eef2ff;border: 1px solid #bbc;padding: 10px;margin-top: 15px;border-radius: 4px;}
+
+/* 쿠폰 리스트 */
+.coupon-table {width: 100%;border-collapse: collapse; margin-top: 20px;}
+.coupon-table th, .coupon-table td {border: 1px solid #ddd;padding: 12px 15px;text-align: center;}
+.coupon-table th {background-color: #f4f4f4;}
+.expired {color: red;font-weight: bold;}
+.active {color: green;font-weight: bold;}
+.btn-group a {margin-right: 8px;padding: 6px 12px;background-color: #007bff;color: white;text-decoration: none;border-radius: 4px;font-size: 14px;}
+.btn-group a:hover {background-color: #0056b3;}	
