@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -873,7 +872,7 @@ public class GoodsControllerImpl implements GoodsController {
 
 
 
-	@PostMapping("/goodsDelete.do")
+	@RequestMapping(value="/goodsDelete.do",  method = {RequestMethod.POST,RequestMethod.GET})
 	public String deleteGoodsForm(@RequestParam("g_id") int gId,
 			RedirectAttributes ra, HttpSession session) throws Exception {
 		System.out.println("컨트롤러 진입");
