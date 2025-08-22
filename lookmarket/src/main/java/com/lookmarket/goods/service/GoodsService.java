@@ -24,4 +24,5 @@ public interface GoodsService {
 	public String selectmyGoods(String m_id) throws Exception;
 	public List<OrderItemVO> getBizOrderItems(String mId, int page, int size) throws Exception;
 	public int countBizOrderItems(String mId) throws Exception;
+	public List<ImageFileVO> goodsSubImage(int gId) throws Exception;
 }

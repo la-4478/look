@@ -12,7 +12,7 @@ public interface GoodsController {
 	public ModelAndView goodsList(@RequestParam("category") String category, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView goodsDetail(@RequestParam("g_id") int g_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView goodsAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView goodsUpdateForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
+	public ModelAndView goodsUpdateForm(int g_id,HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ResponseEntity goodsAdd(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 	public ResponseEntity goodsUpdate(MultipartHttpServletRequest multipartRequest, HttpServletResponse response) throws Exception;
 }

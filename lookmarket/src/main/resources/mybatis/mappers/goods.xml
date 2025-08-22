@@ -115,6 +115,9 @@
     <select id="selectMainimagefile" parameterType="int" resultType="imageFileVO">
     	select * from goods_image where g_id=#{g_id}
     </select>
+    <select id="selectSubimage" parameterType="int" resultType="imageFileVO">
+    	select * from goods_image where g_id=#{g_id} AND i_filetype = 'subimage'
+    </select>
     
 
 

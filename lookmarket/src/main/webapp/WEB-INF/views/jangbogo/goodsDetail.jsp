@@ -72,7 +72,7 @@
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" />
+        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" style="width:400px; height:200px;" />
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
@@ -135,12 +135,12 @@
     <div class="bottom-section">
         <h4 class="mt-5 mb-3">상세 설명</h4>
         <p>${goods.g_discription}</p>
-
+	<div class="subimage">
         <c:forEach var="img" items="${detailImageList}">
-            <img src="${contextPath}/resources/image/${img}" alt="상세 이미지" />
+            <img src="${contextPath}/resources/image/${img.i_filename}" alt="상세 이미지" />
         </c:forEach>
     </div>
-
+    </div>
 </div>
 
 	<script>

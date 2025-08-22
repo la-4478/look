@@ -85,6 +85,11 @@
       <input type="file" class="form-control" name="i_filename" id="i_filename" accept="image/*">
       <input type="hidden" name="cre_m_id" value="${loginUserId}"/>
     </div>
+    
+    <div class="mb-3">
+		<label for="sub_image"class="form-label">상세 이미지</label>
+		<input type="file" class="form-control" name="sub_image" id="sub_image" accept="image/*" multiple>
+	</div>
 
     <!-- (선택) g_status를 기본값으로 숨겨 보낼 수도 있음: 컨트롤러 intParams 포함됨 -->
     <!-- <input type="hidden" name="g_status" value="1"> -->

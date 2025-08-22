@@ -64,48 +64,70 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsDAO.selectGoodsDetail(g_id);
 	}
 
-	@Override
-	public int addNewGoods(Map<String, Object> newGoodsMap) throws Exception {
-	    int goodsId = goodsDAO.addNewGoods(newGoodsMap); // ✅ 이제 7 같은 실제 PK
+	/** goods + goods_image를 한 트랜잭션으로 처리 */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int addNewGoods(Map<String, Object> newGoodsMap) throws Exception {
+        // 1) goods insert -> PK 반환
+        int goodsId = goodsDAO.addNewGoods(newGoodsMap); // ✅ 실제 PK 반환(아래 매퍼/DAO 참고)
+        System.out.println("서비스 실행됨 : int goodsId = goodsDAO.addNewGoods(newGoodsMap)");
 
-	    @SuppressWarnings("unchecked")
-	    ArrayList<ImageFileVO> imageFileList = (ArrayList<ImageFileVO>) newGoodsMap.get("imageFileList");
-	    if (imageFileList != null && !imageFileList.isEmpty()) {
-	        for (ImageFileVO imageFileVO : imageFileList) {
-	            imageFileVO.setG_id(goodsId); // FK 세팅
-	        }
-	        goodsDAO.insertGoodsImageFile(imageFileList);
-	    }
-	    return goodsId;
-	}
+        // 2) 상세 이미지 있으면 FK 채워서 batch insert
+        @SuppressWarnings("unchecked")
+        ArrayList<ImageFileVO> imageFileList = (ArrayList<ImageFileVO>) newGoodsMap.get("detailImageList");
+        if (imageFileList != null && !imageFileList.isEmpty()) {
+            for (ImageFileVO imageFileVO : imageFileList) {
+                System.out.println("imageFileVO : " + imageFileList);
+            	imageFileVO.setG_id(goodsId);
+            }
+            goodsDAO.insertGoodsImageFile(imageFileList);
+            System.out.println("서비스 실행됨 : goodsDAO.insertGoodsImageFile(imageFileList);");
+        }
+        return goodsId;
+    }
 
 	@Override
 	public List<ImageFileVO> goodsMainImage(int g_id) throws Exception {
 	    return goodsDAO.selectGoodsImages(g_id);
 	}
+	
+	public List<ImageFileVO> goodsSubImage(int g_id) throws Exception {
+		return goodsDAO.goodsSubImage(g_id);
+	}
 
 	@Override
-    @Transactional(rollbackFor = Exception.class)
-    public int updateGoods(Map<String, Object> goodsMap) throws Exception {
-        GoodsVO vo = mapToGoodsVO(goodsMap);
+	@Transactional(rollbackFor = Exception.class)
+	public int updateGoods(Map<String, Object> goodsMap) throws Exception {
+	    GoodsVO vo = mapToGoodsVO(goodsMap);
+	    if (vo.getG_id() == 0) throw new IllegalArgumentException("g_id 누락");
 
-        if (vo.getG_id() == 0) {
-            throw new IllegalArgumentException("g_id 누락");
-        }
+	    // 대표이미지: 새 값 없으면 업데이트에서 제외
+	    String newFile = asStr(goodsMap.get("i_filename"));
+	    if (newFile != null && !newFile.isBlank()) {
+	        vo.setI_filename(newFile);
+	    } else {
+	        vo.setI_filename(null); // <if test="i_filename != null"> 로만 set
+	    }
 
-        // 이미지 교체 안 하면 i_filename 건드리지 않도록 null/빈으로 유지
-        String newFile = asStr(goodsMap.get("i_filename"));
-        String oldFile = asStr(goodsMap.get("old_i_filename"));
-        if (newFile != null && !newFile.isBlank()) {
-            vo.setI_filename(newFile);   // 교체
-        } else {
-            vo.setI_filename(null);      // 동적 SQL로 무시
-            // 참고: old_i_filename은 DB에 이미 있으므로 굳이 set하지 않음
-        }
+	    // 1) 기본 상품정보 업데이트
+	    int updated = goodsDAO.updateGoods(vo);
+	    if (updated <= 0) return 0;
 
-        return goodsDAO.updateGoods(vo);
-    }
-
+	    // 2) 상세이미지: detailImageList가 들어왔을 때만 전체 교체
+	    @SuppressWarnings("unchecked")
+	    List<ImageFileVO> detailImageList = (List<ImageFileVO>) goodsMap.get("detailImageList");
+	    if (detailImageList != null && !detailImageList.isEmpty()) {
+	        // 기존 레코드 삭제
+	        goodsDAO.deleteGoodsImages(vo.getG_id());
+	        // FK 보정 + 정렬 보정
+	        for (ImageFileVO img : detailImageList) {
+	            img.setG_id(vo.getG_id());
+	        }
+	        goodsDAO.insertGoodsImageFile((ArrayList<ImageFileVO>) detailImageList); // 배치 insert
+	    }
+	    return updated;
+	}
+	
     // ---------------- helpers ----------------
     private GoodsVO mapToGoodsVO(Map<String, Object> m) {
         GoodsVO vo = new GoodsVO();
