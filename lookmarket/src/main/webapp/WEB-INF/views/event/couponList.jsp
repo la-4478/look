@@ -32,14 +32,14 @@
                 <c:forEach var="coupon" items="${couponList}">
                     <tr>
                         <td>${coupon.promoCode}</td>
-                        <td>
+                        <td class="btn-event">
                             <c:choose>
                                 <c:when test="${coupon.promoDiscountType == 1}">정률 할인 (%)</c:when>
                                 <c:when test="${coupon.promoDiscountType == 2}">정액 할인 (₩)</c:when>
                                 <c:otherwise>기타</c:otherwise>
                             </c:choose>
                         </td>
-                        <td>
+                        <td class="btn-event">
                             <c:choose>
                                 <c:when test="${coupon.promoDiscountType == 1}">
                                     ${coupon.promoDiscountValue}%
@@ -50,7 +50,7 @@
                                 <c:otherwise>-</c:otherwise>
                             </c:choose>
                         </td>
-                        <td>
+                        <td class="btn-event">
                             <c:choose>
                                 <c:when test="${coupon.promoMaxDiscount != null && coupon.promoMaxDiscount > 0}">
                                     <fmt:formatNumber value="${coupon.promoMaxDiscount}" type="currency" currencySymbol="₩"/>
@@ -58,30 +58,32 @@
                                 <c:otherwise>-</c:otherwise>
                             </c:choose>
                         </td>
-                        <td>
+                        <td class="btn-event">
                             <fmt:formatNumber value="${coupon.promoMinPurchase}" type="currency" currencySymbol="₩"/>
                         </td>
-                        <td>
+                        <td class="btn-event">
                             <fmt:formatDate value="${coupon.promoStartDate}" pattern="yyyy-MM-dd" /> ~ 
                             <fmt:formatDate value="${coupon.promoEndDate}" pattern="yyyy-MM-dd" />
                         </td>
-                        <td>
+                        <td class="btn-event">
                             <c:choose>
                                 <c:when test="${coupon.promoCouponActive}">
-                                    <span class="active">활성</span>
+                                    <span class="coupon-active">활성</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="expired">비활성</span>
+                                    <span class="coupon-expired">비활성</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <td class="btn-group">
-                            <a href="${contextPath}/event/couponDetail.do?promoId=${coupon.promoId}">상세보기</a>
+                        <td>
+                         <div class="coupon-btn-group">
+                            <a href="${contextPath}/event/couponDetail.do?promoId=${coupon.promoId}" class="detail">상세보기</a>
                             <c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
-						        <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}">수정</a>
-						        <a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}"
+						        <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}" class="update">수정</a>
+						        <a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}" class="delete"
 						           onclick="return confirm('삭제하시겠습니까?')">삭제</a>
 						    </c:if>
+				    	 </div>
                         </td>
                     </tr>
                 </c:forEach>

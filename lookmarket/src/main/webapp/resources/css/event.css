@@ -1,33 +1,31 @@
 /* 이벤트 등록 */
-.form-container{width:600px;margin:50px auto;padding:30px;border:1px solid #ccc;border-radius:10px;background-color:#fafafa}
-.form-container h2{text-align:center}
-.form-group{margin-bottom:15px}
-label{font-weight:bold;display:block;margin-bottom:5px}
-input[type="text"],textarea,select{width:100%;padding:10px;font-size:14px;box-sizing:border-box}
-input[type="file"]{margin-top:5px}
-.submit-btn{text-align:center;margin-top:20px}
-.submit-btn button{padding:10px 20px;font-size:16px;background-color:#3366cc;color:#fff;border:none;border-radius:5px;cursor:pointer}
-.submit-btn button:hover{background-color:#254a9a}
-.promotion-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; }
-.promotion-card { width: 300px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1); background-color: #fff; display: flex; flex-direction: column; transition: transform 0.3s ease; }
-.promotion-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
-.promotion-card img { width: 100%; height: 180px; object-fit: cover; }
-.promotion-no-image { height: 180px; background-color: #999; color: white; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; }
-.promotion-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-.promotion-title { font-size: 1.25rem; font-weight: bold; margin-bottom: 10px; }
-.promotion-dates { font-size: 0.9rem; color: #666; margin-bottom: 15px; }
-.promotion-btn { margin-top: auto; padding: 10px; background-color: #0069d9; color: white; border: none; border-radius: 4px; text-align: center; cursor: pointer; text-decoration: none; font-weight: 600; }
-.promotion-btn:hover { background-color: #0053ba; }
+.form-container { width:600px; margin:50px auto; padding:30px; border:1px solid #ccc; border-radius:10px; background-color:#fafafa; }  
+.form-container h2 { text-align:center; }  
+.form-group { margin-bottom:15px; }  
+label { font-weight:bold; display:block; margin-bottom:5px; }  
+input[type="text"], textarea, select { width:100%; padding:10px; font-size:14px; box-sizing:border-box; }  
+input[type="file"] { margin-top:5px; }  
+.submit-btn { text-align:center; margin-top:20px; }  
+.submit-btn button, .submit-btn a { padding:10px 20px; font-size:16px; font-weight:600; color:#fff; border:none; border-radius:5px; cursor:pointer; text-decoration:none; transition:background-color 0.3s ease; }  
+.submit-btn button:hover { background-color:#254a9a; }  
 
-/* 이벤트 목록 버튼 */
-.promotion-btn-group{display:flex;flex-direction:column;gap:10px;margin-top:10px;}
-.promotion-btn{width:100%;padding:10px 0;background:#6c757d;color:#fff;text-align:center;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;transition:background-color 0.3s ease;}
-.promotion-btn:hover{background:#5a6268;}
-.promotion-sub-btns{display:flex;gap:10px;}
-.promotion-btn-edit{flex:1;padding:10px 0;background:#007bff;color:#fff;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;transition:background-color 0.3s ease;}
-.promotion-btn-edit:hover{background:#0056b3;}
-.promotion-btn-delete{flex:1;padding:10px 0;background:#dc3545;color:#fff;border:none;border-radius:6px;font-weight:600;font-size:14px;cursor:pointer;transition:background-color 0.3s ease;}
-.promotion-btn-delete:hover{background:#a71d2a;}
+/* ======================= 프로모션 카드 스타일 ======================= */  
+.promotion-container { display:flex; flex-wrap:wrap; gap:20px; justify-content:flex-start; }  
+.promotion-card { width:300px; min-width: 250px; border:1px solid #ddd; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1); background-color:#fff; display:flex; flex-direction:column; transition:transform 0.3s ease, box-shadow 0.3s ease; }  
+.promotion-card:hover { transform:translateY(-5px); box-shadow:0 6px 15px rgba(0,0,0,0.15); }  
+.promotion-card img { width:100%; height:180px; object-fit:cover; }  
+.promotion-no-image { height:180px; background-color:#999; color:white; display:flex; justify-content:center; align-items:center; font-size:1.2rem; }  
+.promotion-content { padding:15px; flex-grow:1; display:flex; flex-direction:column; }  
+.promotion-title { font-size:1.25rem; font-weight:bold; margin-bottom:10px; }  
+.promotion-dates { font-size:0.9rem; color:#666; margin-bottom:15px; }  
+.promotion-btn { margin-top:auto; padding:10px; background-color:#0069d9; color:white; border:none; border-radius:4px; text-align:center; cursor:pointer; text-decoration:none; font-weight:600; }  
+.promotion-btn:hover { background-color:#0053ba; }  
+.promotion-btn-group { display:flex; flex-direction:column; gap:10px; margin-top:10px; }  
+.promotion-sub-btns { display:flex; gap:10px; }  
+.promotion-btn-edit { flex:1; padding:10px 0; background:#007bff; color:#fff; border-radius:6px; font-weight:600; font-size:14px; cursor:pointer; transition:background-color 0.3s ease; }  
+.promotion-btn-edit:hover { background:#0056b3; }  
+.promotion-btn-delete { flex:1; padding:10px 0; background:#dc3545; color:#fff; border-radius:6px; font-weight:600; font-size:14px; cursor:pointer; transition:background-color 0.3s ease; }  
+.promotion-btn-delete:hover { background:#a71d2a; }  
 
 /* 이벤트 수정 */
 
@@ -40,29 +38,30 @@ input[type="file"]{margin-top:5px}
 label { font-weight: bold; }
 input[readonly], textarea[readonly] {background-color: #f8f9fa;}
 
-/*쿠폰 상세 */
-.readonly-field {background-color: #f9f9f9;padding: 8px;border: 1px solid #ddd;border-radius: 4px;}
-.expired {color: red;font-weight: bold;}
-.active {color: green;font-weight: bold;}
-.example-box {background-color: #eef2ff;border: 1px solid #bbc;padding: 10px;margin-top: 15px;border-radius: 4px;}
+/* ======================= 쿠폰 상세 및 리스트 ======================= */  
+.readonly-field { background-color:#f9f9f9; padding:8px; border:1px solid #ddd; border-radius:4px; }  
+.example-box { background-color:#eef2ff; border:1px solid #bbc; padding:10px; margin-top:15px; border-radius:4px; }  
+.coupon-active { color:green; font-weight:bold; }  
+.coupon-expired { color:red; font-weight:bold; }  
+.coupon-table { width:100%; border-collapse:collapse; margin-top:20px; }  
+.coupon-table th, .coupon-table td { min-width: 80px; /* 최소 너비 확보 */ white-space: nowrap; /* 글씨 줄바꿈 금지 */ border:1px solid #ddd; padding:10px 5px; text-align:center; vertical-align:middle; }  
+.coupon-table th { background-color:#f4f4f4; }  
+.coupon-btn-group { display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap: nowrap; /* 줄 바꿈 방지 */ }  
+.coupon-btn-group a { flex:0 0 auto; min-width:80px; padding:6px 12px; font-size:14px; font-weight:600; color:white; text-decoration:none; border-radius:6px; text-align:center; white-space:nowrap; box-sizing:border-box; transition:background-color 0.3s ease; }  
+.coupon-btn-group a.detail { background-color:#007bff; }  
+.coupon-btn-group a.detail:hover { background-color:#0056b3; }  
+.coupon-btn-group a.update { background-color:#17a2b8; }  
+.coupon-btn-group a.update:hover { background-color:#117a8b; }  
+.coupon-btn-group a.delete { background-color:#dc3545; }  
+.coupon-btn-group a.delete:hover { background-color:#a71d2a; }  
 
-/* 쿠폰 리스트 */
-.coupon-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-.coupon-table th, .coupon-table td { border: 1px solid #ddd; padding: 12px 15px; text-align: center; }
-.coupon-table th { background-color: #f4f4f4; }
-.active { color: green; font-weight: bold; }
-.expired { color: red; font-weight: bold; }
-
-.btn-group { display: flex; gap: 10px; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.btn-group a { flex: 0 0 auto; min-width: 120; padding: 10px 18px; font-size: 16px; font-weight: 600; color: white; text-decoration: none; border-radius: 8px; background-color: #007bff; transition: background-color 0.3s ease; text-align: center; white-space: nowrap; box-sizing: border-box; }
-.btn-group a:hover { background-color: #0056b3; }
-
-.action-buttons { margin-top: 30px; }
-.btn { display: inline-block; padding: 10px 20px; margin-right: 12px; font-size: 15px; font-weight: 600; text-align: center; text-decoration: none; border-radius: 6px; transition: background-color 0.3s ease; cursor: pointer; }
-.btn-return { display: inline-block; padding: 12px 24px; font-size: 16px; font-weight: 600; color: white; text-decoration: none; border-radius: 8px; background-color: #6c757d; transition: background-color 0.3s ease; }
-.btn-return:hover { background-color: #5a6268; }
-.btn-add { display: inline-block; padding: 12px 24px; font-size: 16px; font-weight: 600; color: white; text-decoration: none; border-radius: 8px; background-color: #28a745; transition: background-color 0.3s ease; }
-.btn-add:hover { background-color: #218838; }
+/* ======================= 액션 버튼 ======================= */  
+.action-buttons { margin-top:30px; }  
+.btn-return, .btn-add { display:inline-block; padding:12px 24px; font-size:16px; font-weight:600; color:white; text-decoration:none; border-radius:8px; transition:background-color 0.3s ease; cursor:pointer; }  
+.btn-return { background-color:#6c757d; }  
+.btn-return:hover { background-color:#5a6268; }  
+.btn-add { background-color:#28a745; }  
+.btn-add:hover { background-color:#218838; }
 
 
 
