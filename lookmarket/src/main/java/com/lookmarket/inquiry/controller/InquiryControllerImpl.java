@@ -53,7 +53,7 @@ public class InquiryControllerImpl implements InquiryController {
 
         inquiryService.createInquiry(loginId, role, vo);
 
-        ModelAndView mav = new ModelAndView("redirect:/inquiry/myList.do"); 
+        ModelAndView mav = new ModelAndView("redirect:/inquiry/inquiryList.do"); 
         return mav;
     }
 
@@ -73,6 +73,14 @@ public class InquiryControllerImpl implements InquiryController {
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
+		if(role == 3) {
+			session.setAttribute("sideMenu", "reveal");
+			session.setAttribute("sideMenu_option", "myPage_admin");
+		}else if(role == 1) {
+			session.setAttribute("sideMenu", "reveal");
+			session.setAttribute("sideMenu_option", "myPage");
+		}
+
 
         mav.addObject("inquiryList", list);
         return mav;
@@ -103,7 +111,7 @@ public class InquiryControllerImpl implements InquiryController {
 
     // 5. 관리자 답변 등록
     @PostMapping("/answer.do")
-    public ModelAndView answerInquiry(@PathVariable("id") long inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
+    public ModelAndView answerInquiry(@RequestParam("inquiryId") long inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
         String adminId = (String) session.getAttribute("loginUserId");
         int role = (int) session.getAttribute("loginUserRole");
 

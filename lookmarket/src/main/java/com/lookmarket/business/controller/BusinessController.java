@@ -12,8 +12,6 @@ public interface BusinessController {
 	public ModelAndView mypageBusinessInfo(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView businessGoodsList(@RequestParam("category") String category, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView businessOrderList(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView myMemberList(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView myCommunityList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView myBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView BusinessMain(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public Map<String, Object> updateDelivery(int orderId, int dStatus) throws Exception;

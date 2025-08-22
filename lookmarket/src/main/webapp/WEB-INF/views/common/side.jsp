@@ -28,10 +28,10 @@
 					<li>
 						<h3>사업자 메뉴</h3>
 						<ul>
-							<li><a href="${contextPath}/business/mypage/mypageBusinessInfo.do">내정보</a></li>
+							<li><a href="${contextPath}/business/mypageBusinessInfo.do">내정보</a></li>
 							<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
 							<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
-							<li><a href="${contextPath}/business/mypage/myBlackBoardList.do">사장님고충방</a></li>
+							<li><a href="${contextPath}/business/BlackBoardList.do">사장님고충방</a></li>
 						</ul>
 					</li>
 				</c:when>
@@ -40,13 +40,14 @@
 						<h3>관리자 메뉴</h3>
 						<ul>
 							<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">내정보</a></li>
-							<li><a href="${contextPath}/admin/jangbogo/allGoodsList.do">상품관리</a></li>
-							<li><a href="${contextPath}/admin/order/allOrderList.do">주문관리</a></li>
-							<li><a href="${contextPath}/admin/member/allMemberList.do">회원관리</a></li>
-							<li><a href="${contextPath}/admin/mypage/allCommunityList.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/admin/allGoodsList.do">상품관리</a></li>
+							<li><a href="${contextPath}/admin/allOrderList.do">주문관리</a></li>
+							<li><a href="${contextPath}/admin/allMemberList.do">회원관리</a></li>
+							<li><a href="${contextPath}/admin/community/allCommunityList.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/admin/community/allBlackBoardList.do">사장님고충방</a></li>
 							<li><a href="${contextPath}/admin/ApprovalList.do">사업자 승인 요청</a></li>
-							<li><a href="${contextPath}/admin/mypage/allBlackBoardList.do">사장님고충방</a></li>
 							<li><a href="${contextPath}/admin/accountList.do">회계관리</a></li>
+							<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>							
 						</ul>
 					</li>
 				</c:when>

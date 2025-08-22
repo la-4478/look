@@ -61,22 +61,20 @@
 								<c:when test="${memberInfo.m_role == 1}">
 									<li><a href="${contextPath}/mypage/mypageInfo.do">마이페이지</a></li>
 									<li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
-									<li><a href="#">주문내역</a></li>
+									<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역</a></li>
 									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 2}">
-									<li><a href="${contextPath}/business/businessMain.do">사업자
-											페이지</a></li>
-									<li><a href="#">상품관리</a></li>
-									<li><a href="#">주문관리</a></li>
-									<li><a href="${contextPath}/chatbot/chatbot.do">고객센터</a></li>
+									<li><a href="${contextPath}/business/businessMain.do">사업자 페이지</a></li>
+									<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
+									<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
 									<li><a
 										href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
-									<li><a href="#">상품관리</a></li>
-									<li><a href="#">회원관리</a></li>
-									<li><a href="${contextPath}/chatbot/chatbot.do">회계관리</a></li>
+									<li><a href="${contextPath}/admin/allGoodsList.do">상품관리</a></li>
+									<li><a href="${contextPath}/admin/allMemberList.do">회원관리</a></li>
+									<li><a href="${contextPath}/admin/accountList.do">회계관리</a></li>
 									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
 								</c:when>
 							</c:choose>
@@ -109,10 +107,10 @@
 											class="menu__title">주변상권</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/sijangbajo/nearby/nearby2.do">주변상권</a></li>
+										<li><a href="${contextPath}/sijangbajo/nearby/nearby.do">주변상권</a></li>
 										<li><a
 											href="${contextPath}/sijangbajo/nearby/nearCourse.do">추천코스</a></li>
-										<li><a href="${contextPath}/sijangbajo/nearby/festvalList.do">지역축제</a></li>
+										<li><a href="${contextPath}/sijangbajo/nearby/festivalList.do">지역축제</a></li>
 									</ul>
 								</li>
 								<li class="menu">

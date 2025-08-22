@@ -67,49 +67,6 @@
   </script>
 </head>
 <body>
-
-
-    <!-- 필터/검색 -->
-    <section class="section filters">
-      <form method="get" action="${contextPath}/order/businessOrders.do" class="filter-form">
-        <input type="hidden" name="page" value="1"/>
-        <label>
-          상태
-          <select name="status">
-            <option value="all" ${statusParam=='all'?'selected':''}>전체</option>
-            <option value="PENDING" ${statusParam=='PENDING'?'selected':''}>결제대기</option>
-            <option value="PAID" ${statusParam=='PAID'?'selected':''}>결제완료</option>
-            <option value="SHIPPED" ${statusParam=='SHIPPED'?'selected':''}>배송중</option>
-            <option value="COMPLETED" ${statusParam=='COMPLETED'?'selected':''}>구매확정</option>
-            <option value="CANCELED" ${statusParam=='CANCELED'?'selected':''}>취소/환불</option>
-          </select>
-        </label>
-
-        <label>
-          기간
-          <input type="date" name="dateFrom" value="${dateFrom}"/>
-          ~
-          <input type="date" name="dateTo" value="${dateTo}"/>
-        </label>
-
-        <label>
-          정렬
-          <select name="sort">
-            <option value="recent" ${sort=='recent'?'selected':''}>최신순</option>
-            <option value="amount" ${sort=='amount'?'selected':''}>금액높은순</option>
-          </select>
-        </label>
-
-        <label class="grow">
-          검색(주문번호/상품명/구매자)
-          <input type="search" name="q" value="${q}" placeholder="예: 20250812 / 사과 / 홍길동"/>
-        </label>
-
-        <button type="submit" class="btn primary">검색</button>
-        <a class="btn" href="${contextPath}/order/businessOrders.do">초기화</a>
-      </form>
-    </section>
-
     <!-- 주문 리스트 -->
     <section class="section">
      <h1>내 상품 주문 목록</h1>
@@ -185,7 +142,7 @@
   </c:forEach>
 
   <c:if test="${empty orders}">
-    <tr><td colspan="8">조건에 맞는 주문이 없습니다.</td></tr>
+    <tr><td colspan="8">주문 내역이 없습니다.</td></tr>
   </c:if>
 </tbody>
 

@@ -297,7 +297,7 @@
 
 	<!-- 초기 서울 리스트 (JSP 마크업) -->
 	<div id="initialSeoulList"
-		style="margin-top: 30px; max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; width: 900px;">
+		style="margin-top: 30px; max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; width: 83.5%;">
 		<c:forEach var="item" items="${seoulSijangList}">
 			<div class="market-item"
 				data-market-name="${fn:escapeXml(item['시장명'])}"

@@ -67,4 +67,9 @@ public class CommunityServiceImpl implements CommunityService{
 	public void deleteBlackBoard(int b_id) throws Exception {
 	    communityDAO.deleteBlackBoard(b_id);
 	}
+
+	@Override
+	public List<BlackBoardVO> myBlackBoard(String m_id) {
+		return communityDAO.myBlackBoard(m_id);
+	}
 }
