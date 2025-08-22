@@ -47,6 +47,7 @@
         // 컨트롤러가 "success" 문자열을 리턴
         if (typeof res === 'string' && res.trim() === 'success') {
           alert("장바구니에 담겼습니다 🛒");
+          window.location.href = '${contextPath}/cart/myCartList.do';
           // 필요하면 장바구니 배지 갱신, 모달 열기 등 여기서 처리
           // ex) $('#cartCount').text(parseInt($('#cartCount').text()) + Number(qty));
         } else {
@@ -168,6 +169,7 @@ $(document).ready(function() {
 
                 if (result === 'login_required') {
                     alert('로그인 후 이용 가능합니다.');
+                    window.location.href = '${contextPath}/member/loginForm.do';
                     return;
                 }
 

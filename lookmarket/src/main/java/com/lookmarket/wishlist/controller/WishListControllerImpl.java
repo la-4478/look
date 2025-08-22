@@ -57,11 +57,11 @@ public class WishListControllerImpl implements WishListController  {
         }
         
         WishListVO wishVO = new WishListVO();
-        wishVO.setGId(g_id);
-        wishVO.setG_image(g_image);
-        wishVO.setG_name(g_name);
-        wishVO.setG_price(g_price);
-        wishVO.setMId(m_id);
+        wishVO.setgId(g_id);
+        wishVO.setgName(g_name);
+        wishVO.setgPrice(g_price);
+        wishVO.setgImage(g_image);
+        wishVO.setmId(m_id);
         
         // 이미 찜 되어있으면 삭제, 아니면 추가
         boolean isWished = wishListService.isWished(wishVO);

@@ -178,7 +178,7 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 		
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
+		mav.addObject("viewName", "mypage/myCommunity");
 		mav.addObject("communityList", communityList);
 		
 		session = request.getSession();
