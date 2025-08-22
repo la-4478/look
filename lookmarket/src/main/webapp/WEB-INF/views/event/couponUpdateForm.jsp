@@ -57,8 +57,8 @@
         <div class="form-group">
             <label for="promoCouponActive">쿠폰 활성 상태</label>
             <select id="promoCouponActive" name="promoCouponActive" required>
-                <option value="1" <c:if test="${coupon.promoCouponActive == 1}">selected</c:if>>활성</option>
-                <option value="0" <c:if test="${coupon.promoCouponActive == 0}">selected</c:if>>비활성</option>
+                <option value="1" <c:if test="${coupon.promoCouponActive}">selected</c:if>>활성</option>
+                <option value="0" <c:if test="${coupon.promoCouponActive}">selected</c:if>>비활성</option>
             </select>
         </div>
 

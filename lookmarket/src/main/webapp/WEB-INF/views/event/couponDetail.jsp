@@ -9,29 +9,7 @@
     <meta charset="UTF-8">
     <title>쿠폰 상세</title>
     <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
-    <style>
-        .readonly-field {
-            background-color: #f9f9f9;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .expired {
-            color: red;
-            font-weight: bold;
-        }
-        .active {
-            color: green;
-            font-weight: bold;
-        }
-        .example-box {
-            background-color: #eef2ff;
-            border: 1px solid #bbc;
-            padding: 10px;
-            margin-top: 15px;
-            border-radius: 4px;
-        }
-    </style>
+
 </head>
 <body>
 <div class="form-container">
@@ -95,7 +73,7 @@
     <div class="form-group">
         <label>활성 상태</label>
         <div class="readonly-field">
-            <c:out value="${coupon.promoCouponActive == 1 ? '활성' : '비활성'}" />
+            <c:out value="${coupon.promoCouponActive? '활성' : '비활성'}" />
         </div>
     </div>
 

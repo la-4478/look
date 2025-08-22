@@ -120,7 +120,7 @@ public class SijangSearchService {
 	                + "&MobileApp=SijangBajo"
 	                + "&eventStartDate=" + startDate
 	                + "&_type=json"
-	                + "&numOfRows=20"
+	                + "&numOfRows=100"
 	                + "&pageNo=1";
 
 	        URL url = new URL(apiUrl);

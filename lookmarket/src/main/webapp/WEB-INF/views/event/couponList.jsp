@@ -1,48 +1,13 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>쿠폰 리스트</title>
-    <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
-    <style>
-        .coupon-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .coupon-table th, .coupon-table td {
-            border: 1px solid #ddd;
-            padding: 12px 15px;
-            text-align: center;
-        }
-        .coupon-table th {
-            background-color: #f4f4f4;
-        }
-        .expired {
-            color: red;
-            font-weight: bold;
-        }
-        .active {
-            color: green;
-            font-weight: bold;
-        }
-        .btn-group a {
-            margin-right: 8px;
-            padding: 6px 12px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .btn-group a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+
 </head>
 <body>
 <div class="container">
@@ -111,9 +76,11 @@
                         </td>
                         <td class="btn-group">
                             <a href="${contextPath}/event/couponDetail.do?promoId=${coupon.promoId}">상세보기</a>
-                            <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}">수정</a>
-							<a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}"
-							   onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+                            <c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+						        <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}">수정</a>
+						        <a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}"
+						           onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+						    </c:if>
                         </td>
                     </tr>
                 </c:forEach>

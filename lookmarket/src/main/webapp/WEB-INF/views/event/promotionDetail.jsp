@@ -8,13 +8,7 @@
     <meta charset="UTF-8">
     <title>프로모션 상세</title>
     <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
-    <style>
-        .form-group { margin-bottom: 20px; }
-        label { font-weight: bold; }
-        input[readonly], textarea[readonly] {
-            background-color: #f8f9fa;
-        }
-    </style>
+
 </head>
 <body class="bg-light">
 
