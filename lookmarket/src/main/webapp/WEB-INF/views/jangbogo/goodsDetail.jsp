@@ -47,6 +47,7 @@
         // 컨트롤러가 "success" 문자열을 리턴
         if (typeof res === 'string' && res.trim() === 'success') {
           alert("장바구니에 담겼습니다 🛒");
+          window.location.href = '${contextPath}/cart/myCartList.do';
           // 필요하면 장바구니 배지 갱신, 모달 열기 등 여기서 처리
           // ex) $('#cartCount').text(parseInt($('#cartCount').text()) + Number(qty));
         } else {
@@ -72,7 +73,7 @@
 
     <!-- 상단: 상품 이미지 + 정보 -->
     <div class="top-section">
-        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" />
+        <img src="${contextPath}/resources/image/${goods.i_filename}" alt="${goods.g_name}" style="width:400px; height:200px;" />
 
         <div class="product-info">
             <h2>${goods.g_name}</h2>
@@ -135,12 +136,12 @@
     <div class="bottom-section">
         <h4 class="mt-5 mb-3">상세 설명</h4>
         <p>${goods.g_discription}</p>
-
+	<div class="subimage">
         <c:forEach var="img" items="${detailImageList}">
-            <img src="${contextPath}/resources/image/${img}" alt="상세 이미지" />
+            <img src="${contextPath}/resources/image/${img.i_filename}" alt="상세 이미지" />
         </c:forEach>
     </div>
-
+    </div>
 </div>
 
 	<script>
@@ -168,6 +169,7 @@ $(document).ready(function() {
 
                 if (result === 'login_required') {
                     alert('로그인 후 이용 가능합니다.');
+                    window.location.href = '${contextPath}/member/loginForm.do';
                     return;
                 }
 

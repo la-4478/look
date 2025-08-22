@@ -28,4 +28,5 @@ public interface GoodsDAO {
 	public List<GoodsVO> getLiving(int category) throws DataAccessException;
 	public List<GoodsVO> getFashion(int category) throws DataAccessException;
 	public List<GoodsVO> getLocal(int category) throws DataAccessException;
+	public List<ImageFileVO> goodsSubImage(int g_id);
 }

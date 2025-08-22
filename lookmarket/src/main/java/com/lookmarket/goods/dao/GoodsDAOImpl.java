@@ -146,4 +146,8 @@ public class GoodsDAOImpl implements GoodsDAO{
 		
 
 	}
+	@Override
+	public List<ImageFileVO> goodsSubImage(int g_id) {
+		return sqlSession.selectList("mapper.goods.selectSubimage", g_id);
+	}
 }

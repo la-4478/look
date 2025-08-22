@@ -32,15 +32,25 @@ public class WishListControllerImpl implements WishListController  {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("wishlist/wishList"); // JSP 경로
         List<WishListVO> wishList = wishListService.getWishListByMember(mId);
+        for (WishListVO item : wishList) {
+        	System.out.println("상품 ID: " + item.getwId());
+            System.out.println("상품 ID: " + item.getgId());
+            System.out.println("회원 ID: " + item.getmId());
+            System.out.println("상품명: " + item.getgName());
+            System.out.println("가격: " + item.getgPrice());
+            System.out.println("이미지: " + item.getgImage());
+            System.out.println("----------------------------");
+        }
+        
         mav.addObject("wishList", wishList);
 
         return mav;
     }
 
     @RequestMapping(value="/delete.do", method={RequestMethod.GET, RequestMethod.POST})
-    public String deleteWishList(@RequestParam("wId") int wId) throws Exception {
-        wishListService.removeWishList(wId);
-        return "redirect:/wishlist/wishList.do";
+    public String deleteWishList(@RequestParam("w_id") int w_id) throws Exception {
+        wishListService.removeWishList(w_id);
+        return "redirect:/mypage/myWishList.do";
     }
     
     @RequestMapping(value="/toggle.do", method=RequestMethod.POST)
@@ -57,11 +67,11 @@ public class WishListControllerImpl implements WishListController  {
         }
         
         WishListVO wishVO = new WishListVO();
-        wishVO.setGId(g_id);
-        wishVO.setG_image(g_image);
-        wishVO.setG_name(g_name);
-        wishVO.setG_price(g_price);
-        wishVO.setMId(m_id);
+        wishVO.setgId(g_id);
+        wishVO.setgName(g_name);
+        wishVO.setgPrice(g_price);
+        wishVO.setgImage(g_image);
+        wishVO.setmId(m_id);
         
         // 이미 찜 되어있으면 삭제, 아니면 추가
         boolean isWished = wishListService.isWished(wishVO);

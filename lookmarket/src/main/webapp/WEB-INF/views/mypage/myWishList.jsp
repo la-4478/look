@@ -29,18 +29,18 @@
                 <c:forEach var="wish" items="${wishList}">
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
-                            <img src="${contextPath}/resources/image/${wish.g_image}" alt="${wish.g_name}" class="product-image" />
+                            <img src="${contextPath}/resources/image/${wish.gImage}" alt="${wish.gName}" class="product-image" />
 
-                            <div class="product-name">${wish.g_name}</div>
+                            <div class="product-name">${wish.gName}</div>
                             <div class="product-price">
-                                <fmt:formatNumber value="${wish.g_price}" type="currency" currencySymbol="₩" />
+                                <fmt:formatNumber value="${wish.gPrice}" type="currency" currencySymbol="₩" />
                             </div>
 
                             <div class="mt-2 d-flex justify-content-center gap-2">
-                                <a href="${contextPath}/goodsDetail.do?g_id=${wish.g_id}" class="btn btn-primary btn-small">상세보기</a>
+                                <a href="${contextPath}/jangbogo/goodsDetail.do?g_id=${wish.gId}" class="btn btn-primary btn-small">상세보기</a>
 
-                                <form action="${contextPath}/wishlist/removeWish.do" method="post" style="display:inline;">
-                                    <input type="hidden" name="g_id" value="${wish.g_id}" />
+                                <form action="${contextPath}/wishlist/delete.do?w_id=${wish.wId}" method="post" style="display:inline;">
+                                    <input type="hidden" name="g_id" value="${wish.gId}" />
                                     <button type="submit" class="btn btn-danger btn-small">삭제</button>
                                 </form>
                             </div>

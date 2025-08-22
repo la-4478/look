@@ -5,24 +5,14 @@
 
 <mapper namespace="mapper.wishlist">
 
-    <resultMap id="wishListResultMap" type="com.lookmarket.wishlist.vo.WishListVO">
-        <result property="wId" column="w_id"/>
-        <result property="gId" column="g_id"/>
-        <result property="mId" column="m_id"/>
-        <result property="gName" column="g_name"/>
-        <result property="gPrice" column="g_price"/>
-        <result property="gThumbnail" column="i_filename"/>
-    </resultMap>
-
-    <!-- 회원별 찜목록 조회 -->
-    <select id="selectWishListByMember" parameterType="string" resultMap="wishListResultMap">
-        SELECT w.w_id, w.m_id, g.g_id, g.g_name, g.g_price, gi.i_filename
-        FROM wishlist w
-        JOIN goods g ON w.g_id = g.g_id
-        LEFT JOIN goods_image gi ON g.g_id = gi.g_id
-        WHERE w.m_id = #{mId}
-        ORDER BY w.w_id DESC
-    </select>
+	<resultMap id="wishListResultMap" type="com.lookmarket.wishlist.vo.WishListVO">
+	    <result property="wId" column="w_id"/>
+	    <result property="gId" column="g_id"/>
+	    <result property="mId" column="m_id"/>
+	    <result property="gName" column="g_name"/>
+	    <result property="gPrice" column="g_price"/>
+	    <result property="gImage" column="g_image"/>
+	</resultMap>
 
     <!-- 찜목록 삭제 -->
     <delete id="deleteWishList" parameterType="int">
@@ -39,8 +29,8 @@
 
     <!-- 찜 추가 -->
     <insert id="insertWish" parameterType="WishListVO">
-	    INSERT INTO wishlist (m_id, g_id, g_name, g_price, g_image)
-	    VALUES (#{mId}, #{gId}, #{g_name}, #{g_price}, #{g_image})
+    INSERT INTO wishlist (m_id, g_id, g_name, g_price, g_image)
+    VALUES (#{mId}, #{gId}, #{gName}, #{gPrice}, #{gImage})
 	</insert>
 
     <!-- 찜 제거 -->

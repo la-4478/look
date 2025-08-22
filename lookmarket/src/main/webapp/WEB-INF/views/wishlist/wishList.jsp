@@ -30,7 +30,7 @@
                     <div class="col-md-3 col-sm-6 mb-4">
                         <div class="product-card">
                             <!-- 상품 이미지 -->
-                            <img src="${contextPath}/resources/image/${wish.gThumbnail}" 
+                            <img src="${contextPath}/resources/image/${wish.gImage}" 
                                  alt="${wish.gName}" class="product-image" />
 
                             <!-- 상품명 -->
