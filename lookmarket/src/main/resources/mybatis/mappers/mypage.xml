@@ -175,7 +175,7 @@
             w.m_id AS mId,
             g.g_name AS gName,
             g.g_price AS gPrice,
-            g.i_filename AS gThumbnail
+            w.g_image AS gImage
         FROM wishlist w
         JOIN goods g ON w.g_id = g.g_id
         WHERE w.m_id = #{m_id}
@@ -187,4 +187,5 @@
     		d_status = 4 where o_id = #{oId}
     	]]>
     </update>
+    
 </mapper>

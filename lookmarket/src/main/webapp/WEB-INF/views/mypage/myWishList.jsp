@@ -39,7 +39,7 @@
                             <div class="mt-2 d-flex justify-content-center gap-2">
                                 <a href="${contextPath}/jangbogo/goodsDetail.do?g_id=${wish.gId}" class="btn btn-primary btn-small">상세보기</a>
 
-                                <form action="${contextPath}/wishlist/removeWish.do" method="post" style="display:inline;">
+                                <form action="${contextPath}/wishlist/delete.do?w_id=${wish.wId}" method="post" style="display:inline;">
                                     <input type="hidden" name="g_id" value="${wish.gId}" />
                                     <button type="submit" class="btn btn-danger btn-small">삭제</button>
                                 </form>

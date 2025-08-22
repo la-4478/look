@@ -14,16 +14,6 @@
 	    <result property="gImage" column="g_image"/>
 	</resultMap>
 
-    <!-- 회원별 찜목록 조회 -->
-    <select id="selectWishListByMember" parameterType="string" resultMap="wishListResultMap">
-    SELECT w.w_id, w.m_id, g.g_id, g.g_name, g.g_price, gi.i_filename AS g_image
-    FROM wishlist w
-    JOIN goods g ON w.g_id = g.g_id
-    LEFT JOIN goods_image gi ON g.g_id = gi.g_id
-    WHERE w.m_id = #{mId}
-    ORDER BY w.w_id DESC
-	</select>
-
     <!-- 찜목록 삭제 -->
     <delete id="deleteWishList" parameterType="int">
         DELETE FROM wishlist WHERE w_id = #{wId}
