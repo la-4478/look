@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}" />
-<div id="map" style="width:100%;height:600px;"></div>
+<div id="map" style="width:83.%;height:400px;"></div>
 
 <script>
 (function () {
@@ -129,11 +129,8 @@
             var html =
               '<div style="padding:6px 10px;">'
               + '<b>' + safeTitle + '</b><br/>'
-              + (address ? address : '주소를 찾을 수 없습니다.')
-              + '<br/><button onclick="openNearby(' + lng + ',' + lat + ',\'FD6\')">주변 음식점</button> '
-              + '<button onclick="openNearby(' + lng + ',' + lat + ',\'CE7\')">주변 카페</button>'
-              + '</div>';
-
+              + (address ? address : '주소를 찾을 수 없습니다.');
+              
             var iw = new kakao.maps.InfoWindow({ content: html });
             iw.open(map, marker);
             map.panTo(marker.getPosition());

@@ -111,7 +111,7 @@ public class InquiryControllerImpl implements InquiryController {
 
     // 5. 관리자 답변 등록
     @PostMapping("/answer.do")
-    public ModelAndView answerInquiry(@PathVariable("id") long inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
+    public ModelAndView answerInquiry(@RequestParam("inquiryId") long inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
         String adminId = (String) session.getAttribute("loginUserId");
         int role = (int) session.getAttribute("loginUserRole");
 
