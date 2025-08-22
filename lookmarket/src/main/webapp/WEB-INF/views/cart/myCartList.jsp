@@ -15,6 +15,22 @@
 <script>
 const contextPath = "${contextPath}";
 
+$(document).ready(function() {
+    // 키보드 직접 입력 시 수량 반영
+    $('.qty-input').on('input', function() {
+        const input = $(this);
+        const c_id = this.id.split('-')[1];
+        const maxStock = parseInt(input.attr('max')) || 100;
+        let value = parseInt(input.val());
+
+        if(isNaN(value) || value < 1) value = 1;
+        if(value > maxStock) value = maxStock;
+
+        input.val(value); // 보정된 값 적용
+        updateCartQty(c_id, value); // AJAX 호출 및 합계 갱신
+    });
+});
+
 function updateCartQty(c_id, newQty) {
     if (newQty < 1) {
         alert("수량은 1 이상이어야 합니다.");
@@ -185,7 +201,7 @@ function fn_order_all_cart_goods() {
                         </td>
                         <td>
                             <button class="qty-btn" onclick="changeQty('${item.c_id}', -1, ${item.g_stock})">-</button>
-                            <input class="qty-id qty-input" type="number" id="qty-${item.c_id}" name="goodsQty" value="${item.c_qty}" min="1" max="${item.g_stock}" readonly >
+                            <input class="qty-id qty-input" id="qty-${item.c_id}" name="goodsQty" value="${item.c_qty}" min="1" max="${item.g_stock}" >
                             <button class="qty-btn" onclick="changeQty('${item.c_id}', 1, ${item.g_stock})">+</button>
                         </td>
                         <td class="delivery" id="delivery-${item.c_id}" data-delivery="${item.g_delivery_price}">
