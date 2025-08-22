@@ -23,7 +23,7 @@
         <!-- 상품 ID -->
         <div class="form-group">
             <label for="g_name">상품 명</label>
-            <input type="text" id="g_name" name="g_name" readonly />
+            <input type="text" id="g_name" name="g_name" />
         </div>
 
         <!-- 별점 ★ 클릭 방식 -->

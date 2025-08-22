@@ -9,7 +9,6 @@
     <meta charset="UTF-8">
     <title>쿠폰 상세</title>
     <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
-
 </head>
 <body>
 <div class="form-container">
@@ -105,7 +104,9 @@
     </div>
 
     <div class="submit-btn">
-        <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}">수정하기</a>
+    	<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+        	<a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}">수정하기</a>
+   		</c:if>
         <a href="${contextPath}/event/couponList.do?postId=${coupon.postId}">목록으로</a>
     </div>
 </div>
