@@ -58,11 +58,12 @@
       error: function (xhr) {
         if (xhr.status === 401) {
           alert("로그인이 필요합니다.");
-          // location.href = ctx + "/member/loginForm.do";
+          location.href = ctx + "/member/loginForm.do";
           return;
         }
-        alert("서버 오류로 실패했습니다.");
+        alert("로그인이 필요합니다.");
         console.error("addCartItem error:", xhr);
+        window.location.href = ctx + "/member/loginForm.do";
       }
     });
   });
