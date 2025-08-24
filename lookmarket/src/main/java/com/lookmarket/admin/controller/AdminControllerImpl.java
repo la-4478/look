@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lookmarket.community.Service.CommunityService;
+import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.MemberApprovalDTO;
 import com.lookmarket.member.vo.MemberVO;
@@ -25,6 +27,8 @@ public class AdminControllerImpl implements AdminController{
 	@Autowired
 	private MemberService memberService;
 	String layout ="common/layout";
+	@Autowired
+	private CommunityService communityService;
 	
 	//viewName 수정 필요
 	@Override
@@ -217,6 +221,9 @@ public class AdminControllerImpl implements AdminController{
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
+		List<ReviewVO> reviewList = communityService.communityList();
+		mav.addObject("reviewList", reviewList);
+		
 		mav.addObject("viewName", viewName);
 		
 		session = request.getSession();

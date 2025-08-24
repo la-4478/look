@@ -18,7 +18,7 @@
     <c:forEach var="g" items="${goodsList}">
       <tr>
         <td>${g.g_id}</td>
-        <td>${g.g_name}</td>
+        <td><a href="${contextPath}/jangbogo/goodsDetail.do?g_id=${g.g_id}">${g.g_name}</a></td>
         <td>${g.g_brand}</td>
         <c:if test="${g.g_category == '1' }">
         <td>신선식품</td>
