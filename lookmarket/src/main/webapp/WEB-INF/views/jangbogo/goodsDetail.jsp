@@ -81,6 +81,7 @@
             <h2>${goods.g_name}</h2>
 
             <!-- 찜 버튼 -->
+            	<c:if test="${memberInfo.m_role == 1 || memberInfo.m_role == null }">
 				<button class="wish-btn ${empty m_id == 'disabled'}" 
 				        data-gid="${goods.g_id}" 
 				        data-gname="${goods.g_name}"
@@ -101,6 +102,7 @@
 					</c:choose>
 				</span>
 			</button>
+			</c:if>
 
 				<p><strong>브랜드:</strong> ${goods.g_brand}</p>
 
