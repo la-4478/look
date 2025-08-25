@@ -26,11 +26,9 @@
 				   goods.g_name,
 				   goods.g_price,
 				   goods.g_delivery_price,
-				   goods.g_stock,
-				   goods_image.i_filename
+				   goods.g_stock
 			FROM cart
 			JOIN goods ON cart.g_id = goods.g_id
-			LEFT JOIN goods_image ON goods.g_id = goods_image.g_id
 			WHERE cart.m_id = #{current_id}
 		]]>
 	</select>

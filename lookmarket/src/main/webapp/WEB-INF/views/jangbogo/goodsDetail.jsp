@@ -13,6 +13,7 @@
     <meta charset="UTF-8" />
     <title>${goods.g_name} - 상품 상세</title>
 <link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   // 페이지 어디든 contextPath 쓰고 있으면 맞춰 사용
   var ctx = "${contextPath}"; // 없으면 ""로 둬도 됨
@@ -80,10 +81,15 @@
             <h2>${goods.g_name}</h2>
 
             <!-- 찜 버튼 -->
-			<button class="wish-btn ${empty m_id == 'disabled'}"
-				data-gid="${goods.g_id}" ${empty m_id}>
+            	<c:if test="${memberInfo.m_role == 1 || memberInfo.m_role == null }">
+				<button class="wish-btn ${empty m_id == 'disabled'}" 
+				        data-gid="${goods.g_id}" 
+				        data-gname="${goods.g_name}"
+				        data-gprice="${goods.g_price}"
+				        data-gimage="${goods.i_filename}"
+				        ${empty m_id}>
 				<span class="wish-icon"> 
-				<c:choose>
+					<c:choose>
 						<c:when
 							test="${myWishList != null && myWishList.contains(goods.g_id)}">
 							<img src="${contextPath}/resources/image/like_on.png"
@@ -96,11 +102,12 @@
 					</c:choose>
 				</span>
 			</button>
+			</c:if>
 
 				<p><strong>브랜드:</strong> ${goods.g_brand}</p>
 
             <div class="price">
-                <del><fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩" /></del>
+                <fmt:formatNumber value="${goods.g_price}" type="currency" currencySymbol="₩" />
             </div>
 
             <form action="${contextPath}/cart/addCartItem.do" method="post">
@@ -157,12 +164,15 @@ $(document).ready(function() {
 
         const btn = $(this);
         const g_id = btn.data('gid');
+        const g_name = btn.data('gname');
+        const g_price = btn.data('gprice');
+        const g_image = btn.data('gimage');
         console.log('찜 버튼 클릭됨, g_id:', g_id);
 
         $.ajax({
             url: '${contextPath}/wishlist/toggle.do',
             method: 'POST',
-            data: { gId: g_id },
+            data: { g_id: g_id, g_name:g_name, g_price:g_price, g_image:g_image },
             beforeSend: function() {
                 console.log('AJAX 요청 전송 준비 중...');
             },
