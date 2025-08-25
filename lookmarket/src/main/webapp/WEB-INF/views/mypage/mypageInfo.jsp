@@ -105,22 +105,8 @@
         <div class="form-group icon email">
             <label>이메일</label>
             <div style="display:flex; gap:5px; align-items:center;">
-                <input type="text" name="m_email_id" value="${myPageInfo.m_email_id}" size="12" /> @
-                <input type="text" name="m_email_domain" id="m_email_domain" value="${myPageInfo.m_email_domain}" size="15" />
-                <select onchange="setEmailDomain(this.value)">
-                    <option value="non">직접입력</option>
-                    <option value="hanmail.net">hanmail.net</option>
-                    <option value="naver.com">naver.com</option>
-                    <option value="yahoo.co.kr">yahoo.co.kr</option>
-                    <option value="hotmail.com">hotmail.com</option>
-                    <option value="paran.com">paran.com</option>
-                    <option value="nate.com">nate.com</option>
-                    <option value="google.com">google.com</option>
-                    <option value="gmail.com">gmail.com</option>
-                    <option value="empal.com">empal.com</option>
-                    <option value="korea.com">korea.com</option>
-                    <option value="freechal.com">freechal.com</option>
-                </select>
+                <input type="text" name="m_email_id" value="${myPageInfo.m_email_id}" size="12" readonly /> @
+                <input type="text" name="m_email_domain" id="m_email_domain" value="${myPageInfo.m_email_domain}" size="15" readonly />
             </div>
             <div class="checkbox-group">
                 <input type="checkbox" name="m_email_yn" value="1" <c:if test="${myPageInfo.m_email_yn == 1}">checked</c:if> /> 이메일 수신 동의

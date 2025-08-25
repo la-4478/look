@@ -104,4 +104,9 @@ public class MemberServiceImpl implements MemberService{
 	public BusinessVO findBusinessByMemberId(String m_id) throws Exception {
 		return memberDAO.findBusinessByMemberId(m_id);
 	}
+
+	@Override
+	public List<MemberVO> getMemberList() throws Exception {
+		return memberDAO.getMemberList();
+	}
 }

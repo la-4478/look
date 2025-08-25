@@ -82,7 +82,8 @@
             <!-- 찜 버튼 -->
 			<button class="wish-btn ${empty m_id == 'disabled'}"
 				data-gid="${goods.g_id}" ${empty m_id}>
-				<span class="wish-icon"> <c:choose>
+				<span class="wish-icon"> 
+				<c:choose>
 						<c:when
 							test="${myWishList != null && myWishList.contains(goods.g_id)}">
 							<img src="${contextPath}/resources/image/like_on.png"

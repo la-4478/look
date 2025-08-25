@@ -37,4 +37,9 @@ public class DeliveryDAOImpl implements DeliveryDAO {
 		
 	}
 
+	@Override
+	public List<DeliveryVO> allDeliList() throws DataAccessException {
+		return sqlSession.selectList("mapper.admin.allDelivery1");
+	}
+
 }

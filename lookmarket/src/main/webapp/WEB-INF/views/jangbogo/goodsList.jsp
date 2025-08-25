@@ -148,16 +148,17 @@ String m_id = (String) session.getAttribute("loginUserId");
 									<fmt:formatNumber value="${goods.g_price}" type="currency"
 										currencySymbol="₩" />
 								</div>
-
-								<div
-									class="mt-2 d-flex justify-content-center align-items-center gap-2">
+							
+							
+								<div class="mt-2 d-flex justify-content-center align-items-center gap-2">
 									<button class="wish-btn ${empty m_id == 'disabled'}" 
 								        data-gid="${goods.g_id}" 
 								        data-gname="${goods.g_name}"
 								        data-gprice="${goods.g_price}"
 								        data-gimage="${goods.i_filename}"
 								        ${empty m_id}>
-										<span class="wish-icon"> <c:choose>
+										<span class="wish-icon"> 
+											<c:choose>
 												<c:when test="${myWishList != null && myWishList.contains(goods.g_id)}">
 													<img src="${contextPath}/resources/image/like_on.png" alt="찜목록 추가되있음">
 												</c:when>

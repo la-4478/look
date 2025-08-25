@@ -7,33 +7,51 @@
 <head>
 <meta charset="UTF-8">
 <title>회원들의 주문내역</title>
-<link rel="stylesheet" href="${contextPath}/resources/css/mypage.css"/>
 </head>
 <body>
 
 <div class="order-history">
-    <h2>나의 주문내역</h2>
+    <h2>상품 주문내역</h2>
+<table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+        <tr>
+            <th>주문번호</th>
+            <th>품목</th>
+            <th>품목개수</th>
+            <th>금액</th>
+            <th>할인금액</th>
+            <th>구매자</th>
+            <th>수령인</th>
+            <th>배송 주소</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:choose>
+            <c:when test="${not empty orderList}">
+            	<c:forEach var="info" items="${orderList}">
+                <c:forEach var="item" items="${orderItem}">
+                <c:forEach var="delivery" items="${delivery}">
+                    <tr>
+                    	<td>${info.oId}</td>	
+                    	<td>${item.otGoodsName}</td>
+                    	<td>${item.otGoodsQty}</td>
+                    	<td>${item.otGoodsPrice}</td>
+                    	<td>${item.otSalePrice}</td>
+                    	<td>${info.oiName}</td>
+                    	<td>${info.oiReceiverName}</td>
+                    	<td>${info.oiDeliveryAddress} - ${info.oi_deli_namuji_address}</td>
+                    </tr>
+                    </c:forEach>
+                   </c:forEach>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <tr>
+                    <td colspan="8" class="no-orders">주문 내역이 없습니다.</td>
+                </tr>
+            </c:otherwise>
+        </c:choose>
+    </tbody>
+</table>
 
-    <c:choose>
-        <c:when test="${not empty orderList}">
-            <c:forEach var="order" items="${orderList}">
-                <div class="order-card">
-                    <div class="order-info">
-                        <div>주문번호: <c:out value="${order.oId}" /></div>
-                        <div>주문일자: <c:out value="${order.oiDate}" /></div>
-                        <div>주문자: <c:out value="${order.oiName}" /></div>
-                        <div>총 결제금액: 
-                            <fmt:formatNumber value="${order.oiTotalGoodsPrice + order.oiDeliveryPrice - (order.oiSalePrice != null ? order.oiSalePrice : 0)}" pattern="#,###"/> 원
-                        </div>
-                    </div>
-                    <div class="order-actions">
-                        <a href="${contextPath}/mypage/myOrderDetail.do?oId=${order.oId}">상세보기</a>
-                    </div>
-                </div>
-            </c:forEach>
-        </c:when>
-        <c:otherwise>
-            <div class="no-orders">주문 내역이 없습니다.</div>
-        </c:otherwise>
-    </c:choose>
 </div>

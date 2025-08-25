@@ -2,7 +2,7 @@ package com.lookmarket.order.vo;
 
 import org.springframework.stereotype.Component;
 
-@Component("OrderVO")
+@Component("OrderVO") // DB orderInfo 테이블
 public class OrderVO {
     private int oId;                     // 주문 id
     private String mId;                  // 회원 id
