@@ -92,12 +92,19 @@ public class InquiryControllerImpl implements InquiryController {
     public ModelAndView detailInquiry(@RequestParam("inquiryId") int inquiryId, HttpSession session, HttpServletRequest request) throws Exception {
         String loginId = (String) session.getAttribute("loginUserId");
         MemberVO memvo = memberService.findMemberById(loginId);
-        
+        int inquiry_num = 0;
         int role = memvo.getM_role();
         
         System.out.println("권한 번호 : " + role);
 
         InquiryVO vo = inquiryService.getInquiryDetail(inquiryId);
+        System.out.println("문의번호 : " +vo.getInquiryId());
+        System.out.println("답변 : " + vo.getAnswer());
+        
+        if(role == 3) {
+        	inquiry_num = inquiryService.getInquiryNum(inquiryId);
+        	System.out.println("관리자측 문의번호 : " + inquiry_num);
+        }
 
 		ModelAndView mav = new ModelAndView();
 		String layout = "common/layout";
@@ -105,19 +112,22 @@ public class InquiryControllerImpl implements InquiryController {
 		String viewName = (String)request.getAttribute("viewName");
 		mav.addObject("viewName", viewName);
         mav.addObject("inquiry", vo);
+        mav.addObject("number", inquiry_num);
         mav.addObject("role", role);
         return mav;
     }
 
     // 5. 관리자 답변 등록
     @PostMapping("/answer.do")
-    public ModelAndView answerInquiry(@RequestParam("inquiryId") long inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
+    public ModelAndView answerInquiry(@RequestParam("inquiryId") int inquiryId, @RequestParam("answer") String answer,HttpSession session)throws Exception {
         String adminId = (String) session.getAttribute("loginUserId");
-        int role = (int) session.getAttribute("loginUserRole");
+        String loginId = (String) session.getAttribute("loginUserId");
+        MemberVO memvo = memberService.findMemberById(loginId);
+        int role = memvo.getM_role();
 
         inquiryService.answerInquiry(inquiryId, adminId, role, answer);
 
-        return new ModelAndView("redirect:/inquiry/" + inquiryId);
+        return new ModelAndView("redirect:/inquiry/detail.do?inquiryid=" + inquiryId);
     }
 }
 

@@ -13,5 +13,5 @@ public interface InquiryController {
 	 public ModelAndView insertInquiry(InquiryVO vo, HttpSession session, HttpServletRequest request) throws Exception;
 	 public ModelAndView myInquiries(HttpSession session, HttpServletRequest request, HttpServletResponse reseponse) throws Exception;
 	 public ModelAndView detailInquiry(int inquiryId, HttpSession session, HttpServletRequest request) throws Exception;
-	 public ModelAndView answerInquiry(long inquiryId, String answer,HttpSession session)throws Exception;
+	 public ModelAndView answerInquiry(int inquiryId, String answer,HttpSession session)throws Exception;
 }

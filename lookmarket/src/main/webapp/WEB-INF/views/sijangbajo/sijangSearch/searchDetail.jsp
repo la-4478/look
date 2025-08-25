@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}" />
-<div id="map" style="width:83.%;height:400px;"></div>
+<div id="map" style="width:83.5%;height:400px;"></div>
 
 <script>
 (function () {

@@ -13,5 +13,6 @@ public interface InquiryService {
     public void answerInquiry(long id, String adminId, int loginRole, String answer) throws Exception;
     
     public InquiryVO getInquiryDetail(int inquiryId) throws Exception;
+	public int getInquiryNum(int inquiryId) throws Exception;
     
 }
