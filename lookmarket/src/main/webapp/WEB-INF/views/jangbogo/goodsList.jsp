@@ -81,8 +81,7 @@ String m_id = (String) session.getAttribute("loginUserId");
 											class="btn btn-primary btn-small">상세보기</a>
 
 										<button class="wish-btn ${empty m_id == 'disabled'}" 
-									        data-gid="${goods.g_id}" 
-									        ${empty m_id}>
+									        data-gid="${goods.g_id}" ${empty m_id}>
 								       	 <span class="wish-icon">
 									            <c:choose>
 									                <c:when test="${myWishList != null && myWishList.contains(goods.g_id)}">
