@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +56,7 @@ import jakarta.servlet.http.HttpSession;
 			return mav;
 		}
 		@Override
-		@RequestMapping(value="/communityDetail.do", method=RequestMethod.GET)
+		@RequestMapping(value="/communityDetail.do", method= {RequestMethod.GET,RequestMethod.POST})
 		public ModelAndView communityDetail(@RequestParam("r_id") String r_id, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes)  throws Exception{
 			//커뮤니티 상세정보
 			HttpSession session = request.getSession();
@@ -141,7 +142,7 @@ import jakarta.servlet.http.HttpSession;
 		}
 		
 		@Override
-		@RequestMapping(value="/blackBoardDetail.do", method=RequestMethod.GET)
+		@RequestMapping(value="/business/blackBoardDetail.do", method=RequestMethod.GET)
 		public ModelAndView blackBoardDetail(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		    HttpSession session = request.getSession();
 		    ModelAndView mav = new ModelAndView();
@@ -193,7 +194,7 @@ import jakarta.servlet.http.HttpSession;
 		
 		@Override
 		@RequestMapping(value="/communityAddForm.do", method=RequestMethod.GET)
-		public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception{
 			HttpSession session = request.getSession();
 			ModelAndView mav = new ModelAndView();
 			String layout = "common/layout";
@@ -203,11 +204,18 @@ import jakarta.servlet.http.HttpSession;
 			
 			String m_id = (String) session.getAttribute("current_id");
 			
-			int o_id = orderService.whomid(m_id);
+			int o_id;
+			try {
+				o_id = orderService.whomid(m_id);
+			}catch (EmptyResultDataAccessException e) {
+				redirectAttributes.addFlashAttribute("message", "주문내역이 없습니다.");
+	            mav.setViewName("redirect:/community/communityList.do");
+	            return mav;
+			}
 			
 			String goods_name = orderService.reviewgoodsname(o_id);
-			System.out.println("goods_name : "+goods_name);
 			
+
 			session.setAttribute("sideMenu", "reveal");
 			session.setAttribute("sideMenu_option", "community");
 			mav.addObject("goodsname", goods_name);

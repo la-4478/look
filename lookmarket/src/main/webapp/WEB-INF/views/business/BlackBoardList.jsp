@@ -147,7 +147,7 @@
             <tr>
                 <td data-label="번호">${board.b_id}</td>
                 <td data-label="제목" class="title-cell">
-                    <a href="blackBoardDetail.do?b_id=${board.b_id}">
+                    <a href="${contextPath}/business/blackBoardDetail.do?b_id=${board.b_id}">
                         ${board.b_title}
                     </a>
                 </td>

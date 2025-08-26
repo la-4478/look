@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.lookmarket.inquiry.vo.CommentVO;
 import com.lookmarket.inquiry.vo.InquiryVO;
 
 @Repository
@@ -46,6 +47,16 @@ public class InquiryDAOImpl implements InquiryDAO{
 	@Override
 	public int getInquiryNum(int inquiryId) throws DataAccessException {
 		return sqlSession.selectOne(NS + "inquirynumber", inquiryId);
+	}
+
+	@Override
+	public int insertComment(CommentVO vo) throws DataAccessException {
+		return sqlSession.insert(NS + "insertcomment", vo);
+	}
+
+	@Override
+	public List<CommentVO> getcomment(int i_b_id) throws DataAccessException {
+		return sqlSession.selectList(NS + "getcomment", i_b_id);
 	}
 
 }

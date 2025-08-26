@@ -37,5 +37,5 @@ public interface OrderService {
 
 	public String reviewgoodsname(int o_id)throws Exception;
 	
-	public int whomid(String m_id) throws Exception;
+	public Integer whomid(String m_id) throws Exception;
 }

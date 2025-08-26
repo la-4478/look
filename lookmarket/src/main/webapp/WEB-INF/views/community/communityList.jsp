@@ -12,6 +12,11 @@
 <body>
 
 <h2>커뮤니티 리뷰 목록</h2>
+    <c:if test="${not empty message}">
+        <script>
+            alert("${message}");
+        </script>
+    </c:if>
 
 <div class="news-list">
     <c:forEach var="review" items="${communityList}">

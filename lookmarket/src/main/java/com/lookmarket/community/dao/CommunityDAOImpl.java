@@ -86,4 +86,14 @@ public class CommunityDAOImpl implements CommunityDAO{
 		return sqlSession.selectList("mapper.admin.allboardList");
 	}
 
+	@Override
+	public String findWriterByBoardId(String b_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.community.findWriterByBoardId", b_id);
+	}
+
+	@Override
+	public String findWriterByCommentId(String c_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.Inquiry.findWriterByCommentId", c_id);
+	}
+
 }

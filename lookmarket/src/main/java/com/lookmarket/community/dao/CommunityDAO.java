@@ -26,5 +26,7 @@ public interface CommunityDAO {
 	public void deleteBlackBoard(int b_id) throws DataAccessException;
 	public List<BlackBoardVO> myBlackBoard(String m_id) throws DataAccessException;
 	public List<BlackBoardVO> allboardList() throws DataAccessException;
+	public String findWriterByBoardId(String b_id) throws DataAccessException;
+	public String findWriterByCommentId(String c_id) throws DataAccessException;
 
 }

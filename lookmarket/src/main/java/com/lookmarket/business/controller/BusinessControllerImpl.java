@@ -17,6 +17,8 @@ import com.lookmarket.community.Service.CommunityService;
 import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.goods.service.GoodsService;
 import com.lookmarket.goods.vo.GoodsVO;
+import com.lookmarket.inquiry.service.InquiryService;
+import com.lookmarket.inquiry.vo.CommentVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.BusinessVO;
 import com.lookmarket.member.vo.MemberVO;
@@ -38,6 +40,8 @@ public class BusinessControllerImpl implements BusinessController{
 	private DeliveryService deliveryService;
 	@Autowired
 	private CommunityService communityService;
+	@Autowired
+	private InquiryService inquiryService;
 	
 
 	//viewName 수정 필요
@@ -50,7 +54,7 @@ public class BusinessControllerImpl implements BusinessController{
 		String layout = "common/layout";
 		mav.setViewName(layout);
 		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
+		mav.addObject("viewName", viewName);	
 		
 
 	    session.setAttribute("sideMenu", "reveal");
@@ -289,6 +293,39 @@ public class BusinessControllerImpl implements BusinessController{
 	    
 	    redirectAttributes.addFlashAttribute("message", "고충방 글이 등록되었습니다.");
 	    return new ModelAndView("redirect:/business/blackBoardList.do");
+	}
+	
+	@Override
+	@RequestMapping(value="/blackBoardDetail.do", method= {RequestMethod.GET,RequestMethod.POST})
+	public ModelAndView blackBoardDetail(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    ModelAndView mav = new ModelAndView();
+	    
+	    String layout = "common/layout";
+	    mav.setViewName(layout);
+	    
+	    // 현재 로그인 사용자 ID 가져오기
+	    String current_id = (String) session.getAttribute("current_id");
+
+	    // 세션에 저장 (JSP에서 EL로 ${currentUserId} 접근할 수 있도록)
+	    session.setAttribute("currentUserId", current_id);
+	    
+	    BlackBoardVO blackBoard = communityService.blackBoardDetail(b_id);
+	    if(blackBoard != null) {
+	    	communityService.upBlackHit(b_id);
+	    }
+	    
+	    List<CommentVO> commentList = inquiryService.getcomment(b_id);
+	    
+	    mav.addObject("commentList", commentList);
+	    mav.addObject("blackBoard", blackBoard);
+	    
+	    mav.addObject("viewName", "/business/blackBoardDetail");
+	    
+	    session.setAttribute("sideMenu", "reveal");
+	    session.setAttribute("sideMenu_option", "community_admin");
+	    
+	    return mav;
 	}
 	
 	

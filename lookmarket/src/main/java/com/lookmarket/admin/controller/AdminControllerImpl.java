@@ -16,6 +16,8 @@ import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.community.vo.ReviewVO;
 import com.lookmarket.goods.service.GoodsService;
 import com.lookmarket.goods.vo.GoodsVO;
+import com.lookmarket.inquiry.service.InquiryService;
+import com.lookmarket.inquiry.vo.CommentVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.MemberApprovalDTO;
 import com.lookmarket.member.vo.MemberVO;
@@ -47,6 +49,8 @@ public class AdminControllerImpl implements AdminController{
 	private DeliveryService deliveryService;
 	@Autowired
 	private MyPageService myPageService;
+	@Autowired
+	private InquiryService inquiryService;
 	
 	//viewName 수정 필요
 	@Override
@@ -314,6 +318,10 @@ public class AdminControllerImpl implements AdminController{
 	    if(blackBoard != null) {
 	    	communityService.upBlackHit(b_id);
 	    }
+	    
+	    List<CommentVO> commentList = inquiryService.getcomment(b_id);
+	    
+	    mav.addObject("commentList", commentList);
 	    mav.addObject("blackBoard", blackBoard);
 	    
 	    mav.addObject("viewName", "admin/community/blackBoardDetail");

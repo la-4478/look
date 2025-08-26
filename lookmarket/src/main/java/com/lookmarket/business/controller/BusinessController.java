@@ -15,5 +15,6 @@ public interface BusinessController {
 	public ModelAndView myBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView BusinessMain(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public Map<String, Object> updateDelivery(int orderId, int dStatus) throws Exception;
+	ModelAndView blackBoardDetail(String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception;
 	
 }

@@ -78,7 +78,7 @@
 
         <div class="form-group icon pw">
             <label>비밀번호</label>
-            <input type="password" name="m_pw" placeholder="새 비밀번호 입력" />
+            <input type="password" name="m_pw" placeholder="새 비밀번호 입력" required="비밀번호를 입력해주세요" />
         </div>
 
         <div class="form-group icon user">

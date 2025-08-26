@@ -18,6 +18,24 @@
     </div>
 
     <div class="board-content">${blackBoard.b_content}</div>
+    
+    <div class="board-content">${blackBoard.b_content}</div><hr>
+    <div class="board-comment">
+    <h1>댓글</h1>
+    <c:forEach var="c" items="${commentList}">
+  	  		<div>
+   			 ${c.c_m_id} : ${c.c_content}<br>작성 시간 : ${c.c_credate}
+    		</div>
+    	<hr>
+    </c:forEach>
+	</div>
+	<form action="${contextPath}/inquiry/insertcomment.do" method="post">
+	<div class="board-comment">
+		<input type="hidden" name="b_id" value="${blackBoard.b_id}">
+		<textarea name="c_content" maxlength="2000"  required></textarea>
+		<input type="submit" value="작성하기">
+	</div>
+	</form>
 
     <c:if test="${currentUserId == blackBoard.m_id}">
         <div class="update-btn-wrap">
