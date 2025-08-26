@@ -71,7 +71,7 @@
 		<table>
   			<tr>
     			<td>아이디</td>
-    			<td><input type="text" name="m_id" value="${myPageInfo.m_id}" readonly /></td>
+    			<td><input type="text" name="m_id" value="${member.m_id}" readonly /></td>
   			</tr>
   			<tr>
     			<td>비밀번호</td>
@@ -79,42 +79,28 @@
   			</tr>
   			<tr>
     			<td>이름</td>
-   				<td><input type="text" name="m_name" value="${myPageInfo.m_name}" disabled /></td>
+   				<td><input type="text" name="m_name" value="${member.m_name}" readonly /></td>
  	 		</tr>
   			<tr>
    		 		<td>성별</td>
     			<td>
-					<input type="radio" name="m_gender" value="1" <c:if test="${myPageInfo.m_gender == 1}">checked</c:if> /> 남성
-					<input type="radio" name="m_gender" value="2" <c:if test="${myPageInfo.m_gender == 2}">checked</c:if> /> 여성
+					<input type="radio" name="m_gender" value="1" <c:if test="${member.m_gender == 1}">checked</c:if> /> 남성
+					<input type="radio" name="m_gender" value="2" <c:if test="${member.m_gender == 2}">checked</c:if> /> 여성
     			</td>
  			</tr>
   			<tr>
     			<td>휴대폰 번호</td>
     			<td>
-      				<input type="text" name="m_phone" value="${myPageInfo.m_phone}"/><br>
-      				<input type="checkbox" name="m_phone_yn" value="1" <c:if test="${myPageInfo.m_phone_yn == 1}">checked</c:if> /> SMS 수신 동의
+      				<input type="text" name="m_phone" value="${member.m_phone}"/><br>
+      				<input type="checkbox" name="m_phone_yn" value="1" <c:if test="${member.m_phone_yn == 1}">checked</c:if> /> SMS 수신 동의
    	 			</td>
  			</tr>
   			<tr>
     			<td>이메일</td>
     			<td>
-      				<input type="text" name="m_email_id" value="${myPageInfo.m_email_id}" size="12" /> @
-      				<input type="text" name="m_email_domain" id="m_email_domain" value="${myPageInfo.m_email_domain}" size="15" />
-      				<select onchange="setEmailDomain(this.value)">
-	        			<option value="non">직접입력</option>
-	        			<option value="hanmail.net">hanmail.net</option>
-				        <option value="naver.com">naver.com</option>
-				        <option value="yahoo.co.kr">yahoo.co.kr</option>
-				        <option value="hotmail.com">hotmail.com</option>
-				        <option value="paran.com">paran.com</option>
-				        <option value="nate.com">nate.com</option>
-				        <option value="google.com">google.com</option>
-				        <option value="gmail.com">gmail.com</option>
-				        <option value="empal.com">empal.com</option>
-				        <option value="korea.com">korea.com</option>
-				        <option value="freechal.com">freechal.com</option>
-      				</select><br>
-      				<input type="checkbox" name="m_email_yn" value="1" <c:if test="${myPageInfo.m_email_yn == 1}">checked</c:if> /> 이메일 수신 동의
+      				<input type="text" name="m_email_id" value="${member.m_email_id}" size="12" readonly/> @
+      				<input type="text" name="m_email_domain" id="m_email_domain" value="${member.m_email_domain}" size="15" readonly/>
+      				<input type="checkbox" name="m_email_yn" value="1" <c:if test="${member.m_email_yn == 1}">checked</c:if> /> 이메일 수신 동의
     			</td>
   			</tr>
   			<tr>
@@ -123,11 +109,11 @@
       				<input type="text" name="m_zipcode" id="m_zipcode" value="${myPageInfo.m_zipcode}" readonly size="10" />
       				<button type="button" onclick="execDaumPostCode()">우편번호 검색</button><br>
       				도로명 주소:<br>
-				    <input type="text" name="m_road_address" id="m_road_address" value="${myPageInfo.m_road_address}" size="50" /><br><br>
+				    <input type="text" name="m_road_address" id="m_road_address" value="${member.m_road_address}" size="50" /><br><br>
 				    지번 주소:<br>
-				    <input type="text" name="m_jibun_address" id="m_jibun_address" value="${myPageInfo.m_jibun_address}" size="50" /><br><br>
+				    <input type="text" name="m_jibun_address" id="m_jibun_address" value="${member.m_jibun_address}" size="50" /><br><br>
 				    상세 주소:<br>
-      				<input type="text" name="m_namuji_address" value="${myPageInfo.m_namuji_address}" size="50" />
+      				<input type="text" name="m_namuji_address" value="${member.m_namuji_address}" size="50" />
     			</td>
   			</tr>
 		</table><br>
@@ -136,7 +122,7 @@
 	</form>
 
 	<form id="deleteForm" method="post" action="${contextPath}/mypage/deleteMyInfo.do">
-		<input type="hidden" name="m_id" value="${myPageInfo.m_id}" />
+		<input type="hidden" name="m_id" value="${member.m_id}" />
 		
 	</form>
 </body>

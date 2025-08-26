@@ -165,7 +165,7 @@
     </tbody>
 </table>
 <div class="d-flex justify-content-end mb-3">
-<a href="${contextPath}/community/blackBoardAddForm2.do" class="btn btn-primary">고충방 등록</a>
+<a href="${contextPath}/community/blackBoardAddForm.do" class="btn btn-primary">고충방 등록</a>
 </div>
 </body>
 </html>

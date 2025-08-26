@@ -81,8 +81,7 @@ String m_id = (String) session.getAttribute("loginUserId");
 											class="btn btn-primary btn-small">상세보기</a>
 
 										<button class="wish-btn ${empty m_id == 'disabled'}" 
-									        data-gid="${goods.g_id}" 
-									        ${empty m_id}>
+									        data-gid="${goods.g_id}" ${empty m_id}>
 								       	 <span class="wish-icon">
 									            <c:choose>
 									                <c:when test="${myWishList != null && myWishList.contains(goods.g_id)}">
@@ -149,6 +148,7 @@ String m_id = (String) session.getAttribute("loginUserId");
 										currencySymbol="₩" />
 								</div>
 
+								<c:if test="${memberInfo.m_role == 1 || memberInfo.m_role == null }">
 								<div
 									class="mt-2 d-flex justify-content-center align-items-center gap-2">
 									<button class="wish-btn ${empty m_id == 'disabled'}" 
@@ -164,10 +164,11 @@ String m_id = (String) session.getAttribute("loginUserId");
 												<c:otherwise>
 													<img src="${contextPath}/resources/image/like.png" alt="찜목록 추가하기">										
 												</c:otherwise>
-											</c:choose>
+											</c:choose>									
 										</span>
 									</button>
 								</div>
+								</c:if>
 
 								<c:if
 									test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">

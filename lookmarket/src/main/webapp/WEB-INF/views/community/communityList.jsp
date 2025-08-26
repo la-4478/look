@@ -14,7 +14,7 @@
 <h2>커뮤니티 리뷰 목록</h2>
 
 <div class="news-list">
-    <c:forEach var="review" items="${reviewList}">
+    <c:forEach var="review" items="${communityList}">
         <div class="news-item">
             <a href="${contextPath}/community/communityDetail.do?r_id=${review.r_id}" style="text-decoration:none; color: inherit;">
                 <c:choose>

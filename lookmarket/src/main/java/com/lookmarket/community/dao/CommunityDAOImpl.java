@@ -55,30 +55,35 @@ public class CommunityDAOImpl implements CommunityDAO{
 	    sqlSession.delete("mapper.community.deleteReview", r_id);
 	}
 	@Override
-	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception {
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws DataAccessException {
 	    sqlSession.insert("mapper.community.insertBlackBoard", blackBoardVO);
 	}
 	@Override
-	public BlackBoardVO blackBoardDetail(int b_id) throws Exception {
+	public BlackBoardVO blackBoardDetail(int b_id) throws DataAccessException {
 	    return sqlSession.selectOne("mapper.community.blackBoardDetail", b_id);
 	}
 
 	@Override
-	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws Exception {
+	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws DataAccessException {
 	    sqlSession.update("mapper.community.updateBlackBoard", blackBoardVO);
 	}
 	@Override
-	public void upBlackHit(String b_id) throws Exception {
+	public void upBlackHit(String b_id) throws DataAccessException {
 	    sqlSession.update("mapper.community.upBlackHit", b_id);
 	}
 	@Override
-	public void deleteBlackBoard(int b_id) throws Exception {
+	public void deleteBlackBoard(int b_id) throws DataAccessException {
 	    sqlSession.delete("mapper.community.deleteBlackBoard", b_id);
 	}
 
 	@Override
-	public List<BlackBoardVO> myBlackBoard(String m_id) {
+	public List<BlackBoardVO> myBlackBoard(String m_id) throws DataAccessException {
 		return sqlSession.selectList("mapper.community.myblackboardList", m_id);
+	}
+
+	@Override
+	public List<BlackBoardVO> allboardList() throws DataAccessException {
+		return sqlSession.selectList("mapper.admin.allboardList");
 	}
 
 }

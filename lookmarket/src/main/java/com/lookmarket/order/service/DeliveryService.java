@@ -14,4 +14,6 @@ public interface DeliveryService {
 
 	public void cencelDelivery(int o_id) throws Exception;
 
+	public List<DeliveryVO> allDeliList() throws Exception;
+
 }

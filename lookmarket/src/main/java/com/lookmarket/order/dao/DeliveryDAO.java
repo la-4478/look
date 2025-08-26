@@ -12,5 +12,6 @@ public interface DeliveryDAO {
 	public Object newDelivery(DeliveryVO deliVO) throws DataAccessException;
 	public List<DeliveryVO> selectDeliveryListByMember(String d_m_id) throws DataAccessException;
 	public void cencelDlivery(int o_id) throws DataAccessException;
+	public List<DeliveryVO> allDeliList() throws DataAccessException;
 
 }

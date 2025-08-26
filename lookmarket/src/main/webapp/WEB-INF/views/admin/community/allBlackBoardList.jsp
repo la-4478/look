@@ -139,11 +139,11 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach var="board" items="${myBoard}">
+        <c:forEach var="board" items="${boardList}">
             <tr>
                 <td data-label="번호">${board.b_id}</td>
                 <td data-label="제목" class="title-cell">
-                    <a href="blackBoardDetail.do?b_id=${board.b_id}">
+                    <a href="${contextPath}/admin/community/blackBoardDetail.do?b_id=${board.b_id}">
                         ${board.b_title}
                     </a>
                 </td>
@@ -164,8 +164,5 @@
         </c:forEach>
     </tbody>
 </table>
-<div class="d-flex justify-content-end mb-3">
-<a href="${contextPath}/community/blackBoardAddForm2.do" class="btn btn-primary">고충방 등록</a>
-</div>
 </body>
 </html>

@@ -4,6 +4,7 @@
 <h2>문의 상세</h2>
 <p><b>제목:</b> ${inquiry.title}</p>
 <p><b>질문:</b> ${inquiry.question}</p>
+<p><b>숫자:</b> ${inquiry.inquiryId}</p>
 <p><b>상태:</b> 
 <c:if test="${inquiry.status == 0 }"> 미답변 </c:if>
 <c:if test="${inquiry.status == 1 }"> 답변완료 </c:if></p>
@@ -22,7 +23,7 @@
 <!-- 관리자만 답변 입력 -->
 <c:if test="${role == 3}">
 <c:if test="${empty inquiry.answer}">
-  <form method="post" action="${pageContext.request.contextPath}/inquiry/answer.do?inquiryId=${inquiry.inquiryId}">
+  <form method="post" action="${pageContext.request.contextPath}/inquiry/answer.do?inquiryId=${number}">
     <textarea name="answer" rows="5" cols="50"></textarea><br>
     <button type="submit">답변 등록</button>
   </form>

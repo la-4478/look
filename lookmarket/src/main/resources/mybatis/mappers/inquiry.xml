@@ -38,7 +38,14 @@
 
   <!-- 3) 문의 단건 조회 (권한 체크는 서비스에서) -->
   <select id="selectInquiryById" resultType="InquiryVO" parameterType="int">
-    SELECT * FROM inquiry WHERE inquiry_id = #{inquiryId} 
+    SELECT inquiry_id AS inquiryId,
+      m_id,
+      title,
+      question,
+      answer,
+      answered_by,
+      status
+      FROM inquiry WHERE inquiry_id = #{inquiryId} 
   </select>
 
   <!-- 4) 관리자 목록 (필터 옵션) -->
@@ -61,7 +68,7 @@
   <update id="updateAnswer">
     UPDATE inquiry
     SET answer = #{answer},
-        status = 'ANSWERED',
+        status = 1,
         answered_by = #{answeredBy},
         answered_at = NOW()
     WHERE inquiry_id = #{inquiryId}
@@ -83,5 +90,10 @@
     WHERE inquiry_id = #{inquiryId}
       AND deleted_at IS NULL
   </update>
+  
+  <!-- 문의 번호만 불러오기 -->
+  <select id="inquirynumber" resultType="int" parameterType="int">
+  	select inquiry_id AS inquiryId from inquiry where inquiry_id =#{inquiryId}
+  </select>
 
 </mapper>

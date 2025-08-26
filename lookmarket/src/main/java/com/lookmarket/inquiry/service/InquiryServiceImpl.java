@@ -57,4 +57,9 @@ public class InquiryServiceImpl implements InquiryService {
         inquirydao.updateAnswer(vo);
 	}
 
+	@Override
+	public int getInquiryNum(int inquiryId) throws Exception {
+		return inquirydao.getInquiryNum(inquiryId);
+	}
+
 }

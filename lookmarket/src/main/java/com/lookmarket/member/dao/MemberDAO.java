@@ -26,4 +26,5 @@ public interface MemberDAO {
 	public String status(String m_id) throws DataAccessException;
 	public MemberVO findMemberById(String mId) throws DataAccessException;
 	public BusinessVO findBusinessByMemberId(String mId) throws DataAccessException;
+	public List<MemberVO> getMemberList() throws DataAccessException;
 }

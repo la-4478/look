@@ -121,4 +121,9 @@ public class MemberDAOImpl implements MemberDAO{
 	public BusinessVO findBusinessByMemberId(String m_id) throws DataAccessException {
 		return sqlSession.selectOne("mapper.member.selectBusinessByMemberId", m_id);
 	}
+
+	@Override
+	public List<MemberVO> getMemberList() throws DataAccessException {
+		return sqlSession.selectList("mapper.admin.getMemberList");
+	}
 }
