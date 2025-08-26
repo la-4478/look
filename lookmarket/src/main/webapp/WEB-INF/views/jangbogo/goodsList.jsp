@@ -31,13 +31,6 @@ String m_id = (String) session.getAttribute("loginUserId");
 					class="btn btn-primary">상품 등록</a>
 			</div>
 		</c:if>
-		<c:if test="${businessStatus == '2' || businessStatus eq 'APPROVED'}">
-			<div>
-				<a href="${contextPath}/jangbogo/goodsAddForm.do"
-					class="btn btn-primary">상품 등록</a>
-			</div>
-		</c:if>
-
 
 		<c:choose>
 			<c:when test="${not empty goodsMap}">

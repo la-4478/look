@@ -91,7 +91,6 @@
 					<li>
 						<h3>커뮤니티</h3>
 						<ul>
-							<li><a href="${contextPath}/community/blackBoardList.do">사장님 커뮤니티</a></li>
 							<li><a href="${contextPath}/community/blackBoardAddForm.do">사장님고충방 등록</a></li>
 						</ul>
 				</c:when>
