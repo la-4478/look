@@ -343,24 +343,46 @@ public class SijangbajoControllerImpl implements SijangbajoController {
     }
 	
 	@Override
-	@RequestMapping(value="/nearby/nearCourse.do", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/nearby/nearCourse.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public ModelAndView nearCourse(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    HttpSession session = request.getSession();
 	    ModelAndView mav = new ModelAndView();
 
 	    mav.setViewName("common/layout");
-	    mav.addObject("viewName", "sijangbajo/nearby/nearCourse");  // JSP 파일 경로에 맞게 수정
+	    mav.addObject("viewName", "sijangbajo/nearby/nearCourse");
 	    mav.addObject("pageType", "sijangbajo");
 
-	    List<Map<String, Object>> courseList = sijangService.fetchTourCourses(null); // 전국
-	    System.out.println("courseList size: " + courseList.size()); // 확인용 로그
-	    mav.addObject("courseList", courseList);
+	    // 1. 전체 코스 가져오기
+	    List<Map<String, Object>> courseList = sijangService.fetchTourCourses(null);
+
+	    // 2. 사용자 입력값 받기
+	    String sido = request.getParameter("sido");
+	    String sigungu = request.getParameter("sigungu");
+
+	    // 3. 필터링 적용
+	    List<Map<String, Object>> filtered = courseList.stream()
+	        .filter(item -> {
+	            String addr = String.valueOf(item.getOrDefault("address", ""));
+	            boolean matchSido = (sido == null || sido.isBlank()) || addr.contains(sido);
+	            boolean matchSigungu = (sigungu == null || sigungu.isBlank()) || addr.contains(sigungu);
+	            return matchSido && matchSigungu;
+	        })
+	        .collect(Collectors.toList());
+
+	    // 4. 필터링된 리스트로 전달
+	    mav.addObject("courseList", filtered);
+	    mav.addObject("sido", sido);       // 선택된 값 유지
+	    mav.addObject("sigungu", sigungu); // 선택된 값 유지
+
+	    System.out.println("courseList 원본 크기: " + courseList.size());
+	    System.out.println("filtered 결과 크기: " + filtered.size());
 
 	    session.setAttribute("sideMenu", "reveal");
 	    session.setAttribute("sideMenu_option", "nearby");
 
 	    return mav;
 	}
+
 
 
     // =========================
@@ -487,23 +509,30 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         return out;
     }
     
-	@Override
-	@RequestMapping(value="/nearby/festivalList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView festivalList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    ModelAndView mav = new ModelAndView();
-	    mav.setViewName("common/layout");
-	    mav.addObject("viewName", "sijangbajo/nearby/festivalList"); // JSP 경로
-	    mav.addObject("pageType", "sijangbajo");
+    @Override
+    @RequestMapping(value="/nearby/festivalList.do", method = { RequestMethod.GET, RequestMethod.POST })
+    public ModelAndView festivalList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("common/layout");
+        mav.addObject("viewName", "sijangbajo/nearby/festivalList");
+        mav.addObject("pageType", "sijangbajo");
 
-	    // 오늘 날짜 기준 축제
-	    String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
-	    List<Map<String, Object>> festivalList = sijangService.fetchFestivals(today);
-	    mav.addObject("festivalList", festivalList);
+        // 🟡 파라미터 받기
+        String areaCode = request.getParameter("areaCode"); // 예: "1" (서울)
 
-	    HttpSession session = request.getSession();
-	    session.setAttribute("sideMenu", "reveal");
-	    session.setAttribute("sideMenu_option", "nearby");
+        // 🟢 오늘 날짜 기준
+        String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-	    return mav;
-	}
+        // 🟢 지역코드 기반으로 필터된 축제 목록 요청
+        List<Map<String, Object>> festivalList = sijangService.fetchFestivals(today);
+        mav.addObject("festivalList", festivalList);
+        mav.addObject("areaCode", areaCode); // → 뷰에서 드롭다운 유지용
+
+        HttpSession session = request.getSession();
+        session.setAttribute("sideMenu", "reveal");
+        session.setAttribute("sideMenu_option", "nearby");
+
+        return mav;
+    }
+
 }
