@@ -121,6 +121,15 @@
 									</ul>
 								</c:if>
 
+							<!-- 사업자 (m_role == 2) -->
+								<c:if test="${isLogOn eq true and memberInfo.m_role == 2}">
+								<div>
+									<a href="${contextPath}/community/blackBoardList.do" class="menu__title">사장님 커뮤니티</a>
+								</div>
+									<ul id="tipSybm1" class="navbar__submenu">
+										<li><a href="${contextPath}/community/blackBoardAddForm.do">사장님 고충방 등록</a></li>
+									</ul>
+								</c:if>
 							<!-- 관리자 (m_role == 3) -->
 								<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
 								<div>
