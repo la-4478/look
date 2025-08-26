@@ -83,6 +83,10 @@
 						        <a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}" class="delete"
 						           onclick="return confirm('삭제하시겠습니까?')">삭제</a>
 						    </c:if>
+						    <!-- 일반 회원에게 발급 버튼 노출 -->
+			                <c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
+			                    <a href="#" class="issue" onclick="event.preventDefault(); issueCoupon(${coupon.promoId});">발급하기</a>
+			                </c:if>
 				    	 </div>
                         </td>
                     </tr>
@@ -101,5 +105,33 @@
         </div>
     </c:if>
 </div>
+<script>
+	function issueCoupon(promoId) {
+	    if (!confirm('이 쿠폰을 발급받으시겠습니까?')) {
+	        return;
+	    }
+	
+	    fetch('${contextPath}/mypage/issueCoupon.do', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/json',
+	            'X-Requested-With': 'XMLHttpRequest'
+	        },
+	        body: JSON.stringify({ promoId: promoId })
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        if (data.success) {
+	            alert('쿠폰이 발급되었습니다!');
+	            // 필요하면 페이지 리로드 또는 버튼 비활성화 등 추가 가능
+	        } else {
+	            alert('쿠폰 발급 실패: ' + (data.message || '알 수 없는 오류'));
+	        }
+	    })
+	    .catch(() => {
+	        alert('서버와 통신 중 오류가 발생했습니다.');
+	    });
+	}
+</script>
 </body>
 </html>

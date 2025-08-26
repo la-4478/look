@@ -54,6 +54,8 @@ input[readonly], textarea[readonly] {background-color: #f8f9fa;}
 .coupon-btn-group a.update:hover { background-color:#117a8b; }  
 .coupon-btn-group a.delete { background-color:#dc3545; }  
 .coupon-btn-group a.delete:hover { background-color:#a71d2a; }  
+.coupon-btn-group a.issue { background-color: #ffc107; color: white; padding: 6px 12px; font-size: 14px; font-weight: 600; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; min-width: 80px; transition: background-color 0.3s ease; }
+.coupon-btn-group a.issue:hover { background-color: #e0a800; }
 
 /* ======================= 액션 버튼 ======================= */  
 .action-buttons { margin-top:30px; }  

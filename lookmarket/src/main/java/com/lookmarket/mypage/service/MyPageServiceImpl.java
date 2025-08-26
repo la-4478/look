@@ -58,4 +58,9 @@ public class MyPageServiceImpl implements MyPageService{
 	public List<WishListVO> getMyWishList(String m_id) throws Exception {
 		return myPageDAO.getMyWishList(m_id);
 	}
+	@Override
+	public int issuePromotionCoupon(int promoId, String memberId) throws Exception {
+		return myPageDAO.issuePromotionCoupon(promoId, memberId);
+	}
+
 }

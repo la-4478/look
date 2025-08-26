@@ -1,13 +1,18 @@
 package com.lookmarket.mypage.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -258,5 +263,26 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 		deliveryService.cencelDelivery(o_id);
 
 		return "redirect:/mypage/listMyDelivery.do";
+	}
+	
+	@PostMapping("/issueCoupon.do")
+	@ResponseBody
+	public Map<String, Object> issueCoupon(@RequestBody Map<String, Integer> body, HttpSession session) throws Exception {
+	    String memberId = (String) session.getAttribute("current_id");
+	    System.out.println("memberId for coupon issue: " + memberId);
+	    Map<String, Object> response = new HashMap<>();
+	    
+	    int promoId = body.get("promoId");
+	    int result = myPageService.issuePromotionCoupon(promoId, memberId);
+	    
+	    if(result == 1) {
+	        response.put("success", true);
+	        response.put("message", "쿠폰이 발급되었습니다.");
+	    } else {
+	        response.put("success", false);
+	        response.put("message", "쿠폰 발급 중 오류가 발생했습니다.");
+	    }
+	    
+	    return response;
 	}
 }

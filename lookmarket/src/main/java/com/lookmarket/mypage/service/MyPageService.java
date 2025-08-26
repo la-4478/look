@@ -26,6 +26,5 @@ public interface MyPageService {
 	public List<OrderItemVO> getOrderItemsByOrderId(int oId) throws Exception;
 	
 	public List<WishListVO> getMyWishList(String m_id) throws Exception;
-
-	
+	public int issuePromotionCoupon(int promoId, String memberId)throws Exception;
 }

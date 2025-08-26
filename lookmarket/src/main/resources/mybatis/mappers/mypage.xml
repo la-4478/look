@@ -187,5 +187,11 @@
     		d_status = 4 where o_id = #{oId}
     	]]>
     </update>
-    
+    <!-- 내 쿠폰 발급 -->
+    <insert id="insertIssuedCoupon" parameterType="map">
+	    <![CDATA[
+		    INSERT INTO promotion_coupon_issue(promo_id, m_id)
+		    VALUES (#{promoId}, #{memberId})
+	    ]]>
+	    </insert>    
 </mapper>

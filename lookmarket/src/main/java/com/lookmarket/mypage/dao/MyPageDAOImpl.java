@@ -1,6 +1,8 @@
 package com.lookmarket.mypage.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +62,13 @@ public class MyPageDAOImpl implements MyPageDAO{
     @Override
     public List<WishListVO> getMyWishList(String m_id) throws DataAccessException {
 		return sqlSession.selectList("mapper.mypage.getMyWishList", m_id);
+    }
+    @Override
+    public int issuePromotionCoupon(int promoId, String memberId) throws DataAccessException {
+        Map<String, Object> params = new HashMap<>();
+        params.put("promoId", promoId);
+        params.put("memberId", memberId);
+
+        return sqlSession.insert("mapper.mypage.insertIssuedCoupon", params);
     }
 }
