@@ -74,13 +74,7 @@
 							<li><a href="${contextPath}/event/promotionList.do">프로모션</a></li>
 						</ul>
 				</c:when>
-				<c:when test="${sideMenu_option == 'clean'}">
-					<li>
-						<h3>클린업체</h3>
-						<ul>
-							<li><a href="${contextPath}/sijangbajo/clean/clean.do">클린업체</a></li>
-						</ul>
-				</c:when>
+				
 				<c:when test="${sideMenu_option == 'community'}">
 					<li>
 						<h3>커뮤니티</h3>
