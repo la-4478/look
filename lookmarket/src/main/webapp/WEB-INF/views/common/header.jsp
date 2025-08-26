@@ -118,7 +118,7 @@
 							<!-- 사용자 (m_role == 1) -->
 								<c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
 								<div>
-									<a href="${contextPath}/community/communityList.do" class="menu__title">커뮤니티</a>
+									<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
 								</div>
 									<ul id="tipSybm1" class="navbar__submenu">
 										<li><a href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
@@ -215,19 +215,8 @@
 								<li class="menu">
 									<div>
 										<a href="${contextPath}/community/communityList.do"
-											class="menu__title">커뮤니티</a>
-									</div>
-									<ul id="tipSybm1" class="navbar__submenuu">
-										<li><a href="${contextPath}/community/communityList.do">커뮤니티
-												리뷰목록</a></li>
-										<li><a
-											href="${contextPath}/community/communityAddForm.do">리뷰 작성</a></li>
-										<li><a
-											href="${contextPath}/community/communityUpdateForm.do">리뷰
-												수정</a></li>
-										<li><a href="${contextPath}/jangbogo/goodsUpdateForm.do"
-											class="menu__title">상품수정</a></li>
-									</ul>
+											class="menu__title">리뷰</a>
+									</div>								
 								</li>
 
 								<li class="menu">
