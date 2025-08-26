@@ -93,4 +93,14 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderItemVO> allItemList() throws Exception {
 		return orderDAO.allItemList();
 	}
+
+	@Override
+	public String reviewgoodsname(int o_id) throws Exception {
+		return orderDAO.reviewgoodsname(o_id);
+	}
+
+	@Override
+	public int whomid(String m_id) throws Exception {
+		return orderDAO.whomid(m_id);
+	}
 }

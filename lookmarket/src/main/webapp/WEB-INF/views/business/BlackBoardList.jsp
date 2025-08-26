@@ -121,6 +121,10 @@
 			    overflow: hidden;
 			    text-overflow: ellipsis;
 			}
+			.ma-1{
+			margin-top :1%;
+			margin-right: 5%;
+			}
     </style>
 </head>
 <body>
@@ -164,7 +168,7 @@
         </c:forEach>
     </tbody>
 </table>
-<div class="d-flex justify-content-end mb-3">
+<div class="d-flex justify-content-end mb-3 ma-1">
 <a href="${contextPath}/community/blackBoardAddForm.do" class="btn btn-primary">고충방 등록</a>
 </div>
 </body>

@@ -24,4 +24,6 @@ public interface OrderDAO {
 	public Integer removeCartItem(CartVO cartVO) throws DataAccessException;
 	public List<OrderVO> allOrderList() throws DataAccessException;
 	public List<OrderItemVO> allItemList() throws DataAccessException;
+	public String reviewgoodsname(int o_id) throws DataAccessException;
+	public int whomid(String m_id) throws DataAccessException;
 }

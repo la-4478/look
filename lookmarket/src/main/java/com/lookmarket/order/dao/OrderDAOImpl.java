@@ -112,6 +112,16 @@ public class OrderDAOImpl implements OrderDAO {
 	public List<OrderItemVO> allItemList() throws DataAccessException {
 		return sqlSession.selectList("mapper.admin.allOrderItem1");
 	}
+	
+	@Override
+	public String reviewgoodsname(int o_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.community.reviewgoodsname", o_id);
+	}
+
+	@Override
+	public int whomid(String m_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.community.whomid", m_id);
+	}
 
 }
 

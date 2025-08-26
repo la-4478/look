@@ -34,4 +34,8 @@ public interface OrderService {
 	public List<OrderVO> allOrderList() throws Exception;
 
 	public List<OrderItemVO> allItemList() throws Exception;
+
+	public String reviewgoodsname(int o_id)throws Exception;
+	
+	public int whomid(String m_id) throws Exception;
 }
