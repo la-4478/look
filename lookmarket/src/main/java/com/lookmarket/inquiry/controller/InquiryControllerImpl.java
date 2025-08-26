@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lookmarket.inquiry.service.InquiryService;
+import com.lookmarket.inquiry.vo.CommentVO;
 import com.lookmarket.inquiry.vo.InquiryVO;
 import com.lookmarket.member.service.MemberService;
 import com.lookmarket.member.vo.MemberVO;
@@ -129,5 +130,43 @@ public class InquiryControllerImpl implements InquiryController {
 
         return new ModelAndView("redirect:/inquiry/detail.do?inquiryid=" + inquiryId);
     }
+
+	@Override
+	@PostMapping("/insertcomment.do")
+	public String insertComment(@ModelAttribute("CommentVO")CommentVO vo, HttpSession session, RedirectAttributes redirectAttributes) throws Exception {
+		String loginId = (String) session.getAttribute("current_id"); // 프로젝트 키에 맞춰 통일
+	    if (loginId == null || loginId.isBlank()) {
+	        redirectAttributes.addFlashAttribute("message", "로그인 후 이용해주세요.");
+	        return "redirect:/member/loginForm.do";
+	    }
+	    MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
+
+	    // 1) 필수값 검증
+	    if (vo.getB_id() == null) {
+	        redirectAttributes.addFlashAttribute("message", "잘못된 접근입니다.(게시글 ID 없음)");
+	        return "redirect:/community/list.do";
+	    }
+	    if (vo.getC_content() == null || vo.getC_content().isBlank()) {
+	        redirectAttributes.addFlashAttribute("message", "내용을 입력해주세요.");
+	        return "redirect:/community/detail.do?b_id=" + vo.getB_id();
+	    }
+	    vo.setC_m_id(loginId);
+
+	    // 3) 저장
+	    int inserted = inquiryService.insertComment(vo, loginId);
+	    if (inserted != 1) {
+	        redirectAttributes.addFlashAttribute("message", "댓글 저장 중 오류가 발생했습니다.");
+	    } else {
+	        redirectAttributes.addFlashAttribute("message", "댓글이 등록되었습니다.");
+	    }
+
+	    // 4) PRG 패턴으로 상세로 복귀
+	    
+	    if(memberVO.getM_role() == 3) {
+	    return "redirect:/admin/community/blackBoardDetail.do?b_id=" + vo.getB_id();
+	    }
+	    return "redirect:/business/blackBoardDetail.do?b_id=" + vo.getB_id();
+		}
+    
 }
 

@@ -27,8 +27,9 @@
 				<c:when test="${sideMenu_option == 'myPage_business'}">
 					<li>
 						<h3>사업자 메뉴</h3>
-						<ul>
-							<li><a href="${contextPath}/business/mypageBusinessInfo.do">내정보</a></li>
+						<ul><c:if test="${businessVO.bm_status == 2 }">
+							<li><a href="${contextPath}/jangbogo/busigoodsAddForm.do">상품 등록</a></li>
+							</c:if>
 							<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
 							<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 							<li><a href="${contextPath}/business/BlackBoardList.do">사장님고충방</a></li>
@@ -73,13 +74,7 @@
 							<li><a href="${contextPath}/event/promotionList.do">프로모션</a></li>
 						</ul>
 				</c:when>
-				<c:when test="${sideMenu_option == 'clean'}">
-					<li>
-						<h3>클린업체</h3>
-						<ul>
-							<li><a href="${contextPath}/sijangbajo/clean/clean.do">클린업체</a></li>
-						</ul>
-				</c:when>
+				
 				<c:when test="${sideMenu_option == 'community'}">
 					<li>
 						<h3>커뮤니티</h3>
@@ -96,7 +91,6 @@
 					<li>
 						<h3>커뮤니티</h3>
 						<ul>
-							<li><a href="${contextPath}/community/blackBoardList.do">사장님 커뮤니티</a></li>
 							<li><a href="${contextPath}/community/blackBoardAddForm.do">사장님고충방 등록</a></li>
 						</ul>
 				</c:when>

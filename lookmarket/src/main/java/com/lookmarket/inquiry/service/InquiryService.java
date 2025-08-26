@@ -2,6 +2,7 @@ package com.lookmarket.inquiry.service;
 
 import java.util.List;
 
+import com.lookmarket.inquiry.vo.CommentVO;
 import com.lookmarket.inquiry.vo.InquiryVO;
 
 public interface InquiryService {
@@ -14,5 +15,7 @@ public interface InquiryService {
     
     public InquiryVO getInquiryDetail(int inquiryId) throws Exception;
 	public int getInquiryNum(int inquiryId) throws Exception;
+	public int insertComment(CommentVO vo, String sessionMemberId) throws Exception;
+	public List<CommentVO> getcomment(String b_id) throws Exception;
     
 }

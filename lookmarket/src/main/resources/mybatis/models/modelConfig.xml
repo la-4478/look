@@ -30,10 +30,12 @@
   		<typeAlias type="com.lookmarket.kb.vo.KbDocumentVO" alias="kbDocumentVO"/>
 	    <typeAlias type="com.lookmarket.kb.vo.KbChunkVO" alias="kbChunkVO"/>
 	    <typeAlias type="com.lookmarket.inquiry.vo.InquiryVO" alias="inquiryVO"/>
+	    <typeAlias type="com.lookmarket.inquiry.vo.CommentVO" alias="commentVO"/>
 	    <typeAlias type="com.lookmarket.wishlist.vo.WishListVO" alias="wishListVO"/>
 	    <typeAlias type="com.lookmarket.account.vo.AccAccountVO" alias="accAccountVO"/>
 	    <typeAlias type="com.lookmarket.account.vo.AccCategoryVO" alias="accCategoryVO"/>
 	    <typeAlias type="com.lookmarket.account.vo.AccTxnVO" alias="accTxnVO"/>
+	    <typeAlias type="com.lookmarket.notify.vo.NotifyVO" alias="notifyVO"/>
   	</typeAliases>
 
 

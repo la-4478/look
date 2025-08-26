@@ -95,5 +95,16 @@
   <select id="inquirynumber" resultType="int" parameterType="int">
   	select inquiry_id AS inquiryId from inquiry where inquiry_id =#{inquiryId}
   </select>
-
+  
+  <insert id="insertcomment" parameterType="commentVO"  useGeneratedKeys="true" keyProperty="c_id">
+  	insert into comment(b_id, c_content, c_m_id) values ( #{b_id}, #{c_content}, #{c_m_id})
+  </insert>
+  
+  <select id="getcomment" parameterType="int" resultType="commentVO">
+  	select * from comment where b_id = #{i_b_id}
+  </select>
+  
+  <select id="findWriterByCommentId" parameterType="String" resultType="String">
+  	  SELECT c_m_id FROM comment WHERE c_id = #{c_id} LIMIT 1
+  </select>
 </mapper>

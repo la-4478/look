@@ -1,7 +1,9 @@
 package com.lookmarket.inquiry.controller;
 
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lookmarket.inquiry.vo.CommentVO;
 import com.lookmarket.inquiry.vo.InquiryVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,4 +16,5 @@ public interface InquiryController {
 	 public ModelAndView myInquiries(HttpSession session, HttpServletRequest request, HttpServletResponse reseponse) throws Exception;
 	 public ModelAndView detailInquiry(int inquiryId, HttpSession session, HttpServletRequest request) throws Exception;
 	 public ModelAndView answerInquiry(int inquiryId, String answer,HttpSession session)throws Exception;
+	 public String insertComment(CommentVO vo, HttpSession session, RedirectAttributes redirectAttributes) throws Exception;
 }

@@ -24,20 +24,6 @@ String m_id = (String) session.getAttribute("loginUserId");
 		<div class="alert alert-info">${msg}</div>
 	</c:if>
 	<div class="container mt-4">
-		<c:if
-			test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
-			<div class="top-right">
-				<a href="${contextPath}/jangbogo/goodsAddForm.do"
-					class="btn btn-primary">상품 등록</a>
-			</div>
-		</c:if>
-		<c:if test="${businessStatus == '2' || businessStatus eq 'APPROVED'}">
-			<div>
-				<a href="${contextPath}/jangbogo/goodsAddForm.do"
-					class="btn btn-primary">상품 등록</a>
-			</div>
-		</c:if>
-
 
 		<c:choose>
 			<c:when test="${not empty goodsMap}">

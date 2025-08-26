@@ -126,7 +126,21 @@
 	    WHERE b_id = #{b_id}
 	</delete>
 	<select id="myblackboardList" parameterType="String" resultType="blackboardVO">
-		select * from blackboard where m_id = #{m_id}
+		select * from blackboard where m_id = #{m_id} 
+	</select>
+	
+	<select id="whomid" parameterType="String" resultType="Integer">
+		select o_id from order_info where m_id = #{m_id} order by oi_date DESC LIMIT 1
+	</select>
+	
+	<select id="reviewgoodsname" parameterType="int" resultType="String">
+		select ot_goods_name from order_item where o_id = #{oId} 
+	</select>
+	
+	<select id="findWriterByBoardId" parameterType="string" resultType="string">
+	  SELECT m_id
+	  FROM blackboard
+	  WHERE b_id = #{b_id}
 	</select>
 
 </mapper>

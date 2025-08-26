@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="mapper.notify">
+
+  <resultMap id="NotifyMap" type="com.lookmarket.notify.vo.NotifyVO">
+    <id property="n_id" column="n_id"/>
+    <result property="receiver_id" column="receiver_id"/>
+    <result property="n_type" column="n_type"/>
+    <result property="ref_id" column="ref_id"/>
+    <result property="title" column="title"/>
+    <result property="message" column="message"/>
+    <result property="link_url" column="link_url"/>
+    <result property="is_read" column="is_read"/>
+    <result property="created_at" column="created_at"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="com.lookmarket.notify.vo.NotifyVO" useGeneratedKeys="true" keyProperty="n_id">
+    INSERT INTO notify (receiver_id, n_type, ref_id, title, message, link_url)
+    VALUES (#{receiver_id}, #{n_type}, #{ref_id}, #{title}, #{message}, #{link_url})
+  </insert>
+
+  <select id="countUnread" parameterType="string" resultType="int">
+    SELECT COUNT(*) FROM notify
+    WHERE receiver_id = #{value} AND is_read = 0
+  </select>
+
+  <select id="listUnread" parameterType="string" resultMap="NotifyMap">
+    SELECT n_id, receiver_id, n_type, ref_id, title, message, link_url, is_read, created_at
+    FROM notify
+    WHERE receiver_id = #{value} AND is_read = 0
+    ORDER BY created_at DESC
+    LIMIT 20
+  </select>
+
+  <update id="markRead" parameterType="map">
+    UPDATE notify
+       SET is_read = 1
+     WHERE n_id = #{nId}
+       AND receiver_id = #{receiverId}
+  </update>
+
+  <update id="markAllRead" parameterType="string">
+    UPDATE notify
+       SET is_read = 1
+     WHERE receiver_id = #{value}
+       AND is_read = 0
+  </update>
+
+</mapper>

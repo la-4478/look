@@ -121,6 +121,10 @@
 			    overflow: hidden;
 			    text-overflow: ellipsis;
 			}
+			.ma-1{
+			margin-top :1%;
+			margin-right: 5%;
+			}
     </style>
 </head>
 <body>
@@ -143,7 +147,7 @@
             <tr>
                 <td data-label="번호">${board.b_id}</td>
                 <td data-label="제목" class="title-cell">
-                    <a href="blackBoardDetail.do?b_id=${board.b_id}">
+                    <a href="${contextPath}/business/blackBoardDetail.do?b_id=${board.b_id}">
                         ${board.b_title}
                     </a>
                 </td>
@@ -164,7 +168,7 @@
         </c:forEach>
     </tbody>
 </table>
-<div class="d-flex justify-content-end mb-3">
+<div class="d-flex justify-content-end mb-3 ma-1">
 <a href="${contextPath}/community/blackBoardAddForm.do" class="btn btn-primary">고충방 등록</a>
 </div>
 </body>

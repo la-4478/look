@@ -20,7 +20,7 @@ public interface CommunityController {
     ModelAndView blackBoardUpdate(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception;
     ModelAndView blackBoardDelete(String b_id, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception;
 
-    ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
+    ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;
     ModelAndView blackBoardAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
     ModelAndView insertReview(MultipartHttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception;
     ModelAndView insertBlackBoard(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception;

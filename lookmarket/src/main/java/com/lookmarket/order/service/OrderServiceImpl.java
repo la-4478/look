@@ -3,15 +3,14 @@ package com.lookmarket.order.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lookmarket.cart.dao.CartDAO;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.order.dao.OrderDAO;
-import com.lookmarket.order.dao.PayDAO;
 import com.lookmarket.order.vo.OrderItemVO;
-import com.lookmarket.order.vo.OrderListRowVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
 
@@ -93,4 +92,19 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderItemVO> allItemList() throws Exception {
 		return orderDAO.allItemList();
 	}
+
+	@Override
+	public String reviewgoodsname(int o_id) throws Exception {
+		return orderDAO.reviewgoodsname(o_id);
+	}
+
+	@Override
+	public Integer whomid(String m_id) throws Exception {
+		Integer oId = orderDAO.whomid(m_id);
+	if (oId == null) {
+		throw new EmptyResultDataAccessException("주문없음: " + m_id, 1);
+    }
+	return oId;
+	}
+	
 }

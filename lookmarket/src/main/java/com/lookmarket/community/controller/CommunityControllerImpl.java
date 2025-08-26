@@ -2,9 +2,9 @@ package com.lookmarket.community.controller;
 
 import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.lookmarket.community.Service.CommunityService;
 import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.community.vo.ReviewVO;
+import com.lookmarket.order.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,6 +32,8 @@ import jakarta.servlet.http.HttpSession;
 		private BlackBoardVO blackBoardVO;
 		@Autowired
 		private ReviewVO reviewVO;
+		@Autowired
+		private OrderService orderService;
 		
 		@Override
 		@RequestMapping(value="/communityList.do", method=RequestMethod.GET)
@@ -53,7 +56,7 @@ import jakarta.servlet.http.HttpSession;
 			return mav;
 		}
 		@Override
-		@RequestMapping(value="/communityDetail.do", method=RequestMethod.GET)
+		@RequestMapping(value="/communityDetail.do", method= {RequestMethod.GET,RequestMethod.POST})
 		public ModelAndView communityDetail(@RequestParam("r_id") String r_id, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes)  throws Exception{
 			//커뮤니티 상세정보
 			HttpSession session = request.getSession();
@@ -139,7 +142,7 @@ import jakarta.servlet.http.HttpSession;
 		}
 		
 		@Override
-		@RequestMapping(value="/blackBoardDetail.do", method=RequestMethod.GET)
+		@RequestMapping(value="/business/blackBoardDetail.do", method=RequestMethod.GET)
 		public ModelAndView blackBoardDetail(@RequestParam("b_id") String b_id, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		    HttpSession session = request.getSession();
 		    ModelAndView mav = new ModelAndView();
@@ -191,17 +194,31 @@ import jakarta.servlet.http.HttpSession;
 		
 		@Override
 		@RequestMapping(value="/communityAddForm.do", method=RequestMethod.GET)
-		public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
-			HttpSession session;
+		public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception{
+			HttpSession session = request.getSession();
 			ModelAndView mav = new ModelAndView();
 			String layout = "common/layout";
 			mav.setViewName(layout);
 			String viewName = (String)request.getAttribute("viewName");
 			mav.addObject("viewName", viewName);
 			
-			session = request.getSession();
+			String m_id = (String) session.getAttribute("current_id");
+			
+			int o_id;
+			try {
+				o_id = orderService.whomid(m_id);
+			}catch (EmptyResultDataAccessException e) {
+				redirectAttributes.addFlashAttribute("message", "주문내역이 없습니다.");
+	            mav.setViewName("redirect:/community/communityList.do");
+	            return mav;
+			}
+			
+			String goods_name = orderService.reviewgoodsname(o_id);
+			
+
 			session.setAttribute("sideMenu", "reveal");
 			session.setAttribute("sideMenu_option", "community");
+			mav.addObject("goodsname", goods_name);
 			
 			return mav;
 		}
@@ -215,6 +232,8 @@ import jakarta.servlet.http.HttpSession;
 			mav.setViewName(layout);
 			String viewName = (String)request.getAttribute("viewName");
 			mav.addObject("viewName", viewName);
+			
+			
 			
 			session = request.getSession();
 			session.setAttribute("sideMenu", "reveal");

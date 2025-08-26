@@ -23,7 +23,7 @@
         <!-- 상품 ID -->
         <div class="form-group">
             <label for="g_name">상품 명</label>
-            <input type="text" id="g_name" name="g_name" />
+            <input type="text" id="g_name" name="g_name" value="${goodsname}" readonly/>
         </div>
 
         <!-- 별점 ★ 클릭 방식 -->
@@ -41,7 +41,7 @@
         <!-- 내용 -->
         <div class="form-group">
             <label for="r_content">내용</label>
-            <textarea id="r_content" name="r_content" rows="5" required></textarea>
+            <textarea id="r_content" name="r_content" rows="5"></textarea>
         </div>
 
         <!-- 이미지 업로드 -->

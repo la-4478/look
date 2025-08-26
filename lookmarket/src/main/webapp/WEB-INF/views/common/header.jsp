@@ -12,6 +12,89 @@
 <meta charset="UTF-8">
 <title>header</title>
 <link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css"><!-- 해더 CSS 파일 -->
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const bell  = document.getElementById('bell');
+  if (!bell) return;
+  const badge = document.getElementById('badge');
+  const panel = document.getElementById('panel');
+  const ctx   = bell.dataset.ctx || "${ctx}";
+
+  // HTML 이스케이프
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // 패널 토글
+  async function togglePanel(e){
+    e.stopPropagation();
+    if (panel.style.display === 'block') { panel.style.display = 'none'; return; }
+    await openPanel();
+    panel.style.display = 'block';
+  }
+  document.addEventListener('click', ()=>{ panel.style.display = 'none'; });
+  bell.addEventListener('click', togglePanel);
+
+  // 뱃지 갱신
+  async function refreshCount(){
+    try{
+      const r = await fetch(ctx + '/notify/unread-count.do', { credentials:'same-origin' });
+      if(!r.ok) throw new Error('count http ' + r.status);
+      const txt = await r.text();
+      const count = parseInt(txt,10) || 0;
+      if(count>0){ badge.style.display='inline-block'; badge.textContent = count; }
+      else { badge.style.display='none'; }
+    }catch(e){ console.error('[notify] count error', e); }
+  }
+
+  // 목록 열기
+  async function openPanel(){
+    try{
+      const r = await fetch(ctx + '/notify/unread-list.do', { credentials:'same-origin', headers:{'Accept':'application/json'}});
+      if(!r.ok) throw new Error('list http ' + r.status);
+      const list = await r.json();
+      panel.innerHTML = (list && list.length) ? list.map(n=>{
+        const id    = (n.nId !== undefined && n.nId !== null) ? n.nId : n.n_id;
+        const title = n.title || '';
+        const msg   = n.message || '';
+        const link  = (n.linkUrl || n.link_url || '#');
+        return `
+          <div class="item" data-id="\${id}">
+            <div class="title">\${escapeHtml(title)}</div>
+            <div class="msg">\${escapeHtml(msg)}</div>
+            <div class="actions">
+              <a href="\${ctx}\${link}">바로가기</a>
+              <button type="button" onclick="markRead(\${id})">읽음</button>
+            </div>
+          </div>
+        `;
+      }).join('') : '<div class="empty">새 알림 없음</div>';
+    }catch(e){
+      console.error('[notify] list error', e);
+      panel.innerHTML = '<div class="empty">알림을 불러오지 못했습니다.</div>';
+    }
+  }
+
+  // 읽음 처리
+  window.markRead = async function(id){
+    try{
+      const opts = {
+        method:'POST',
+        headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
+        body:'n_id='+encodeURIComponent(id),
+        credentials:'same-origin'
+      };
+      const r = await fetch(ctx + '/notify/read.do', opts);
+      if(!r.ok) throw new Error('read http ' + r.status);
+      await refreshCount();
+      await openPanel();
+    }catch(e){ console.error('[notify] read error', e); alert('읽음 처리 실패'); }
+  }
+
+  // 초기 실행
+  refreshCount();
+  setInterval(refreshCount, 10000);
+});
+</script>
 </head>
 <body>
 	<header>
@@ -69,10 +152,26 @@
 									<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
 									<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 									<li>${memberInfo.m_name}님 환영합니다.</li>
+									<div id="bell" class="bell" role="button" tabindex="0" aria-label="알림" data-ctx="${ctx}">
+									  🔔 <span id="badge" class="badge" style="display:none;">0</span>
+									  <div id="panel" class="panel" style="display:none;"></div><div id="notifyOverlay" style="display:none;">
+									</div>
+									<div id="notifyModal" role="dialog" aria-modal="true" aria-labelledby="notifyTitle">
+									    <div class="modal-header">
+									      <h3 id="notifyTitle">알림</h3>
+									      <button type="button" id="notifyClose" aria-label="닫기">✕</button>
+									    </div>
+									    <div id="notifyBody"><!-- 여기로 리스트가 들어감 --></div>
+									  </div>
+									</div>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
 									<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
 									<li>${memberInfo.m_name}님 환영합니다.</li>
+									<div id="bell" class="bell" role="button" tabindex="0" aria-label="알림" data-ctx="${ctx}">
+									  🔔 <span id="badge" class="badge" style="display:none;">0</span>
+									  <div id="panel" class="panel" style="display:none;"></div>
+									</div>
 								</c:when>
 							</c:choose>
 						</c:when>
@@ -114,22 +213,13 @@
 							<!-- 사용자 (m_role == 1) -->
 								<c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
 								<div>
-									<a href="${contextPath}/community/communityList.do" class="menu__title">커뮤니티</a>
+									<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
 								</div>
 									<ul id="tipSybm1" class="navbar__submenu">
 										<li><a href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
 									</ul>
 								</c:if>
-
-							<!-- 사업자 (m_role == 2) -->
-								<c:if test="${isLogOn eq true and memberInfo.m_role == 2}">
-								<div>
-									<a href="${contextPath}/community/blackBoardList.do" class="menu__title">사장님 커뮤니티</a>
-								</div>
-									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/community/blackBoardAddForm.do">사장님 고충방 등록</a></li>
-									</ul>
-								</c:if>
+								
 							<!-- 관리자 (m_role == 3) -->
 								<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
 								<div>
@@ -211,19 +301,8 @@
 								<li class="menu">
 									<div>
 										<a href="${contextPath}/community/communityList.do"
-											class="menu__title">커뮤니티</a>
-									</div>
-									<ul id="tipSybm1" class="navbar__submenuu">
-										<li><a href="${contextPath}/community/communityList.do">커뮤니티
-												리뷰목록</a></li>
-										<li><a
-											href="${contextPath}/community/communityAddForm.do">리뷰 작성</a></li>
-										<li><a
-											href="${contextPath}/community/communityUpdateForm.do">리뷰
-												수정</a></li>
-										<li><a href="${contextPath}/jangbogo/goodsUpdateForm.do"
-											class="menu__title">상품수정</a></li>
-									</ul>
+											class="menu__title">리뷰</a>
+									</div>								
 								</li>
 
 								<li class="menu">
