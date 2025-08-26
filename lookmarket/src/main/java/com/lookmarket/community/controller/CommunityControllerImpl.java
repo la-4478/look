@@ -206,10 +206,11 @@ import jakarta.servlet.http.HttpSession;
 			int o_id = orderService.whomid(m_id);
 			
 			String goods_name = orderService.reviewgoodsname(o_id);
-			
+			System.out.println("goods_name : "+goods_name);
 			
 			session.setAttribute("sideMenu", "reveal");
 			session.setAttribute("sideMenu_option", "community");
+			mav.addObject("goodsname", goods_name);
 			
 			return mav;
 		}

@@ -27,8 +27,9 @@
 				<c:when test="${sideMenu_option == 'myPage_business'}">
 					<li>
 						<h3>사업자 메뉴</h3>
-						<ul>
-							<li><a href="${contextPath}/business/mypageBusinessInfo.do">내정보</a></li>
+						<ul><c:if test="${businessVO.bm_status == 2 }">
+							<li><a href="${contextPath}/jangbogo/busigoodsAddForm.do">상품 등록</a></li>
+							</c:if>
 							<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
 							<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 							<li><a href="${contextPath}/business/BlackBoardList.do">사장님고충방</a></li>

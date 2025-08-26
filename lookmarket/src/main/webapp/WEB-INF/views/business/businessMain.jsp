@@ -70,8 +70,8 @@
     <div class="actions toolbar">
       <a class="btn primary"
          href="${contextPath}/jangbogo/busigoodsAddForm.do"<c:if test="${!isApproved}">disabled</c:if>>상품 등록</a>
-      <a class="btn" href="${contextPath}/jangbogo/goodsList.do?mine=true">내 상품 관리</a>
-      <a class="btn" href="${contextPath}/order/businessOrders.do">주문/매출</a>
+      <a class="btn" href="${contextPath}/business/businessGoodsList.do?category=all">내 상품 관리</a>
+      <a class="btn" href="${contextPath}/business/businessOrderList.do">주문관리</a>
     </div>
     <p class="note">
       ※ 승인 완료 후에만 상품 등록이 가능합니다.
