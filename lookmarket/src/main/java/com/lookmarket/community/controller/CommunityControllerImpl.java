@@ -2,7 +2,6 @@ package com.lookmarket.community.controller;
 
 import java.io.File;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.lookmarket.community.Service.CommunityService;
 import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.community.vo.ReviewVO;
+import com.lookmarket.order.service.OrderService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,6 +31,8 @@ import jakarta.servlet.http.HttpSession;
 		private BlackBoardVO blackBoardVO;
 		@Autowired
 		private ReviewVO reviewVO;
+		@Autowired
+		private OrderService orderService;
 		
 		@Override
 		@RequestMapping(value="/communityList.do", method=RequestMethod.GET)
@@ -192,14 +194,20 @@ import jakarta.servlet.http.HttpSession;
 		@Override
 		@RequestMapping(value="/communityAddForm.do", method=RequestMethod.GET)
 		public ModelAndView communityAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
-			HttpSession session;
+			HttpSession session = request.getSession();
 			ModelAndView mav = new ModelAndView();
 			String layout = "common/layout";
 			mav.setViewName(layout);
 			String viewName = (String)request.getAttribute("viewName");
 			mav.addObject("viewName", viewName);
 			
-			session = request.getSession();
+			String m_id = (String) session.getAttribute("current_id");
+			
+			int o_id = orderService.whomid(m_id);
+			
+			String goods_name = orderService.reviewgoodsname(o_id);
+			
+			
 			session.setAttribute("sideMenu", "reveal");
 			session.setAttribute("sideMenu_option", "community");
 			
@@ -215,6 +223,8 @@ import jakarta.servlet.http.HttpSession;
 			mav.setViewName(layout);
 			String viewName = (String)request.getAttribute("viewName");
 			mav.addObject("viewName", viewName);
+			
+			
 			
 			session = request.getSession();
 			session.setAttribute("sideMenu", "reveal");

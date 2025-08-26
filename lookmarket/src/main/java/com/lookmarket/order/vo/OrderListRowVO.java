@@ -27,6 +27,7 @@ public class OrderListRowVO {
     private String  buyer_id;        // 구매자ID -> ${o.buyer_id}
     private String  o_status;        // 문자열 상태(PENDING/PAID/...) -> ${o.o_status}
     private Integer status;          // 숫자 상태(1/2/3/...)          -> ${o.status}
+    private String oi_Receiver_Name;
 
     // ── 표시 보조 ──────────────────────────────────
     private Integer item_count;      // 같은 주문 내 아이템 개수 -> ${o.item_count}
@@ -51,8 +52,6 @@ public class OrderListRowVO {
 
     public String getD_delivery_date() { return d_delivery_date; }
     public void setD_delivery_date(String v) { this.d_delivery_date = v; }
-
-    // ====== Getter/Setter (JSP EL과 완전 일치) ======
 
     public Integer getONum() { return ONum; }
     public void setONum(Integer oNum) { ONum = oNum; }
@@ -95,8 +94,10 @@ public class OrderListRowVO {
 
     public Integer getTotal_price() { return total_price; }           // 언더스코어 유지
     public void setTotal_price(Integer total_price) { this.total_price = total_price; }
+    public String getOi_Receiver_Name() {return oi_Receiver_Name;}
+	public void setOi_Receiver_Name(String oi_Receiver_Name) {this.oi_Receiver_Name = oi_Receiver_Name;}
 
-    // ── (선택) 편의 게터: JSP 계산 줄이고 싶으면 사용 ─────────
+	// ── (선택) 편의 게터: JSP 계산 줄이고 싶으면 사용 ─────────
  public Integer getLine_total() {
      int sale = (otSalePrice == null ? 0 : otSalePrice);
      int qty  = (otGoodsQty   == null ? 0 : otGoodsQty);

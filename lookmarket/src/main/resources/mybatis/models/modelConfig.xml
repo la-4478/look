@@ -31,6 +31,9 @@
 	    <typeAlias type="com.lookmarket.kb.vo.KbChunkVO" alias="kbChunkVO"/>
 	    <typeAlias type="com.lookmarket.inquiry.vo.InquiryVO" alias="inquiryVO"/>
 	    <typeAlias type="com.lookmarket.wishlist.vo.WishListVO" alias="wishListVO"/>
+	    <typeAlias type="com.lookmarket.account.vo.AccAccountVO" alias="accAccountVO"/>
+	    <typeAlias type="com.lookmarket.account.vo.AccCategoryVO" alias="accCategoryVO"/>
+	    <typeAlias type="com.lookmarket.account.vo.AccTxnVO" alias="accTxnVO"/>
   	</typeAliases>
 
 

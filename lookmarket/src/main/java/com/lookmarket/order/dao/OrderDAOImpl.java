@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.order.vo.OrderItemVO;
+import com.lookmarket.order.vo.OrderListRowVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
 
@@ -100,6 +101,26 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public Integer removeCartItem(CartVO cartVO) throws DataAccessException {
 		return sqlSession.selectOne("mapper.order.removeCartItem", cartVO);
+	}
+
+	@Override
+	public List<OrderVO> allOrderList() throws DataAccessException {
+		return sqlSession.selectList("mapper.admin.allOrderInfo1");
+	}
+
+	@Override
+	public List<OrderItemVO> allItemList() throws DataAccessException {
+		return sqlSession.selectList("mapper.admin.allOrderItem1");
+	}
+	
+	@Override
+	public String reviewgoodsname(int o_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.community.reviewgoodsname", o_id);
+	}
+
+	@Override
+	public int whomid(String m_id) throws DataAccessException {
+		return sqlSession.selectOne("mapper.community.whomid", m_id);
 	}
 
 }

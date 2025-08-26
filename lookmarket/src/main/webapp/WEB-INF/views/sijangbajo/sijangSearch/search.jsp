@@ -320,7 +320,7 @@
 
 	<!-- 검색 결과 리스트 (동일한 마크업으로 동적 렌더) -->
 	<div id="resultArea"
-		style="margin-top: 30px; max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; display: none;"></div>
+		style="margin-top: 30px; max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; display: none; width: 83.5%;"></div>
 
 	<%@ include file="searchDetail.jsp"%>
 </body>

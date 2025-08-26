@@ -69,7 +69,12 @@ public class CommunityServiceImpl implements CommunityService{
 	}
 
 	@Override
-	public List<BlackBoardVO> myBlackBoard(String m_id) {
+	public List<BlackBoardVO> myBlackBoard(String m_id) throws Exception {
 		return communityDAO.myBlackBoard(m_id);
+	}
+
+	@Override
+	public List<BlackBoardVO> allboardList() throws Exception {
+		return communityDAO.allboardList();
 	}
 }

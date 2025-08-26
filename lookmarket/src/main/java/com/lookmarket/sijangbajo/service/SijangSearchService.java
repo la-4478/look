@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -225,6 +227,7 @@ public class SijangSearchService {
 
 	    return courseList;
 	}
+	
 
 	public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
 	    double earthRadius = 6371.0; // km 단위
@@ -280,4 +283,69 @@ public class SijangSearchService {
 	        throw new RuntimeException("API 호출/파싱 실패", e);
 	    }
 	}
+	public List<Map<String, Object>> fetchFestivalList(String areaCode) {
+	    List<Map<String, Object>> festivalList = new ArrayList<>();
+	    try {
+	        String rawServiceKey = "2jgkuxtnmXwkyNhBItGVEgjMOV8IATXuwlZLJsbjbELR1bhnG0pCi7GH4eJlWLhuC1sohQgeOlCeX1WwrhWLSA==";
+	        String encodedServiceKey = URLEncoder.encode(rawServiceKey, StandardCharsets.UTF_8);
+
+	        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+	        String apiUrl = "https://apis.data.go.kr/B551011/KorService2/searchFestival2"
+	            + "?serviceKey=" + encodedServiceKey
+	            + "&MobileOS=ETC"
+	            + "&MobileApp=SijangBajo"
+	            + "&_type=json"
+	            + "&numOfRows=20"
+	            + "&pageNo=1"
+	            + "&eventStartDate=" + today;
+
+	        if (areaCode != null && !areaCode.trim().isEmpty()) {
+	            apiUrl += "&areaCode=" + areaCode;
+	        }
+
+	        URL url = new URL(apiUrl);
+	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("GET");
+
+	        if (conn.getResponseCode() == 200) {
+	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+	            StringBuilder sb = new StringBuilder();
+	            String line;
+	            while ((line = in.readLine()) != null) {
+	                sb.append(line);
+	            }
+	            in.close();
+
+	            JSONObject json = new JSONObject(sb.toString());
+	            JSONObject response = json.getJSONObject("response");
+	            JSONObject body = response.getJSONObject("body");
+	            JSONObject items = body.getJSONObject("items");
+	            JSONArray itemArray = items.getJSONArray("item");
+
+	            for (int i = 0; i < itemArray.length(); i++) {
+	                JSONObject item = itemArray.getJSONObject(i);
+	                Map<String, Object> festival = new HashMap<>();
+
+	                festival.put("title", item.optString("title", "제목 없음"));
+	                festival.put("image", item.optString("firstimage", ""));
+	                festival.put("address", item.optString("addr1", "") + " " + item.optString("addr2", ""));
+	                festival.put("latitude", item.optString("mapy", ""));
+	                festival.put("longitude", item.optString("mapx", ""));
+	                festival.put("eventStartDate", item.optString("eventstartdate", ""));
+	                festival.put("eventEndDate", item.optString("eventenddate", ""));
+
+	                festivalList.add(festival);
+	            }
+	        } else {
+	            System.out.println("축제 API 오류 코드: " + conn.getResponseCode());
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return festivalList;
+	}
+
 }

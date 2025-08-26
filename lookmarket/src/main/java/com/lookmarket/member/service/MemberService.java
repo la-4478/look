@@ -23,5 +23,6 @@ public interface MemberService {
 	public String status(String m_id) throws Exception;
 	public MemberVO findMemberById(String mId) throws Exception;
 	public BusinessVO findBusinessByMemberId(String mId) throws Exception;
+	public List<MemberVO> getMemberList() throws Exception;
 	
 }

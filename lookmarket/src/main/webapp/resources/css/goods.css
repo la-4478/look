@@ -20,7 +20,7 @@
 /*상품 상세*/
 .detail-container{max-width:1100px;margin:40px auto;padding:20px}
 .top-section{display:flex;flex-wrap:wrap;gap:30px;background:#fff;padding:20px;border-radius:12px;box-shadow:0 0 10px rgba(0,0,0,.05)}
-.top-section img{width:auto;height:auto;border-radius:8px;object-fit:cover}
+.top-section img{width:50%;height:auto;border-radius:8px;object-fit:cover}
 .product-info{flex:1;position:relative}
 .product-info h2{font-size:24px;margin-bottom:10px;display:inline-block}
 #wishBtn{cursor:pointer;border:none;background:none;font-size:28px;color:#d9534f;padding:0 10px;vertical-align:middle;margin-left:15px}

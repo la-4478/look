@@ -43,7 +43,7 @@
 							<li><a href="${contextPath}/admin/allGoodsList.do">상품관리</a></li>
 							<li><a href="${contextPath}/admin/allOrderList.do">주문관리</a></li>
 							<li><a href="${contextPath}/admin/allMemberList.do">회원관리</a></li>
-							<li><a href="${contextPath}/admin/community/allCommunityList.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/admin/community/allCommunityList.do">리뷰관리</a></li>
 							<li><a href="${contextPath}/admin/community/allBlackBoardList.do">사장님고충방</a></li>
 							<li><a href="${contextPath}/admin/ApprovalList.do">사업자 승인 요청</a></li>
 							<li><a href="${contextPath}/admin/accountList.do">회계관리</a></li>

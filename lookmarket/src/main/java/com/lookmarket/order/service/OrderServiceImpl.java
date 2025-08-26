@@ -11,6 +11,7 @@ import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.order.dao.OrderDAO;
 import com.lookmarket.order.dao.PayDAO;
 import com.lookmarket.order.vo.OrderItemVO;
+import com.lookmarket.order.vo.OrderListRowVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
 
@@ -20,8 +21,6 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO;
 	@Autowired
     private CartDAO cartDAO;
-	@Autowired
-	private PayDAO payDAO;
 	
 	
 	public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception{
@@ -83,5 +82,25 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception {
 	    return orderDAO.getCartItemsByMemberId(m_id);
+	}
+
+	@Override
+	public List<OrderVO> allOrderList() throws Exception {
+		return orderDAO.allOrderList();
+	}
+
+	@Override
+	public List<OrderItemVO> allItemList() throws Exception {
+		return orderDAO.allItemList();
+	}
+
+	@Override
+	public String reviewgoodsname(int o_id) throws Exception {
+		return orderDAO.reviewgoodsname(o_id);
+	}
+
+	@Override
+	public int whomid(String m_id) throws Exception {
+		return orderDAO.whomid(m_id);
 	}
 }

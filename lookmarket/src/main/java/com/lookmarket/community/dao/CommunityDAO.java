@@ -19,11 +19,12 @@ public interface CommunityDAO {
 	public void insertReview(ReviewVO reviewVO) throws DataAccessException;
 	public void updateReview(ReviewVO reviewVO) throws DataAccessException;
 	public void deleteReview(int r_id) throws DataAccessException;
-	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
-	public BlackBoardVO blackBoardDetail(int b_id) throws Exception;
-	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws Exception;
-	public void upBlackHit(String b_id) throws Exception;
-	public void deleteBlackBoard(int b_id) throws Exception;
-	public List<BlackBoardVO> myBlackBoard(String m_id);
+	public void insertBlackBoard(BlackBoardVO blackBoardVO) throws DataAccessException;
+	public BlackBoardVO blackBoardDetail(int b_id) throws DataAccessException;
+	public void updateBlackBoard(BlackBoardVO blackBoardVO) throws DataAccessException;
+	public void upBlackHit(String b_id) throws DataAccessException;
+	public void deleteBlackBoard(int b_id) throws DataAccessException;
+	public List<BlackBoardVO> myBlackBoard(String m_id) throws DataAccessException;
+	public List<BlackBoardVO> allboardList() throws DataAccessException;
 
 }

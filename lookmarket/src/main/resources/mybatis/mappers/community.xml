@@ -128,5 +128,13 @@
 	<select id="myblackboardList" parameterType="String" resultType="blackboardVO">
 		select * from blackboard where m_id = #{m_id}
 	</select>
+	
+	<select id="whomid" parameterType="String" resultType="int">
+		select o_id from order_info where m_id = #{m_id}
+	</select>
+	
+	<select id="reviewgoodsname" parameterType="int" resultType="String">
+		select * from order_item where o_id = #{oId}
+	</select>
 
 </mapper>

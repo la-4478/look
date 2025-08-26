@@ -5,6 +5,17 @@
 
 <h2>📌추천 코스 모아보기</h2>
 
+<!-- 검색 폼 -->
+<form method="get" action="${contextPath}/nearby/nearCourse.do">
+  <label for="sido">시도:</label>
+  <input type="text" id="sido" name="sido" value="${sido != null ? sido : ''}" placeholder="예: 서울특별시" />
+
+  <label for="sigungu">시군구:</label>
+  <input type="text" id="sigungu" name="sigungu" value="${sigungu != null ? sigungu : ''}" placeholder="예: 강남구" />
+
+  <button type="submit">검색</button>
+</form>
+
 <div class="course-container">
   <c:forEach var="course" items="${courseList}">
     <div class="course-card">

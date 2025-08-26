@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.acc">
+
+  <insert id="insertTxn" parameterType="accaccountVO">
+    INSERT INTO acc_txn
+      (txn_date, account_id, category_id, amount, memo, partner_name, order_id, payment_id, transfer_key)
+    VALUES
+      (#{txnDate}, #{accountId}, #{categoryId}, #{amount}, #{memo}, #{partnerName}, #{orderId}, #{paymentId}, #{transferKey})
+  </insert>
+
+  <select id="selectTxns" resultType="accaccountVO">
+    SELECT t.*, a.name AS accountName, c.name AS categoryName, c.kind AS categoryKind
+    FROM acc_txn t
+    LEFT JOIN acc_account a ON a.account_id = t.account_id
+    LEFT JOIN acc_category c ON c.category_id = t.category_id
+    WHERE t.txn_date BETWEEN #{from} AND #{to}
+      <if test="accountId != null"> AND t.account_id = #{accountId} </if>
+      <if test="categoryId != null"> AND t.category_id = #{categoryId} </if>
+    ORDER BY t.txn_date DESC, t.txn_id DESC
+  </select>
+
+  <select id="selectMonthlySummary" resultType="map">
+    SELECT c.kind, c.name, SUM(t.amount) AS sum_amount
+    FROM acc_txn t
+    JOIN acc_category c ON c.category_id = t.category_id
+    WHERE DATE_FORMAT(t.txn_date, '%Y-%m') = #{yyyymm}
+    GROUP BY c.kind, c.name
+    ORDER BY c.kind, c.name
+  </select>
+
+</mapper>

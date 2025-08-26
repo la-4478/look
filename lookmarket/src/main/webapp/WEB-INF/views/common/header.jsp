@@ -56,33 +56,29 @@
 						<c:when test="${isLogOn eq true}">
 							<li><a href="${contextPath}/member/logout.do">로그아웃</a></li>
 
-
 							<c:choose>
 								<c:when test="${memberInfo.m_role == 1}">
 									<li><a href="${contextPath}/mypage/mypageInfo.do">마이페이지</a></li>
 									<li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
 									<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역</a></li>
 									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
+									<li>${memberInfo.m_name}님 환영합니다.</li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 2}">
 									<li><a href="${contextPath}/business/businessMain.do">사업자 페이지</a></li>
 									<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
 									<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
+									<li>${memberInfo.m_name}님 환영합니다.</li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
-									<li><a
-										href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
-									<li><a href="${contextPath}/admin/allGoodsList.do">상품관리</a></li>
-									<li><a href="${contextPath}/admin/allMemberList.do">회원관리</a></li>
-									<li><a href="${contextPath}/admin/accountList.do">회계관리</a></li>
-									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
+									<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
+									<li>${memberInfo.m_name}님 환영합니다.</li>
 								</c:when>
 							</c:choose>
 						</c:when>
 						<c:otherwise>
 							<li><a href="${contextPath}/member/loginForm.do">로그인</a></li>
 							<li><a href="${contextPath}/member/memberSelect.do">회원가입</a></li>
-
 						</c:otherwise>
 					</c:choose>
 				</ul>
