@@ -71,4 +71,13 @@ public class MyPageDAOImpl implements MyPageDAO{
 
         return sqlSession.insert("mapper.mypage.insertIssuedCoupon", params);
     }
+    @Override
+    public boolean isCouponAlreadyIssued(int promoId, String memberId) throws DataAccessException {
+        Integer count = sqlSession.selectOne("mapper.mypage.checkIssuedCoupon", Map.of(
+            "promoId", promoId,
+            "memberId", memberId
+        ));
+        return count != null && count > 0;
+    }
+
 }

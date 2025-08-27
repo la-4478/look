@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.lookmarket.common.base.BaseController;
 import com.lookmarket.community.vo.ReviewVO;
+import com.lookmarket.event.service.EventService;
+import com.lookmarket.event.vo.CouponVO;
 import com.lookmarket.mypage.service.MyPageService;
 import com.lookmarket.mypage.vo.MyPageVO;
 import com.lookmarket.order.service.DeliveryService;
@@ -40,7 +42,9 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 	private DeliveryService deliveryService;
 	@Autowired
 	private WishListService wishListService; 
-	
+	@Autowired
+	private EventService eventService;
+
 	//사용자	
 	@Override
 	@RequestMapping(value="/mypageInfo.do", method=RequestMethod.GET)
@@ -280,9 +284,32 @@ public class MyPageControllerImpl extends BaseController implements MyPageContro
 	        response.put("message", "쿠폰이 발급되었습니다.");
 	    } else {
 	        response.put("success", false);
-	        response.put("message", "쿠폰 발급 중 오류가 발생했습니다.");
+	        response.put("message", "이미 발급된 쿠폰입니다.");
 	    }
 	    
 	    return response;
 	}
+	@RequestMapping(value="/myCoupons.do", method=RequestMethod.GET)
+	public ModelAndView myCoupon(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	    HttpSession session = request.getSession();
+	    ModelAndView mav = new ModelAndView("common/layout");
+
+	    String viewName = (String) request.getAttribute("viewName");
+	    mav.addObject("viewName", "mypage/myCoupons"); // 실제 JSP 위치
+
+	    session.setAttribute("sideMenu", "reveal");
+	    session.setAttribute("sideMenu_option", "myPage");
+
+	    String memberId = (String) session.getAttribute("current_id");
+
+	    if (memberId != null) {
+	        List<CouponVO> myCoupons = eventService.selectCouponsIssuedToMember(memberId);
+	        mav.addObject("myCoupons", myCoupons);
+	    } else {
+	        mav.addObject("message", "로그인이 필요합니다.");
+	    }
+
+	    return mav;
+	}
+
 }

@@ -60,7 +60,13 @@ public class MyPageServiceImpl implements MyPageService{
 	}
 	@Override
 	public int issuePromotionCoupon(int promoId, String memberId) throws Exception {
-		return myPageDAO.issuePromotionCoupon(promoId, memberId);
+	    boolean alreadyIssued = myPageDAO.isCouponAlreadyIssued(promoId, memberId);
+	    
+	    if (alreadyIssued) {
+	        return 0; // 중복
+	    }
+
+	    return myPageDAO.issuePromotionCoupon(promoId, memberId);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.lookmarket.event.vo;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -93,4 +94,22 @@ public class CouponVO {
 	public void setPostId(Integer postId) {
 		this.postId = postId;
 	}
+	public boolean isExpired() {
+	    if (promoEndDate == null) {
+	        return false; // 종료일 없으면 만료 안된 걸로 처리
+	    }
+	    // 오늘 날짜 0시 0분 0초 0밀리초 기준으로 설정
+	    Calendar todayCal = Calendar.getInstance();
+	    todayCal.set(Calendar.HOUR_OF_DAY, 0);
+	    todayCal.set(Calendar.MINUTE, 0);
+	    todayCal.set(Calendar.SECOND, 0);
+	    todayCal.set(Calendar.MILLISECOND, 0);
+
+	    Date today = todayCal.getTime();
+
+	    // promoEndDate가 오늘 자정 이전이면 만료(true), 오늘 자정 이후면 만료 아님(false)
+	    return promoEndDate.before(today);
+	}
+
+
 }

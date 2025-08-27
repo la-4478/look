@@ -193,5 +193,14 @@
 		    INSERT INTO promotion_coupon_issue(promo_id, m_id)
 		    VALUES (#{promoId}, #{memberId})
 	    ]]>
-	    </insert>    
+	</insert>    
+	<!-- 쿠폰 중복 발급 처리 -->
+	<select id="checkIssuedCoupon" resultType="int" parameterType="map">
+		<![CDATA[
+		    SELECT COUNT(*) 
+		    FROM promotion_coupon_issue 
+		    WHERE promo_id = #{promoId} AND m_id = #{memberId}
+		]]>
+	</select>
+	
 </mapper>

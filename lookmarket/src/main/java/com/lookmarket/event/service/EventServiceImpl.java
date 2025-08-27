@@ -43,11 +43,6 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<CouponVO> selectCouponListByPostId(int postId) throws Exception {
-        return eventDAO.selectCouponListByPostId(postId);
-    }
-
-    @Override
     public CouponVO selectCouponById(int promoId) throws Exception {
         return eventDAO.selectCouponById(promoId);
     }
@@ -67,8 +62,38 @@ public class EventServiceImpl implements EventService {
         eventDAO.deleteCoupon(promoId);
     }
 
+    @Override
+    public List<CouponVO> selectCouponListByPostId(int postId) throws Exception {
+    	List<CouponVO> coupons = eventDAO.selectCouponListByPostId(postId);
+        for (CouponVO coupon : coupons) {
+            coupon.setPromoCouponActive(!coupon.isExpired());
+        }
+        return coupons;
+    }
+    
 	@Override
 	public List<CouponVO> selectAllCoupons() throws Exception {
-		return eventDAO.selectAllCoupons();
+		List<CouponVO> coupons = eventDAO.selectAllCoupons();
+	    for (CouponVO coupon : coupons) {
+	        coupon.setPromoCouponActive(!coupon.isExpired());
+	    }
+	    return coupons;
+	}
+	
+	@Override
+	public List<CouponVO> selectCouponsIssuedToMember(String memberId) throws Exception {
+		List<CouponVO> coupons = eventDAO.selectCouponsIssuedToMember(memberId);
+	    for (CouponVO coupon : coupons) {
+	        coupon.setPromoCouponActive(!coupon.isExpired());
+	    }
+	    return coupons;
+	}
+	@Override
+	public CouponVO selectCouponById1(int promoId) throws Exception {
+	    CouponVO coupon = eventDAO.selectCouponById(promoId);
+	    if (coupon != null) {
+	        coupon.setPromoCouponActive(!coupon.isExpired());
+	    }
+	    return coupon;
 	}
 }

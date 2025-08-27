@@ -20,4 +20,5 @@ public interface EventDAO {
     void updateCoupon(CouponVO couponVO) throws Exception;
     void deleteCoupon(int promoId) throws Exception;
 	List<CouponVO> selectAllCoupons() throws Exception;
+	List<CouponVO> selectCouponsIssuedToMember(String memberId) throws Exception;
 }

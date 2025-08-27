@@ -1,6 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<c:set var="contextPath"  value="${pageContext.request.contextPath}" />
+<c:set var="contextPath"  value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
 <html>
@@ -19,6 +19,7 @@
 							<li><a href="${contextPath}/mypage/mypageInfo.do">내정보</a></li>
 							<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역</a></li>
 							<li><a href="${contextPath}/mypage/listMyDelivery.do">배송조회</a></li>
+							<li><a href="${contextPath}/mypage/myCoupons.do">내 쿠폰</a></li>
 							<li><a href="${contextPath}/mypage/myWishList.do">찜목록</a></li>
 							<li><a href="${contextPath}/mypage/myCommunity.do">커뮤니티</a></li>
 						</ul>

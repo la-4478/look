@@ -70,4 +70,11 @@ public class EventDAOImpl implements EventDAO {
 	public List<CouponVO> selectAllCoupons() throws Exception{
 		return sqlSession.selectList("com.lookmarket.event.dao.EventDAO.selectAllCoupons");
 	}
+	
+	@Override
+	public List<CouponVO> selectCouponsIssuedToMember(String memberId) throws DataAccessException {
+		return sqlSession.selectList("com.lookmarket.event.dao.EventDAO.selectCouponsIssuedToMember", memberId);
+
+	}
+
 }
