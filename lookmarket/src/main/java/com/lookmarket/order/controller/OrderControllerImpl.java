@@ -21,14 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lookmarket.cart.service.CartService;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.member.vo.MemberVO;
+import com.lookmarket.order.service.CouponService;
 import com.lookmarket.order.service.DeliveryService;
 import com.lookmarket.order.service.OrderService;
 import com.lookmarket.order.vo.ApiResponse;
+import com.lookmarket.order.vo.CouponVO;
 import com.lookmarket.order.vo.DeliveryVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
@@ -47,7 +50,7 @@ public class OrderControllerImpl implements OrderController {
 	private CartService cartService;
 	@Autowired
 	private DeliveryService deliveryService;
-	
+
 	// 클래스 안에 필드로 Random 생성 (필요시)
 	private Random random = new Random();
 
@@ -639,6 +642,6 @@ public class OrderControllerImpl implements OrderController {
 	    mav.addObject("viewName", "/order/orderForm");
 	    return mav;
 	}
-
+	
 
 }

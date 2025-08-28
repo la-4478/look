@@ -202,5 +202,8 @@
 		    WHERE promo_id = #{promoId} AND m_id = #{memberId}
 		]]>
 	</select>
+	<select id="couponList" resultType="ecouponVO" parameterType="String">
+		select * from promotion_coupon_issue where m_id = #{memberId}
+	</select>
 	
 </mapper>
