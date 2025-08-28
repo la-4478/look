@@ -38,4 +38,6 @@ public interface OrderService {
 	public String reviewgoodsname(int o_id)throws Exception;
 	
 	public Integer whomid(String m_id) throws Exception;
+	
+	public void confirmPaymentAndRecordAccounting(String paymentId, String paymentKey, int generatedOrderId, long paidTotal, String m_id, Object object, String cardCompany, int i) throws Exception;
 }

@@ -1,7 +1,11 @@
 package com.lookmarket.admin.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.lookmarket.account.service.AccountService;
 import com.lookmarket.community.Service.CommunityService;
 import com.lookmarket.community.vo.BlackBoardVO;
 import com.lookmarket.community.vo.ReviewVO;
@@ -51,6 +56,8 @@ public class AdminControllerImpl implements AdminController{
 	private MyPageService myPageService;
 	@Autowired
 	private InquiryService inquiryService;
+	@Autowired
+	private AccountService accountService;
 	
 	//viewName 수정 필요
 	@Override
@@ -188,24 +195,6 @@ public class AdminControllerImpl implements AdminController{
 		
 		return mav;
 	}	
-	
-	@Override
-	@RequestMapping(value="/accountList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView accountList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//회계리스트
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
-		
-		session = request.getSession();
-		session.setAttribute("sideMenu", "reveal");
-		session.setAttribute("sideMenu_option", "myPage_admin");
-		
-		return mav;
-	}
 	
 	@Override
 	@RequestMapping(value="/accountDetail.do", method = { RequestMethod.GET, RequestMethod.POST })

@@ -207,5 +207,10 @@
           AND g_id = #{g_id}
     </delete>
     
+    <insert id="insertAccounting" parameterType="AccountingVO">
+	  INSERT INTO accounting (order_num, member_id, pay_method, pay_amount, pay_status)
+	  VALUES (#{orderNum}, #{memberId}, #{payMethod}, #{payAmount}, #{payStatus}).
+	</insert>
+    
 
 </mapper>

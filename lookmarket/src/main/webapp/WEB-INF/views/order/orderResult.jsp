@@ -15,7 +15,6 @@
 
 	<div class="order-result">
 		<h2>주문 결과</h2>
-
 		<table>
 			<tr>
 				<th>주문자 이름</th>
@@ -53,12 +52,6 @@
 				<th>할인 금액</th>
 				<td><c:out value="${orderInfo.oiSalePrice}" /> 원</td>
 			</tr>
-			<tr>
-				<th>주문일자</th>
-				<td><c:out value="${orderInfo.oiDate}" /></td>
-			</tr>
-
-
 		</table>
 		<h3>주문 상품</h3>
 		<table>

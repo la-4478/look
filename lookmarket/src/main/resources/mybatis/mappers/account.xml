@@ -1,34 +1,168 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="mapper.acc">
 
-  <insert id="insertTxn" parameterType="accaccountVO">
+  <!-- ================================
+       INSERT : 단일 전표(수입/지출/이체)
+       - org_id, posting_type 포함
+       - category_id: 이체면 NULL 허용
+     ================================= -->
+  <insert id="insertTxn" parameterType="com.lookmarket.account.vo.AccTxnVO"
+          useGeneratedKeys="true" keyProperty="txnId">
     INSERT INTO acc_txn
-      (txn_date, account_id, category_id, amount, memo, partner_name, order_id, payment_id, transfer_key)
+      (txn_date, org_id, account_id, category_id,
+       amount, memo, partner_name, order_id, payment_id,
+       transfer_key, posting_type)
     VALUES
-      (#{txnDate}, #{accountId}, #{categoryId}, #{amount}, #{memo}, #{partnerName}, #{orderId}, #{paymentId}, #{transferKey})
+      (#{txnDate}, #{orgId}, #{accountId}, #{categoryId},
+       #{amount}, #{memo}, #{partnerName}, #{orderId}, #{paymentId},
+       #{transferKey}, #{postingType})
   </insert>
 
-  <select id="selectTxns" resultType="accaccountVO">
-    SELECT t.*, a.name AS accountName, c.name AS categoryName, c.kind AS categoryKind
+  <!-- 멱등성 체크: 같은 결제에 같은 posting_type 전표 존재 여부 -->
+  <select id="existsPosting" parameterType="map" resultType="int">
+    SELECT COUNT(1)
+    FROM acc_txn
+    WHERE payment_id = #{paymentId}
+      AND posting_type = #{postingType}
+  </select>
+
+  <!-- ================================
+       드롭다운 옵션
+     ================================= -->
+  <select id="selectOrgOptions" resultType="map">
+    SELECT org_id AS orgId, name, is_active AS isActive
+    FROM acc_org
+    WHERE is_active = 1
+    ORDER BY name
+  </select>
+
+  <select id="selectAccountOptions" resultType="map">
+    SELECT account_id AS accountId, name, kind, is_active
+    FROM acc_account
+    WHERE is_active = 1
+    ORDER BY name
+  </select>
+
+  <select id="selectCategoryOptions" resultType="map">
+    SELECT category_id AS categoryId, name, kind, is_active
+    FROM acc_category
+    WHERE is_active = 1
+    ORDER BY kind, name
+  </select>
+
+  <!-- ================================
+       공통 WHERE
+     ================================= -->
+  <sql id="txnWhere">
+    WHERE 1=1
+      <if test="from != null">       AND t.txn_date <![CDATA[>=]]> #{from} </if>
+      <if test="to   != null">       AND t.txn_date <![CDATA[<=]]> #{to}   </if>
+      <if test="orgId != null">      AND t.org_id = #{orgId}              </if>
+      <if test="accountId != null">  AND t.account_id = #{accountId}      </if>
+      <if test="categoryId != null"> AND t.category_id = #{categoryId}     </if>
+      <if test="postingType != null">AND t.posting_type = #{postingType}   </if>
+  </sql>
+
+  <!-- ================================
+       목록 (리스트/화면)
+     ================================= -->
+  <select id="selectTxns" parameterType="map" resultType="map">
+    SELECT
+      t.txn_id        AS txnId,
+      t.txn_date      AS txnDate,
+      t.amount        AS amount,
+      t.memo          AS memo,
+      t.partner_name  AS partnerName,
+      t.order_id      AS orderId,
+      t.payment_id    AS paymentId,
+      t.transfer_key  AS transferKey,
+      t.posting_type  AS postingType,
+      a.account_id    AS accountId,
+      a.name          AS accountName,
+      a.kind          AS accountKind,
+      c.category_id   AS categoryId,
+      c.name          AS categoryName,
+      c.kind          AS categoryKind
     FROM acc_txn t
     LEFT JOIN acc_account a ON a.account_id = t.account_id
     LEFT JOIN acc_category c ON c.category_id = t.category_id
-    WHERE t.txn_date BETWEEN #{from} AND #{to}
-      <if test="accountId != null"> AND t.account_id = #{accountId} </if>
-      <if test="categoryId != null"> AND t.category_id = #{categoryId} </if>
+    <include refid="txnWhere"/>
     ORDER BY t.txn_date DESC, t.txn_id DESC
+    <if test="limit != null">
+      LIMIT #{limit}
+      <if test="offset != null"> OFFSET #{offset} </if>
+    </if>
   </select>
 
-  <select id="selectMonthlySummary" resultType="map">
+  <!-- 총 건수 -->
+  <select id="countTxns" parameterType="map" resultType="int">
+    SELECT COUNT(1)
+    FROM acc_txn t
+    <include refid="txnWhere"/>
+  </select>
+
+  <!-- 합계 (수입/지출/순이익) -->
+  <select id="selectTotals" parameterType="map" resultType="map">
+    SELECT
+      SUM(CASE WHEN t.amount &gt; 0 THEN t.amount ELSE 0 END) AS income_total,
+      SUM(CASE WHEN t.amount &lt; 0 THEN -t.amount ELSE 0 END) AS expense_total,
+      SUM(t.amount) AS net_total
+    FROM acc_txn t
+    <include refid="txnWhere"/>
+  </select>
+
+  <!-- 월별 요약 (선택: 사업자 필터 포함) -->
+  <select id="selectMonthlySummary" parameterType="map" resultType="map">
     SELECT c.kind, c.name, SUM(t.amount) AS sum_amount
     FROM acc_txn t
     JOIN acc_category c ON c.category_id = t.category_id
-    WHERE DATE_FORMAT(t.txn_date, '%Y-%m') = #{yyyymm}
+    <where>
+      DATE_FORMAT(t.txn_date, '%Y-%m') = #{yyyymm}
+      <if test="orgId != null"> AND t.org_id = #{orgId} </if>
+    </where>
     GROUP BY c.kind, c.name
     ORDER BY c.kind, c.name
+  </select>
+
+  <!-- 상세 (파라미터 하나만 넘기면 _parameter 사용) -->
+  <select id="getTxnDetail" parameterType="long" resultType="map">
+    SELECT
+      t.*, o.name AS orgName, a.name AS accountName,
+      c.name AS categoryName, c.kind AS categoryKind
+    FROM acc_txn t
+    JOIN acc_org o        ON o.org_id = t.org_id
+    LEFT JOIN acc_account a ON a.account_id = t.account_id
+    LEFT JOIN acc_category c ON c.category_id = t.category_id
+    WHERE t.txn_id = #{_parameter}
+  </select>
+
+  <!-- ================================
+       엑셀 전체/필터 조회
+     ================================= -->
+  <select id="selectTxnsForExcel" parameterType="map" resultType="map">
+    SELECT
+      t.txn_id       AS txnId,
+      t.txn_date     AS txnDate,
+      o.name         AS orgName,
+      a.name         AS accountName,
+      a.kind         AS accountKind,
+      c.name         AS categoryName,
+      c.kind         AS categoryKind,
+      t.memo,
+      t.partner_name AS partnerName,
+      t.order_id     AS orderId,
+      t.payment_id   AS paymentId,
+      t.transfer_key AS transferKey,
+      t.posting_type AS postingType,
+      t.amount
+    FROM acc_txn t
+    JOIN acc_org o        ON o.org_id = t.org_id
+    LEFT JOIN acc_account a ON a.account_id = t.account_id
+    LEFT JOIN acc_category c ON c.category_id = t.category_id
+    <include refid="txnWhere"/>
+    ORDER BY t.txn_id
   </select>
 
 </mapper>

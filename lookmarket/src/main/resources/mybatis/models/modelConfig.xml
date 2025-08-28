@@ -20,6 +20,7 @@
     	<typeAlias type="com.lookmarket.mypage.vo.MyPageVO" alias="myPageVO" />
     	<typeAlias type="com.lookmarket.order.vo.OrderVO" alias="orderVO" />
     	<typeAlias type="com.lookmarket.order.vo.OrderItemVO" alias="orderItemVO" />
+    	<typeAlias type="com.lookmarket.order.vo.AccountingVO" alias="AccountingVO" />
     	<typeAlias type="com.lookmarket.order.vo.PayVO" alias="payVO" />
     	<typeAlias type="com.lookmarket.order.vo.DeliveryVO" alias="deliveryVO" />
     	<typeAlias type="com.lookmarket.chatbot.vo.ChatMessageVO" alias="chatMessageVO" />
