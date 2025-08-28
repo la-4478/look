@@ -113,7 +113,7 @@ public class SijangSearchService {
 	    List<Map<String, Object>> festivalList = new ArrayList<>();
 
 	    try {
-	        String rawServiceKey = "발급받은인증키";
+	        String rawServiceKey = "2jgkuxtnmXwkyNhBItGVEgjMOV8IATXuwlZLJsbjbELR1bhnG0pCi7GH4eJlWLhuC1sohQgeOlCeX1WwrhWLSA==";
 	        String encodedKey = URLEncoder.encode(rawServiceKey, StandardCharsets.UTF_8);
 
 	        String apiUrl = "https://apis.data.go.kr/B551011/KorService2/searchFestival2"
@@ -227,7 +227,11 @@ public class SijangSearchService {
 
 	    return courseList;
 	}
-	
+	public List<Map<String, Object>> fetchFestivalListByRegionName(String regionName) {
+	    String areaCode = areaCodeMap.get(regionName);
+	    return fetchFestivalList(areaCode);  // 기존 메서드 활용
+	}
+
 
 	public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
 	    double earthRadius = 6371.0; // km 단위
@@ -347,5 +351,28 @@ public class SijangSearchService {
 
 	    return festivalList;
 	}
+	// 지역명 → areaCode 매핑
+	private static final Map<String, String> areaCodeMap = new HashMap<>();
+
+	static {
+	    areaCodeMap.put("서울특별시", "1");
+	    areaCodeMap.put("인천광역시", "2");
+	    areaCodeMap.put("대전광역시", "3");
+	    areaCodeMap.put("대구광역시", "4");
+	    areaCodeMap.put("광주광역시", "5");
+	    areaCodeMap.put("부산광역시", "6");
+	    areaCodeMap.put("울산광역시", "7");
+	    areaCodeMap.put("세종특별자치시", "8");
+	    areaCodeMap.put("경기도", "31");
+	    areaCodeMap.put("강원도", "32");
+	    areaCodeMap.put("충청북도", "33");
+	    areaCodeMap.put("충청남도", "34");
+	    areaCodeMap.put("경상북도", "35");
+	    areaCodeMap.put("경상남도", "36");
+	    areaCodeMap.put("전라북도", "37");
+	    areaCodeMap.put("전라남도", "38");
+	    areaCodeMap.put("제주특별자치도", "39");
+	}
+
 
 }

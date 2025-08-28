@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -534,5 +535,39 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
         return mav;
     }
+    @GetMapping("/api/festivals.do")
+    public ResponseEntity<List<Map<String, Object>>> getFestivalsByRegion(@RequestParam("areaCode") String areaCode, HttpServletRequest request) {
+        // 🔥 normalize 사용
+    	HttpSession session = request.getSession();
+        List<Map<String, Object>> festivals = sijangService.fetchFestivalListByRegionName(areaCode);
+        session.setAttribute("festivalList", festivals);
+        return ResponseEntity.ok(festivals);
+    }
+//    @GetMapping("/api/festivals/today")
+//    @ResponseBody
+//    public ResponseEntity<List<Map<String, Object>>> getOngoingFestivalsByRegion(@RequestParam String region) {
+//        String fullRegion = normalizeSido(region);
+//        List<Map<String, Object>> allFestivals = sijangService.fetchFestivalListByRegionName(fullRegion);
+//
+//        LocalDate today = LocalDate.now();
+//
+//        List<Map<String, Object>> ongoingFestivals = allFestivals.stream()
+//            .filter(f -> {
+//                try {
+//                    String startStr = (String) f.get("startDate");
+//                    String endStr   = (String) f.get("endDate");
+//
+//                    LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.BASIC_ISO_DATE);
+//                    LocalDate end   = LocalDate.parse(endStr, DateTimeFormatter.BASIC_ISO_DATE);
+//
+//                    return !today.isBefore(start) && !today.isAfter(end);
+//                } catch (Exception e) {
+//                    return false;
+//                }
+//            })
+//            .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(ongoingFestivals);
+//    }
 
 }
