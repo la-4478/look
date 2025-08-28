@@ -13,7 +13,6 @@ public interface AdminController {
 	public ModelAndView allMemberList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView allCommunityList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView allBlackBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception;
-	public ModelAndView accountList(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView accountDetail(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public ModelAndView approvalForm(HttpServletRequest request, HttpServletResponse response) throws Exception;
 	public String approveBusiness(String m_id, RedirectAttributes ra) throws Exception;

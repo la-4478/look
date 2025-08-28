@@ -630,7 +630,7 @@ public class GoodsControllerImpl implements GoodsController {
 			message = "<script>";
 			message += "alert('수정 완료되었습니다.');";
 			message += "location.href='" + multipartRequest.getContextPath()
-					+ "/business/businessGoodsList.do?category=all';";
+					+ "/admin/allGoodsList.do';";
 			message += "</script>";
 
 		} catch (Exception e) {

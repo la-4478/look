@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.lookmarket.cart.vo.CartVO;
+import com.lookmarket.order.vo.AccountingVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
@@ -120,6 +121,12 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public Integer whomid(String m_id) throws DataAccessException {
 		return sqlSession.selectOne("mapper.community.whomid", m_id);
+	}
+
+	@Override
+	public void insertAccounting(AccountingVO acc) throws DataAccessException {	
+		sqlSession.insert("mapper.order.insertAccounting", acc);
+		
 	}
 
 }

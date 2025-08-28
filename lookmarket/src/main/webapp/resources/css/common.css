@@ -21,6 +21,9 @@ header:hover {height: 220px !important;}
 #head_link ul li{font-size:14px} /* 링크 항목 텍스트 크기 */
 .bg-sijangbajo{background-color:#f0eaff} /* 보라톤 배경 테마(sijangbajo) */
 .bg-jangbogo{background-color:#eaffea} /* 연녹 배경 테마(jangbogo) */
+
+
+
 #notifyOverlay{position: fixed; inset: 0; background: rgba(0,0,0,.35);display: none; z-index: 10000;}
 #notifyModal{position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);width: min(90vw, 420px);max-height: 70vh; overflow: auto; background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.25); padding: 12px 12px 16px;}
 #notifyModal .modal-header{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;}

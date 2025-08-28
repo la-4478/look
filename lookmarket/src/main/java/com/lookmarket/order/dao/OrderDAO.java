@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 
 import com.lookmarket.cart.vo.CartVO;
+import com.lookmarket.order.vo.AccountingVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderListRowVO;
 import com.lookmarket.order.vo.OrderVO;
@@ -26,4 +27,5 @@ public interface OrderDAO {
 	public List<OrderItemVO> allItemList() throws DataAccessException;
 	public String reviewgoodsname(int o_id) throws DataAccessException;
 	public Integer whomid(String m_id) throws DataAccessException;
+	public void insertAccounting(AccountingVO acc) throws DataAccessException;
 }

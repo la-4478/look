@@ -58,7 +58,7 @@
 			options = [ "전체", "동구", "서구", "남구", "북구", "광산구" ];
 		} else if (sido === "대전") {
 			options = [ "전체", "동구", "중구", "서구", "유성구", "대덕구" ];
-		} else if (sido === "울산광역시") {
+		} else if (sido === "울산") {
 			options = [ "전체", "중구", "남구", "동구", "북구", "울주군" ];
 		} else if (sido === "세종") {
 			options = [ "전체", "세종특별자치시" ];
@@ -83,7 +83,9 @@
 		} else if (sido === "경상남도") {
 			options = [ "전체", "창원시 의창구", "창원시 성산구", "창원시 마산합포구", "창원시 마산회원구",
 					"창원시 진해구", "진주시" ];
-		} else if (sido === "제주특별자치도") {
+		} else if (sido === "제주도") {
+			options = [ "전체", "제주시", "서귀포시" ];
+		} else if (sido === "제주") {
 			options = [ "전체", "제주시", "서귀포시" ];
 		} else {
 			options = [ "전체" ];
@@ -275,7 +277,7 @@
 			<option value="인천">인천</option>
 			<option value="광주">광주</option>
 			<option value="대전">대전</option>
-			<option value="울산광역시">울산</option>
+			<option value="울산">울산</option>
 			<option value="세종">세종</option>
 			<option value="경기도">경기도</option>
 			<option value="강원도">강원도</option>
@@ -285,7 +287,7 @@
 			<option value="전라남도">전라남도</option>
 			<option value="경상북도">경상북도</option>
 			<option value="경상남도">경상남도</option>
-			<option value="제주특별자치도">제주</option>
+			<option value="제주">제주도</option>
 		</select> <label for="sigungu">시/군/구</label> <select name="sigungu"
 			id="sigungu">
 			<option value="전체">전체</option>

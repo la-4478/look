@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function(){
 							<!-- 비회원 또는 기타 -->
 							<c:if test="${not isLogOn or empty memberInfo}">
 								<div>
-									<a href="${contextPath}/community/communityList.do" class="menu__title">커뮤니티</a>
+									<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
 								</div>
 							</c:if>
 							</li>

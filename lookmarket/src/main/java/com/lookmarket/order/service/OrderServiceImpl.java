@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lookmarket.cart.dao.CartDAO;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.order.dao.OrderDAO;
+import com.lookmarket.order.portone.PortOneService;
+import com.lookmarket.order.vo.AccountingVO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
@@ -20,7 +22,8 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO;
 	@Autowired
     private CartDAO cartDAO;
-	
+    @Autowired
+    private PortOneService portOneService;
 	
 	public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception{
 		List<OrderVO> orderGoodsList;
@@ -106,5 +109,31 @@ public class OrderServiceImpl implements OrderService {
     }
 	return oId;
 	}
-	
+	 public void processOrderPayment(String paymentKey, int expectAmount, OrderVO order, PayVO pay) throws Exception {
+	        // PortOne 결제 검증
+	        boolean verified = portOneService.verifyPayment(paymentKey, expectAmount);
+
+	        if (verified) {
+	            // 회계 내역 자동 등록
+	            AccountingVO acc = new AccountingVO();
+	            acc.setOrder_num(order.getOId());
+	            acc.setMember_id(order.getMId());
+	            acc.setPay_method(pay.getPMethod());
+	            acc.setPay_amount(expectAmount);
+	            acc.setPay_status("SUCCESS");
+
+	            orderDAO.insertAccounting(acc);
+	        } else {
+	            throw new RuntimeException("결제 검증 실패: 회계 등록 불가");
+	        }
+	    }
+
+	@Override
+	public void confirmPaymentAndRecordAccounting(String paymentId,
+			String paymentKey, int generatedOrderId, long paidTotal,
+			String m_id, Object object, String cardCompany, int i)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
