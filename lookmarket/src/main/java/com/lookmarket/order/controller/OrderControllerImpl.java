@@ -467,6 +467,8 @@ public class OrderControllerImpl implements OrderController {
 	    
 	    orderService.recordTransactionAfterPayment(orderVO, payVO);
 	    
+	    
+	    
 	    // 8) 세션 저장
 	    session.setAttribute("itemVO", itemVO);
 	    session.setAttribute("PayVO", payVO);

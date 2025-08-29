@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -67,47 +68,6 @@ public class SijangSearchService {
 	    return dataList;
 	}
 	
-	public List<Map<String, String>> fetchAllDataFromApi1(String apiUrl) {
-		List<Map<String, String>> dataList  = new ArrayList<>();
-		
-	    try {
-	        URL url = new URL(apiUrl);
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-
-	        if (conn.getResponseCode() == 200) {
-	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-	            StringBuilder sb = new StringBuilder();
-	            String line;
-	            while ((line = in.readLine()) != null) {
-	                sb.append(line);
-	            }
-	            in.close();
-
-	            JSONObject json = new JSONObject(sb.toString());
-	            JSONArray dataArray = json.getJSONArray("data");
-
-	            for (int i = 0; i < dataArray.length(); i++) {
-	                JSONObject item = dataArray.getJSONObject(i);
-	                Map<String, String> map = new LinkedHashMap<>(); // 순서 보장
-
-	                Iterator<String> keys = item.keys();
-	                while (keys.hasNext()) {
-	                    String key = keys.next();
-	                    map.put(key, item.optString(key, ""));
-	                }
-
-	                dataList.add(map);
-	            }
-	        } else {
-	            System.out.println("API 응답 오류: " + conn.getResponseCode());
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return dataList;
-	}
 	
 	public List<Map<String, Object>> fetchFestivals(String startDate) {
 	    List<Map<String, Object>> festivalList = new ArrayList<>();
@@ -227,12 +187,7 @@ public class SijangSearchService {
 
 	    return courseList;
 	}
-	public List<Map<String, Object>> fetchFestivalListByRegionName(String regionName) {
-	    String areaCode = areaCodeMap.get(regionName);
-	    return fetchFestivalList(areaCode);  // 기존 메서드 활용
-	}
-
-
+	
 	public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
 	    double earthRadius = 6371.0; // km 단위
 	    double dLat = Math.toRadians(lat2 - lat1);
@@ -292,9 +247,9 @@ public class SijangSearchService {
 	    try {
 	        String rawServiceKey = "2jgkuxtnmXwkyNhBItGVEgjMOV8IATXuwlZLJsbjbELR1bhnG0pCi7GH4eJlWLhuC1sohQgeOlCeX1WwrhWLSA==";
 	        String encodedServiceKey = URLEncoder.encode(rawServiceKey, StandardCharsets.UTF_8);
-
+	        System.out.println("서비스에서 받은 지역코드 : " + areaCode);
 	        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
+	        
 	        String apiUrl = "https://apis.data.go.kr/B551011/KorService2/searchFestival2"
 	            + "?serviceKey=" + encodedServiceKey
 	            + "&MobileOS=ETC"
@@ -302,11 +257,8 @@ public class SijangSearchService {
 	            + "&_type=json"
 	            + "&numOfRows=20"
 	            + "&pageNo=1"
+	            + "&areaCode=" + areaCode
 	            + "&eventStartDate=" + today;
-
-	        if (areaCode != null && !areaCode.trim().isEmpty()) {
-	            apiUrl += "&areaCode=" + areaCode;
-	        }
 
 	        URL url = new URL(apiUrl);
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -320,8 +272,13 @@ public class SijangSearchService {
 	                sb.append(line);
 	            }
 	            in.close();
-
-	            JSONObject json = new JSONObject(sb.toString());
+	            String responseString = sb.toString();
+                System.out.println("📡 API 응답 원문: " + responseString);
+                JSONObject json = new JSONObject(responseString);
+                if (!json.has("response")) {
+                    System.out.println("❌ API 응답에 'response'가 없습니다. 요청 URL 확인 필요.");
+                    return Collections.emptyList();
+                }
 	            JSONObject response = json.getJSONObject("response");
 	            JSONObject body = response.getJSONObject("body");
 	            JSONObject items = body.getJSONObject("items");
@@ -340,6 +297,7 @@ public class SijangSearchService {
 	                festival.put("eventEndDate", item.optString("eventenddate", ""));
 
 	                festivalList.add(festival);
+
 	            }
 	        } else {
 	            System.out.println("축제 API 오류 코드: " + conn.getResponseCode());
@@ -351,27 +309,9 @@ public class SijangSearchService {
 
 	    return festivalList;
 	}
-	// 지역명 → areaCode 매핑
-	private static final Map<String, String> areaCodeMap = new HashMap<>();
-
-	static {
-	    areaCodeMap.put("서울특별시", "1");
-	    areaCodeMap.put("인천광역시", "2");
-	    areaCodeMap.put("대전광역시", "3");
-	    areaCodeMap.put("대구광역시", "4");
-	    areaCodeMap.put("광주광역시", "5");
-	    areaCodeMap.put("부산광역시", "6");
-	    areaCodeMap.put("울산광역시", "7");
-	    areaCodeMap.put("세종특별자치시", "8");
-	    areaCodeMap.put("경기도", "31");
-	    areaCodeMap.put("강원도", "32");
-	    areaCodeMap.put("충청북도", "33");
-	    areaCodeMap.put("충청남도", "34");
-	    areaCodeMap.put("경상북도", "35");
-	    areaCodeMap.put("경상남도", "36");
-	    areaCodeMap.put("전라북도", "37");
-	    areaCodeMap.put("전라남도", "38");
-	    areaCodeMap.put("제주특별자치도", "39");
+	public List<Map<String, Object>> fetchAllFestivals() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
