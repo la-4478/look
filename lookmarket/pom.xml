@@ -241,6 +241,12 @@
 		    <artifactId>json</artifactId>
 		    <version>20230227</version>
 		</dependency>
+		<!-- safeText 함수사용 -->
+		<dependency>
+		    <groupId>org.owasp.encoder</groupId>
+		    <artifactId>encoder</artifactId>
+		    <version>1.2.3</version>
+		</dependency>
 	</dependencies>
 
 
