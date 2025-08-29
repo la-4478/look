@@ -38,10 +38,5 @@ public class DeliveryServiceImpl implements DeliveryService {
 		deliveryDAO.cencelDlivery(o_id);
 		
 	}
-
-	@Override
-	public List<DeliveryVO> allDeliList() throws Exception {
-		return deliveryDAO.allDeliList();
-	}
 	
 }

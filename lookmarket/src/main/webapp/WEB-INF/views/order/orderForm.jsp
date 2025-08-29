@@ -203,7 +203,9 @@
       card_pay_month: cardPayMonthFromPO,
       paymentId: paymentId,
       portone_paymentKey: paymentKey,
-      paymentStatus: response.status
+      paymentStatus: response.status,
+      couponDiscount: toInt(document.querySelector('#couponDiscountVal')?.value), //할인금액 추가
+      couponId: document.querySelector('#couponId')?.value || null
     };
 
     try {

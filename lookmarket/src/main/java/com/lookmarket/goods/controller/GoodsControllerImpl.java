@@ -890,7 +890,7 @@ public class GoodsControllerImpl implements GoodsController {
 		if (role == null || role.intValue() != 3) {
 			System.out.println("권한이 없습니다.");
 			ra.addFlashAttribute("msg", "권한이 없습니다.");
-			return "redirect:/admin/allGoodsList";
+			return "redirect:/admin/allGoodsList.do";
 		}
 
 		int deleted = goodsService.deleteGoods(gId); // 하드삭제: DELETE FROM goods
@@ -900,7 +900,7 @@ public class GoodsControllerImpl implements GoodsController {
 		} else {
 			ra.addFlashAttribute("msg", "삭제 대상이 없거나 이미 삭제되었습니다.");
 		}
-		return "redirect:/admin/allGoodsList";
+		return "redirect:/admin/allGoodsList.do";
 	}
 	
 
