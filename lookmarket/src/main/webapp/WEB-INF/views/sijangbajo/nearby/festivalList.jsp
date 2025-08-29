@@ -80,15 +80,15 @@
 <script>
 $(document).ready(function() {
     $('#areaCode').change(function() {
-        var selectedArea = $(this).val();
+        var selectedArea = $('#areaCode').val();
         if (!selectedArea) {
             $('#festivalContainer').html('<p>지역을 선택해주세요.</p>');
             clearMarkers(); // 지도 마커도 초기화
             return;
         }
         $.ajax({
-            url: '${pageContext.request.contextPath}/api/festivals.do',
-            type: 'GET',
+            url: '${pageContext.request.contextPath}/sijangbajo/api/festivals.do',
+            type: 'get',
             data: { areaCode: selectedArea },
             success: function(data) {
                 var festivalContainer = $('#festivalContainer');

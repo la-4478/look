@@ -544,18 +544,19 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         return mav;
     }
 
-    @GetMapping("/api/festivals.do")
+    
+    @ResponseBody
+    @RequestMapping(value="/api/festivals.do", method = RequestMethod.GET)
     public ResponseEntity<List<Map<String, Object>>> getFestivalsByRegion(
             @RequestParam(value = "areaCode", required = false) String areaCode) {
 
-        List<Map<String, Object>> festivals;
-
+        List<Map<String, Object>> fetchFestivalList;
         if (areaCode == null || areaCode.isEmpty()) {
             // 전체 축제 중 진행 중인 것만 필터링
             List<Map<String, Object>> allFestivals = sijangService.fetchAllFestivals(); // 전체 API 데이터
             LocalDate today = LocalDate.now();
 
-            festivals = allFestivals.stream()
+            fetchFestivalList = allFestivals.stream()
                 .filter(f -> {
                     try {
                         String startStr = (String) f.get("eventStartDate");
@@ -573,10 +574,12 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
         } else {
             // 지역별 축제 리스트
-            festivals = sijangService.fetchFestivalListByRegionName(areaCode);
+        	System.out.println("받은 지역코드 : " + areaCode);
+        	fetchFestivalList = sijangService.fetchFestivalList(areaCode);
+            System.out.println("festivals : " + fetchFestivalList);
         }
 
-        return ResponseEntity.ok(festivals);
+        return ResponseEntity.ok(fetchFestivalList);
     }
 
 
