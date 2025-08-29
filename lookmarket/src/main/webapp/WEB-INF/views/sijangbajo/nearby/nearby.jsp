@@ -108,10 +108,15 @@ th {
 	let currentInfoWindow = null; // 목록 클릭 시 열린 인포윈도우를 관리
 	
 	function safeText(value) {
-	    return (typeof value === 'string' || typeof value === 'number') && value !== null && value !== undefined
-	        ? String(value).trim()
-	        : '';
-	}
+		  if (!value) return '';
+		  // XSS 방지 필터링 예시
+		  return String(value)
+		    .replace(/&/g, '&amp;')
+		    .replace(/</g, '&lt;')
+		    .replace(/>/g, '&gt;')
+		    .replace(/"/g, '&quot;')
+		    .replace(/'/g, '&#39;');
+		}
 var contextPath = '<c:out value="${contextPath}"/>';
 
 const regionCoordMap = {
@@ -167,22 +172,19 @@ $(function(){
     $('#resultBody').on('click', '.result-row', function(){
         const lat = parseFloat($(this).data('lat'));
         const lng = parseFloat($(this).data('lng'));
-        const name = $(this).find('td:first').text(); // 가게 이름
+
         if (!isNaN(lat) && !isNaN(lng)) {
             const position = new kakao.maps.LatLng(lat, lng);
 
-            // 기존 클릭 마커 제거
             if (clickMarker) {
                 clickMarker.setMap(null);
                 clickMarker = null;
             }
 
-            // 기존 열린 인포윈도우 닫기
             if (currentInfoWindow) {
                 currentInfoWindow.close();
             }
 
-            // 마커 배열에서 해당 좌표 마커 찾기
             let targetMarker = null;
             for(let i = 0; i < markers.length; i++) {
                 const pos = markers[i].getPosition();
@@ -192,22 +194,42 @@ $(function(){
                 }
             }
 
+            let content = '';
+            if (targetMarker && targetMarker.storeData) {  // ✅ 수정됨: 마커에서 store 데이터 꺼냄
+                const s = targetMarker.storeData;
+                content = `
+                	  <div style="padding:10px; font-size:13px; line-height:1.6;">
+                    <strong>\${safeText(s.bizesNm) || '이름없음'}</strong><br>
+                    <span>\${safeText(s.indsLclsNm)} / \${safeText(s.indsMclsNm)} / \${safeText(s.indsSclsNm)}</span><br>
+                    <span>\${safeText(s.rdnmAdr) || '주소없음'}</span>
+                  </div>
+                `;
+            } else {
+                const $tds = $(this).find('td');
+                const name = $tds.eq(0).text().trim();
+                const category = $tds.eq(1).text().trim();
+                const address = $tds.eq(2).text().trim();
+                content = `
+                    <div style="padding:10px; font-size:13px; line-height:1.6;">
+                        <strong>${name ? name : '이름없음'}</strong><br>
+                        <span>${category ? category : '업종 정보 없음'}</span><br>
+                        <span>${address ? address : '주소 없음'}</span>
+                    </div>
+                `;
+            }
+
             if (targetMarker) {
-                // 마커가 있으면 해당 마커를 사용해 인포윈도우 띄우기
-                infowindow.setContent(targetMarker.content || `<div style="padding:5px; font-size:13px;">${name}</div>`);
+                infowindow.setContent(content);
                 infowindow.open(map, targetMarker);
                 currentInfoWindow = infowindow;
-
-                // 지도 중앙 이동 및 확대
                 map.setCenter(position);
                 map.setLevel(3);
             } else {
-                // 마커가 없으면 새로 생성 (필요하다면)
                 clickMarker = new kakao.maps.Marker({
                     position: position,
                     map: map
                 });
-                infowindow.setContent(`<div style="padding:5px; font-size:13px;">${name}</div>`);
+                infowindow.setContent(content);
                 infowindow.open(map, clickMarker);
                 currentInfoWindow = infowindow;
                 map.setCenter(position);
@@ -215,6 +237,7 @@ $(function(){
             }
         }
     });
+
     
     // 검색
     $('#searchForm').submit(function(e){
@@ -274,28 +297,36 @@ $(function(){
             	            map: map
             	        });
 
-            	        (function(s) {
-            	            kakao.maps.event.addListener(marker, 'click', function() {
-            	            	
-            	                if (currentInfoWindow) {
-            	                    currentInfoWindow.close();
-            	                }
+            	        marker.storeData = store; // ✅ 이거 여기서 넣어야 돼!!!
 
-            	                const content = `
-            	                    <div style="padding:10px; font-size:13px; line-height:1.6;">
-            	                        <strong>\${safeText(s.bizesNm) || '이름없음'}</strong><br>
-            	                        <span>\${safeText(s.indsLclsNm)} / \${safeText(s.indsMclsNm)} / \${safeText(s.indsSclsNm)}</span><br>
-            	                        <span>\${safeText(s.rdnmAdr) || '주소없음'}</span>
-            	                    </div>
-            	                `;
+            	        marker.content = `
+            	            <div style="padding:10px; font-size:13px; line-height:1.6;">
+            	                <strong>\${safeText(store.bizesNm) || '이름없음'}</strong><br>
+            	                <span>\${safeText(store.indsLclsNm)} / \${safeText(store.indsMclsNm)} / \${safeText(store.indsSclsNm)}</span><br>
+            	                <span>\${safeText(store.rdnmAdr) || '주소없음'}</span>
+            	            </div>
+            	        `;
 
-            	                infowindow.setContent(content);
-            	                infowindow.open(map, marker);
-            	                currentInfoWindow = infowindow;
-            	            });
-            	        })(store);
+            	        // 마커 클릭 이벤트 등록도 여기에
+            	        kakao.maps.event.addListener(marker, 'click', function () {
+            	            if (currentInfoWindow) currentInfoWindow.close();
 
-            	        markers.push(marker);
+            	            const s = marker.storeData; // ✅ 마커가 눌렸을 때 가져와야 함
+
+            	            const content = `
+            	                <div style="padding:10px; font-size:13px; line-height:1.6;">
+            	                    <strong>\${safeText(s.bizesNm) || '이름없음'}</strong><br>
+            	                    <span>\${safeText(s.indsLclsNm)} / \${safeText(s.indsMclsNm)} / \${safeText(s.indsSclsNm)}</span><br>
+            	                    <span>\${safeText(s.rdnmAdr) || '주소없음'}</span>
+            	                </div>
+            	            `;
+
+            	            infowindow.setContent(content);
+            	            infowindow.open(map, marker);
+            	            currentInfoWindow = infowindow;
+            	        });
+
+            	        markers.push(marker); // ✅ 배열에도 넣어주고
             	    }
             	});
                 $('#resultTable').show();

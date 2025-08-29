@@ -323,7 +323,7 @@ public class BusinessControllerImpl implements BusinessController{
 	    mav.addObject("viewName", "/business/blackBoardDetail");
 	    
 	    session.setAttribute("sideMenu", "reveal");
-	    session.setAttribute("sideMenu_option", "community_admin");
+	    session.setAttribute("sideMenu_option", "myPage_business");
 	    
 	    return mav;
 	}
