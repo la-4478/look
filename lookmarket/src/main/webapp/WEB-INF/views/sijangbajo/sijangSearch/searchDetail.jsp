@@ -1,61 +1,49 @@
 <%@ page language="java" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="contextPath"  value="${pageContext.request.contextPath}" />
+
+<!-- 지도 -->
 <div id="map" style="width:83.5%;height:400px;"></div>
 
 <script>
 (function () {
   /** ********************************************************************
-   *  Kakao SDK 로딩/지도 초기화 보장 + 역지오코딩 주소 표시
-   *  - SDK가 늦게 와도 boot()가 재시도
-   *  - moveMarker가 초기화 전에 호출되면 큐에 쌓았다가 flush
-   *  - InfoWindow에는 "이 위치로 이동했습니다" 대신 좌표에 대한 주소를 표시
+   * Kakao 지도: 초기엔 마커 0개. 검색/선택 시에만 렌더링.
    ********************************************************************* */
 
-  // ── 디버깅 로그: SDK 로딩 상태 ──
-  var sdkScript = document.querySelector('script[src*="dapi.kakao.com/v2/maps/sdk.js"]');
-  console.log("[Kakao SDK src]", sdkScript ? sdkScript.src : "NOT FOUND");
-  console.log("[kakao defined?]", !!window.kakao, "maps?", !!(window.kakao && kakao.maps));
+  // 전역 상태
+ 
+	var _focusInfoWindow = null;
+	window.map = window.map || null;
+	window.clusterer = window.clusterer || null;
+	window._pendingMoves = window._pendingMoves || [];
+	var _focusMarker = null;
+	var _nearbyMarkers = [];
+	var _marketMarkers = [];
+	var geocoder = null;
 
-  // ── 전역 객체들 ──
-  window.map = window.map || null;               // kakao.maps.Map 인스턴스
-  window.clusterer = window.clusterer || null;   // MarkerClusterer
-  window._pendingMoves = window._pendingMoves || []; // 초기화 전 moveMarker 호출 큐
-  var _focusMarker = null;                       // 리스트 선택 시 강조 마커
-  var _nearbyMarkers = [];                       // 주변 상권 마커들
-  var geocoder = null;                           // 역지오코딩용 Geocoder
+  // 서버에서 내려준(서울) 데이터는 “미리 적재”만 하고, 초기에는 그리지 않음
+  var _preloadedMarkets = (function(){
+    try { return ${seoulSijangListJson}; } catch(e) { return []; }
+  })();
 
-  // ────────────────────────────────────────────────────────────────────
-  // 1) 지도 초기화
-  // ────────────────────────────────────────────────────────────────────
+  // 지도 초기화
   function initMap() {
     var el = document.getElementById('map');
-    if (!el) {
-      console.error("#map element not found");
-      return;
-    }
-
-    // 컨테이너가 display:none이면 초기 레이아웃 계산이 꼬일 수 있음 → 약간 뒤에 relayout
-    if (el.offsetWidth === 0 || el.offsetHeight === 0) {
-      console.warn("[Map] container size is 0. relayout scheduled…");
-      setTimeout(function(){ if (window.map) window.map.relayout(); }, 250);
-    }
+    if (!el) { console.error("#map element not found"); return; }
 
     // 지도 생성 (서울 시청 근처)
     window.map = new kakao.maps.Map(el, {
       center: new kakao.maps.LatLng(37.566826, 126.9786567),
       level: 7
     });
-    console.log("[Map] initialized");
 
-    // Geocoder 생성 (services 라이브러리 필요)
+    // Geocoder
     if (kakao.maps.services && kakao.maps.services.Geocoder) {
       geocoder = new kakao.maps.services.Geocoder();
-    } else {
-      console.warn("[Kakao] services 라이브러리가 없습니다. 주소 표시 불가");
     }
 
-    // 클러스터러 생성(라이브러리가 있으면)
+    // 클러스터러
     if (kakao.maps.MarkerClusterer) {
       window.clusterer = new kakao.maps.MarkerClusterer({
         map: map,
@@ -64,79 +52,65 @@
       });
     }
 
-    // 서버에서 내려준 시장 데이터로 마커 렌더링
-    renderMarketsSafe();
+    // ✅ 초기에는 마커를 그리지 않는다!
+    // renderMarkets(_preloadedMarkets);  ← 호출하지 않음
 
     // 초기화 이후, 대기 중이던 moveMarker 요청 처리
     if (window._pendingMoves.length) {
-      console.log("[Map] flushing pending moves:", window._pendingMoves.length);
       var q = window._pendingMoves.splice(0);
       q.forEach(function (it) { window.moveMarker(it.lat, it.lng, it.title); });
     }
 
-    // 탭 전환 등으로 뒤늦게 보이는 경우 대비해 relayout
     setTimeout(function(){ if (window.map) window.map.relayout(); }, 400);
   }
 
-  // ────────────────────────────────────────────────────────────────────
-  // 2) 좌표 → 주소 (역지오코딩) 헬퍼
-  //    - lng, lat 순서 주의: Kakao는 x=lng, y=lat
-  // ────────────────────────────────────────────────────────────────────
+  // 좌표 → 주소 (역지오코딩)
   function reverseGeocode(lng, lat, cb) {
     if (!geocoder) { cb(null); return; }
     geocoder.coord2Address(Number(lng), Number(lat), function(result, status) {
-      if (status !== kakao.maps.services.Status.OK || !result || !result.length) {
-        cb(null);
-        return;
-      }
+      if (status !== kakao.maps.services.Status.OK || !result || !result.length) { cb(null); return; }
       var road  = result[0].road_address && result[0].road_address.address_name;
       var jibun = result[0].address && result[0].address.address_name;
       cb(road || jibun || null);
     });
   }
 
-  // ────────────────────────────────────────────────────────────────────
-  // 3) 시장 데이터 렌더 (예외 안전 + 주소를 역지오코딩으로 표출)
-  //    - 마커 클릭 시: 해당 좌표의 주소를 조회해서 인포윈도우에 표시
-  //    - 기존 m['지번주소'] 고정값 대신 항상 실제 좌표 기준 주소 사용
-  // ────────────────────────────────────────────────────────────────────
-  function renderMarketsSafe() {
-    var markets;
-    try {
-      // 컨트롤러에서 JSON 문자열로 내려준 걸 그대로 EL로 주입한다고 가정
-      markets = ${seoulSijangListJson};
-      console.log("[markets]", Array.isArray(markets) ? markets.length : markets);
-    } catch (e) {
-      console.error("seoulSijangListJson 파싱 오류:", e);
-      markets = [];
-    }
+  // 전통시장 마커 모두 제거
+  function clearMarketMarkers() {
+    if (window.clusterer) clusterer.clear();
+    _marketMarkers.forEach(function(m){ m.setMap && m.setMap(null); });
+    _marketMarkers = [];
+    if (_focusInfoWindow) _focusInfoWindow.close();
+  }
 
-    var markers = (markets || [])
+  // 전달된 시장 리스트 렌더(수동 호출)
+  function renderMarkets(markets) {
+    if (!Array.isArray(markets)) markets = [];
+    clearMarketMarkers();
+
+    var markers = markets
       .filter(function(m){ return m.lat && m.lng; })
       .map(function(m){
         var lat = Number(m.lat), lng = Number(m.lng);
         var marker = new kakao.maps.Marker({
           position: new kakao.maps.LatLng(lat, lng)
         });
+        _marketMarkers.push(marker);
 
-        // 마커 클릭 시, 역지오코딩해서 주소 표시
-        kakao.maps.event.addListener(marker, 'click', function () {
-          // 안전한 타이틀(시장명)
-          var safeTitle = ((m['시장명'] || '전통시장') + '')
+        kakao.maps.event.addListener(marker, 'click', function(){
+          var title = ((m['시장명'] || '전통시장') + '')
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
           reverseGeocode(lng, lat, function(address){
-            var html =
-              '<div style="padding:6px 10px;">'
-              + '<b>' + safeTitle + '</b><br/>'
-              + (address ? address : '주소를 찾을 수 없습니다.');
-              
-            var iw = new kakao.maps.InfoWindow({ content: html });
-            iw.open(map, marker);
+       		if (_focusInfoWindow) { _focusInfoWindow.close(); }
+        	if (!_focusInfoWindow) {
+        	  _focusInfoWindow = new kakao.maps.InfoWindow({ removable: true });
+        	}
+        	var html = '<div style="padding:6px 10px;"><b>'+title+'</b><br/>'+(address||'주소를 찾을 수 없습니다.')+'</div>';
+        	_focusInfoWindow.setContent(html);
+        	_focusInfoWindow.open(map, marker);
             map.panTo(marker.getPosition());
           });
         });
-
         return marker;
       });
 
@@ -147,41 +121,28 @@
     }
   }
 
-  // ────────────────────────────────────────────────────────────────────
-  // 4) SDK 로딩이 늦어도 안전 부팅
-  // ────────────────────────────────────────────────────────────────────
+  // SDK 준비 보팅
   function boot() {
     if (window.kakao && kakao.maps) {
-      if (typeof kakao.maps.load === "function") {
-        kakao.maps.load(initMap); // autoload=true 환경에서도 안전
-      } else {
-        initMap();
-      }
+      if (typeof kakao.maps.load === "function") kakao.maps.load(initMap);
+      else initMap();
     } else {
-      console.warn("[Kakao] 아직 준비 안 됨. 재시도…");
-      setTimeout(boot, 150);
+      setTimeout(boot, 120);
     }
   }
   boot();
 
-  // ────────────────────────────────────────────────────────────────────
-  // 5) 외부에서 호출하는 API들
-  // ────────────────────────────────────────────────────────────────────
+  // 외부 공개 API들
+  window.clearMarketMarkers = clearMarketMarkers;
+  window.renderMarkets = renderMarkets;
+  window.getPreloadedMarkets = function(){ return _preloadedMarkets; };
 
-  /**
-   * 리스트에서 선택 시 지도 이동 + 강조 마커 + 주소 인포윈도우
-   * @param {number|string} lat 위도
-   * @param {number|string} lng 경도
-   * @param {string} title  표시할 시장명(옵션)
-   */
+  // 리스트/검색에서 호출: 지도 이동 + 강조 마커 + 주소 인포윈도우
   window.moveMarker = function (lat, lng, title) {
-    // 지도/SDK 준비 전이면 큐에 쌓고 리턴
     if (!(window.kakao && kakao.maps && window.map)) {
-      console.warn("[moveMarker] map not ready → enqueue", lat, lng, title);
       window._pendingMoves.push({ lat: Number(lat), lng: Number(lng), title: title || '' });
       return;
     }
-
     lat = Number(lat); lng = Number(lng);
     var pos = new kakao.maps.LatLng(lat, lng);
     map.panTo(pos);
@@ -189,30 +150,23 @@
     if (!_focusMarker) _focusMarker = new kakao.maps.Marker({ map: map, position: pos });
     else _focusMarker.setPosition(pos);
 
-    var safeTitle = (title || '선택한 시장')
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-    // ✅ 여기서 좌표 → 주소 변환 후 인포윈도우 표시
+    var safeTitle = (title || '선택한 시장').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     reverseGeocode(lng, lat, function(address){
-      var html =
-        '<div style="padding:6px 10px;">'
-        + '<b>' + safeTitle + '</b><br/>'
-        + (address ? address : '주소를 찾을 수 없습니다.')
-        + '</div>';
-
-      var iw = new kakao.maps.InfoWindow({ content: html });
-      iw.open(map, _focusMarker);
+    // 기존 창이 있으면 닫고 하나만 사용
+    if (_focusInfoWindow) { _focusInfoWindow.close(); }
+    if (!_focusInfoWindow) {
+      _focusInfoWindow = new kakao.maps.InfoWindow({ removable: true });
+    }
+    var html = '<div style="padding:6px 10px;"><b>'+safeTitle+'</b><br/>'+(address||'주소를 찾을 수 없습니다.')+'</div>';
+    _focusInfoWindow.setContent(html);
+    _focusInfoWindow.open(map, _focusMarker);
     });
   };
 
-  /**
-   * 주변 상권 조회(카테고리 코드: FD6=음식점, CE7=카페 등)
-   * 서버의 프록시/REST 엔드포인트로 위경도, 코드 전달 → JSON으로 POI 목록 반환 가정
-   */
+  // 주변 POI(카테고리) 열기
   window.openNearby = function (lng, lat, code) {
-    if (!window.map) { console.error("map not ready"); return; }
+    if (!window.map) return;
 
-    // 기존 주변 마커 제거
     _nearbyMarkers.forEach(function(mk){ mk.setMap(null); });
     _nearbyMarkers = [];
 
@@ -221,7 +175,6 @@
     fetch(encodeURI(url), { cache: "no-store" })
       .then(function(res){ return res.json(); })
       .then(function(data){
-        console.log("[nearby]", code, Array.isArray(data) ? data.length : data);
         (data || []).forEach(function(poi){
           var mk = new kakao.maps.Marker({
             map: map,
@@ -231,21 +184,22 @@
 
           var safeName = (poi.place_name || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
           var addr = (poi.road_address_name || poi.address_name || '');
-
           var iw = new kakao.maps.InfoWindow({
-            content:
-              '<div style="padding:6px 10px;">'
-              + safeName
-              + '<br/>' + addr
-              + '<br/>거리: ' + (poi.distance || '-') + 'm'
-              + '</div>'
+            content: '<div style="padding:6px 10px;">'+safeName+'<br/>'+addr+'<br/>거리: '+(poi.distance||'-')+'m</div>'
           });
           kakao.maps.event.addListener(mk, 'click', function(){ iw.open(map, mk); });
         });
       })
-      .catch(function(e){
-        console.error("openNearby error:", e);
-      });
+      .catch(console.error);
   };
+  
+  kakao.maps.event.addListener(map, 'click', function() {
+	  if (_focusInfoWindow) _focusInfoWindow.close();
+	});
+
+  // 안전빵: 초기엔 마커 비우기(혹시 레이아웃 상에서 다른 스크립트가 먼저 추가했을 수도 있으니)
+  window.addEventListener('DOMContentLoaded', function(){
+    if (window.clearMarketMarkers) window.clearMarketMarkers();
+  });
 })();
 </script>

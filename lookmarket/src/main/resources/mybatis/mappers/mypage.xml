@@ -193,5 +193,53 @@
 		    INSERT INTO promotion_coupon_issue(promo_id, m_id)
 		    VALUES (#{promoId}, #{memberId})
 	    ]]>
-	    </insert>    
+	</insert>    
+	<!-- 쿠폰 중복 발급 처리 -->
+	<select id="checkIssuedCoupon" resultType="int" parameterType="map">
+		<![CDATA[
+		    SELECT COUNT(*) 
+		    FROM promotion_coupon_issue 
+		    WHERE promo_id = #{promoId} AND m_id = #{memberId}
+		]]>
+	</select>
+	
+	<resultMap id="CouponResultMap" type="couponVO">
+    <result column="promo_id"             property="promoId"/>
+    <result column="promo_code"           property="promoCode"/>
+    <result column="promo_discount_type"  property="promoDiscountType"/>
+    <result column="promo_discount_value" property="promoDiscountValue"/>
+    <result column="promo_max_discount"   property="promoMaxDiscount"/>
+    <result column="promo_min_purchase"   property="promoMinPurchase"/>
+    <result column="promo_start_date"     property="promoStartDate"/>
+    <result column="promo_end_date"       property="promoEndDate"/>
+    <result column="promo_coupon_active"  property="promoCouponActive" javaType="java.lang.Boolean"/>
+    <result column="m_id"                 property="mId"/>
+    <result column="used_at"              property="promoUsedDate"/>
+  </resultMap>
+
+  <select id="getCouponsForMember" parameterType="string" resultMap="CouponResultMap">
+    SELECT
+      pc.promo_id,
+      pc.promo_code,
+      pc.promo_discount_type,
+      pc.promo_discount_value,
+      pc.promo_max_discount,
+      pc.promo_min_purchase,
+      pc.promo_start_date,
+      pc.promo_end_date,
+      pc.promo_coupon_active,
+      pci.m_id,
+      pci.used_at
+    FROM promotion_coupon pc
+    JOIN promotion_coupon_issue pci ON pci.promo_id = pc.promo_id
+    WHERE pci.m_id = #{memberId}
+      AND pci.used_at IS NULL
+      AND pc.promo_coupon_active = 1
+      AND NOW() BETWEEN pc.promo_start_date AND pc.promo_end_date
+    ORDER BY pc.promo_id DESC
+  </select>
+  <update id="useCoupon" parameterType="String">
+  	update promotion_coupon_issue set used_at = NOW() where promo_id = #{promo_id} AND m_id =#{m_id} AND used_at IS NULL
+  </update>
+	
 </mapper>

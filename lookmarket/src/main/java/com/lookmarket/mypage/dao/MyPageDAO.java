@@ -22,5 +22,6 @@ public interface MyPageDAO {
 	public List<OrderItemVO> getOrderItemsByOrderId(int oId) throws DataAccessException;
 	public List<WishListVO> getMyWishList(String m_id) throws DataAccessException;
 	public int issuePromotionCoupon(int promoId, String memberId) throws DataAccessException;
-	
+	boolean isCouponAlreadyIssued(int promoId, String memberId) throws DataAccessException;
+
 }

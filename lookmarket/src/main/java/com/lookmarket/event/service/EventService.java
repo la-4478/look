@@ -19,4 +19,6 @@ public interface EventService {
     void updateCoupon(CouponVO couponVO) throws Exception;
     void deleteCoupon(int promoId) throws Exception;
 	public List<CouponVO> selectAllCoupons() throws Exception;
+	List<CouponVO> selectCouponsIssuedToMember(String memberId) throws Exception;
+	CouponVO selectCouponById1(int promoId) throws Exception;
 }

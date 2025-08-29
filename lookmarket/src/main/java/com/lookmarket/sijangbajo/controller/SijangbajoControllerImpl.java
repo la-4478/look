@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,13 +93,13 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         String viewName = (String) request.getAttribute("viewName");
         mav.addObject("viewName", viewName);
 
-        String apiUrl1 = "https://api.odcloud.kr/api/15052837/v1/uddi:8e90c34b-c086-422f-882a-d3c15efd101f?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
+
         String apiUrl2 = "https://api.odcloud.kr/api/15052836/v1/uddi:2253111c-b6f3-45ad-9d66-924fd92dabd7?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
-        List<Map<String, String>> sijangList1 = sijangService.fetchAllDataFromApi(apiUrl1);
+
         List<Map<String, String>> sijangList2 = sijangService.fetchAllDataFromApi(apiUrl2);
 
         List<Map<String, String>> allSijangList = new ArrayList<>();
-        if (sijangList1 != null) allSijangList.addAll(sijangList1);
+
         if (sijangList2 != null) allSijangList.addAll(sijangList2);
         
         // 서울만 좌표 부여 테스트 (그대로 유지)
@@ -118,7 +119,7 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         mav.addObject("seoulSijangList", seoulWithCoord);
         mav.addObject("seoulSijangListJson", om.writeValueAsString(seoulWithCoord));
 
-        mav.addObject("sijangList1", sijangList1);
+
         mav.addObject("sijangList2", sijangList2);
 
         mav.addObject("kakaoJsKey", kakaoJsKey);
@@ -534,5 +535,39 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
         return mav;
     }
+    @GetMapping("/api/festivals.do")
+    public ResponseEntity<List<Map<String, Object>>> getFestivalsByRegion(@RequestParam("areaCode") String areaCode, HttpServletRequest request) {
+        // 🔥 normalize 사용
+    	HttpSession session = request.getSession();
+        List<Map<String, Object>> festivals = sijangService.fetchFestivalListByRegionName(areaCode);
+        session.setAttribute("festivalList", festivals);
+        return ResponseEntity.ok(festivals);
+    }
+//    @GetMapping("/api/festivals/today")
+//    @ResponseBody
+//    public ResponseEntity<List<Map<String, Object>>> getOngoingFestivalsByRegion(@RequestParam String region) {
+//        String fullRegion = normalizeSido(region);
+//        List<Map<String, Object>> allFestivals = sijangService.fetchFestivalListByRegionName(fullRegion);
+//
+//        LocalDate today = LocalDate.now();
+//
+//        List<Map<String, Object>> ongoingFestivals = allFestivals.stream()
+//            .filter(f -> {
+//                try {
+//                    String startStr = (String) f.get("startDate");
+//                    String endStr   = (String) f.get("endDate");
+//
+//                    LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.BASIC_ISO_DATE);
+//                    LocalDate end   = LocalDate.parse(endStr, DateTimeFormatter.BASIC_ISO_DATE);
+//
+//                    return !today.isBefore(start) && !today.isAfter(end);
+//                } catch (Exception e) {
+//                    return false;
+//                }
+//            })
+//            .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(ongoingFestivals);
+//    }
 
 }

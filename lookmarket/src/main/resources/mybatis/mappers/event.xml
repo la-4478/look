@@ -150,5 +150,26 @@
         DELETE FROM promotion_coupon
         WHERE promo_id = #{promoId}
     </delete>
-	
+	<select id="selectCouponsIssuedToMember"
+	        parameterType="string"
+	        resultMap="couponResultMap">
+	    SELECT 
+	        c.promo_id,
+	        c.promo_code,
+	        c.promo_discount_type,
+	        c.promo_discount_value,
+	        c.promo_max_discount,
+	        c.promo_min_purchase,
+	        c.promo_start_date,
+	        c.promo_end_date,
+	        c.promo_coupon_active,
+	        pci.m_id,
+	        pci.used_at AS promo_used_date,
+	        c.post_id
+	    FROM promotion_coupon_issue pci
+	    JOIN promotion_coupon c ON pci.promo_id = c.promo_id
+	    WHERE pci.m_id = #{memberId}
+	    ORDER BY c.promo_id DESC
+	</select>
+
 </mapper>

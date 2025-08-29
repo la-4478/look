@@ -1,0 +1,20 @@
+.container { width: 92%; margin: 0 auto; padding: 22px 0; }
+.toolbar   { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+.toolbar form { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.card      {width:80%; background:#fff; border:1px solid #e7e7e7; border-radius:10px; padding:14px; }
+table { width:100%; border-collapse: collapse; }
+th, td { border:1px solid #e6e6e6; padding:10px; text-align:center; }
+th { background:#f8f8fb; }
+tr:hover { background:#fafafa; }
+.totals { text-align:right; font-weight:bold; margin-top:12px; }
+.pill { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #ddd; font-size:12px;}
+.income { color:#09885a; font-weight:600; }
+.expense { color:#b21e1e; font-weight:600; }
+.transfer { color:#555; }
+.empty { text-align:center; color:#777; padding:24px; }
+.pager { text-align:center; margin:14px 0; display:flex; gap:10px; justify-content:center; }
+.pager a, .pager span { padding:6px 10px; border:1px solid #ddd; border-radius:6px; text-decoration:none; }
+.pager .current { background:#f1f1f7; }
+.section-title { font-size:18px; margin:8px 0; }
+.muted { color:#777; font-size:12px; }
+.divider { height:1px; background:#eee; margin:16px 0; }

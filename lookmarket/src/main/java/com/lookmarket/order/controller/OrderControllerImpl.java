@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lookmarket.cart.service.CartService;
 import com.lookmarket.cart.vo.CartVO;
 import com.lookmarket.member.vo.MemberVO;
+import com.lookmarket.order.service.CouponService;
 import com.lookmarket.order.service.DeliveryService;
 import com.lookmarket.order.service.OrderService;
 import com.lookmarket.order.vo.ApiResponse;
@@ -41,13 +42,11 @@ import jakarta.servlet.http.HttpSession;
 @Controller("orderController")
 @RequestMapping(value = "/order")
 public class OrderControllerImpl implements OrderController {
-	@Autowired
-	private OrderService orderService;
-	@Autowired
-	private CartService cartService;
-	@Autowired
-	private DeliveryService deliveryService;
-	
+	@Autowired private OrderService orderService;
+	@Autowired private CartService cartService;
+	@Autowired private DeliveryService deliveryService;
+	@Autowired private CouponService couponService;
+
 	// 클래스 안에 필드로 Random 생성 (필요시)
 	private Random random = new Random();
 
@@ -256,6 +255,7 @@ public class OrderControllerImpl implements OrderController {
 	        throws Exception {
 	    System.out.println("/payToOrderGoods.do컨트롤러 진입");
 	    HttpSession session = request.getSession();
+	    String member_id = (String)session.getAttribute("current_id");
 	    MemberVO memberInfo = (MemberVO) session.getAttribute("memberInfo");
 	    if (memberInfo == null) return new ApiResponse(false, "로그인 정보가 없습니다.");
 
@@ -298,7 +298,8 @@ public class OrderControllerImpl implements OrderController {
 	    String cardCompanyFromClient   = asString(payData.get("card_com_name"));  // (참고)
 	    Integer cardPayMonthFromClient = asInt(payData.get("card_pay_month"), 0); // (참고)
 	    String ordererPhone            = asString(payData.get("pay_order_tel"));
-
+	    Integer salesPrice = asInt(payData.get("couponDiscount"), 0);
+	    String couponId = asString(payData.get("couponId"));
 
 	    // 3) 배송비 (정책에 따라 없으면 0)
 	    Integer deliveryPrice = asInt(payData.get("oiDeliveryPrice"), 0);
@@ -369,6 +370,7 @@ public class OrderControllerImpl implements OrderController {
 	    OrderVO orderVO = new OrderVO();
 	    orderVO.setMId(memberInfo.getM_id());
 	    orderVO.setOiReceiverName(receiverName);
+	    orderVO.setOiSalePrice(salesPrice);
 	    orderVO.setOiName(orderName);
 	    orderVO.setOiReceiverPhone(
 	            (ordererPhone != null && !ordererPhone.isBlank()) ? ordererPhone : receiverPhone
@@ -461,6 +463,9 @@ public class OrderControllerImpl implements OrderController {
 	        orderService.removeCartItem(memberInfo.getM_id(), gid);
 	    }
 	    
+	    couponService.useCoupon(couponId, member_id);
+	    
+	    orderService.recordTransactionAfterPayment(orderVO, payVO);
 	    
 	    // 8) 세션 저장
 	    session.setAttribute("itemVO", itemVO);
@@ -632,6 +637,6 @@ public class OrderControllerImpl implements OrderController {
 	    mav.addObject("viewName", "/order/orderForm");
 	    return mav;
 	}
-
+	
 
 }

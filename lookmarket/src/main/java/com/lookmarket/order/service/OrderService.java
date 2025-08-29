@@ -2,8 +2,8 @@ package com.lookmarket.order.service;
 
 import java.util.List;
 
+import com.lookmarket.order.vo.OrderDTO;
 import com.lookmarket.order.vo.OrderItemVO;
-import com.lookmarket.order.vo.OrderListRowVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
 
@@ -31,11 +31,13 @@ public interface OrderService {
     
     List<OrderItemVO> getCartItemsByMemberId(String m_id) throws Exception;
 
-	public List<OrderVO> allOrderList() throws Exception;
-
-	public List<OrderItemVO> allItemList() throws Exception;
-
 	public String reviewgoodsname(int o_id)throws Exception;
 	
 	public Integer whomid(String m_id) throws Exception;
+
+	void recordTransactionAfterPayment(OrderVO orderVO, PayVO payVO) throws Exception;
+	List<OrderDTO> getPagedOrderList(int offset, int limit) throws Exception;  // 페이징된 주문목록
+    int countAllOrders() throws Exception;
+
+	List<OrderDTO> joinedOrderData();  
 }

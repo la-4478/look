@@ -1,14 +1,19 @@
 package com.lookmarket.order.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.lookmarket.account.vo.AccTxnVO;
 import com.lookmarket.cart.vo.CartVO;
+import com.lookmarket.order.vo.AccountingVO;
+import com.lookmarket.order.vo.OrderDTO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
@@ -101,16 +106,6 @@ public class OrderDAOImpl implements OrderDAO {
 	public Integer removeCartItem(CartVO cartVO) throws DataAccessException {
 		return sqlSession.selectOne("mapper.order.removeCartItem", cartVO);
 	}
-
-	@Override
-	public List<OrderVO> allOrderList() throws DataAccessException {
-		return sqlSession.selectList("mapper.admin.allOrderInfo1");
-	}
-
-	@Override
-	public List<OrderItemVO> allItemList() throws DataAccessException {
-		return sqlSession.selectList("mapper.admin.allOrderItem1");
-	}
 	
 	@Override
 	public String reviewgoodsname(int o_id) throws DataAccessException {
@@ -122,5 +117,38 @@ public class OrderDAOImpl implements OrderDAO {
 		return sqlSession.selectOne("mapper.community.whomid", m_id);
 	}
 
+	@Override
+	public void insertAccounting(AccountingVO acc) throws DataAccessException {	
+		sqlSession.insert("mapper.order.insertAccounting", acc);
+		
+	}
+
+	@Override
+	public void insertTxn(AccTxnVO txn) throws DataAccessException {
+		sqlSession.insert("mapper.acc.insertTxn", txn);
+	}
+
+	@Override
+    public List<OrderVO> selectOrderPage(int offset, int limit) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("offset", offset);
+        params.put("limit", limit);
+        return sqlSession.selectList("mapper.admin.selectOrderPage", params);
+    }
+
+    @Override
+    public List<OrderItemVO> selectOrderItemsByOrderId(int o_id) {
+        return sqlSession.selectList("mapper.admin.selectOrderItemsByOrderId", o_id);
+    }
+
+    @Override
+    public int selectOrderCount() {
+        return sqlSession.selectOne("mapper.admin.selectOrderCount");
+    }
+
+	@Override
+	public List<OrderDTO> joinedOrderData() throws DataAccessException {
+		return sqlSession.selectList("mapper.admin.joinedOrderData");
+	}
 }
 

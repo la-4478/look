@@ -42,8 +42,30 @@
     <button type="submit">검색</button>
 </form>
 
-<hr/>
+    <c:forEach var="festival" items="${festivalList}">
+        <c:if test="${not empty festival.latitude && not empty festival.longitude}">
+            var marker = new kakao.maps.Marker({
+                map: map,
+                position: new kakao.maps.LatLng(${festival.latitude}, ${festival.longitude}),
+                title: "${festival.title}"
+            });
 
+            var infowindow = new kakao.maps.InfoWindow({
+                content: "<div style='padding:5px;font-size:14px;'>${festival.title}</div>"
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseover', function() {
+                infowindow.open(map, marker);
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseout', function() {
+                infowindow.close();
+            });
+        </c:if>
+    </c:forEach>
+</script>
+
+    
 <!-- ✅ 축제 결과 리스트 -->
 <c:if test="${not empty festivalList}">
     <c:forEach var="festival" items="${festivalList}">

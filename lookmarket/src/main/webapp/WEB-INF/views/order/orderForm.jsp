@@ -3,8 +3,6 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<!DOCTYPE html>
-<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <title>결제하기</title>
@@ -16,7 +14,7 @@
 
   <link rel="stylesheet" href="${contextPath}/resources/css/cartorder.css"/>
 
-    <script>
+ <script>
   /** 숫자 안전 변환 */
   function toInt(v) {
     if (v == null) return 0;
@@ -84,7 +82,10 @@
   const ctx = "${contextPath}";
 
   function parseMoney(text){ return Number((text||"").toString().replace(/\D/g,"")); }
-  function makeOrderName(names){ return (!names||!names.length) ? "" : (names.length===1?names[0]:`${names[0]} 외 ${names.length-1}건`); }
+  function makeOrderName(names){
+	if(!names||!names.length) return "";
+	 return (names.length===1?names[0]:(names[0] + ' 외 ' + (names.length-1) + '건'));
+	 }
 
   function execDaumPostcode() {
     new daum.Postcode({
@@ -156,27 +157,27 @@
       email : email
     };
 
-    const paymentId = `PAYMENT_${Date.now()}_${Math.floor(Math.random()*1e6)}`;
+    const paymentId = 'PAYMENT_' + Date.now() + '_' + Math.floor(Math.random()*1e6);
 
    const response = await PortOne.requestPayment({
- 	  storeId:    "store-292f1f91-b8c2-4608-9394-615315d5f811",
- 	  channelKey: "channel-key-16983525-2a28-41f4-b177-b4f8e27769dc",
- 	  paymentId:  paymentId,
- 	  orderName:  payloadBase.pd_name,
- 	  totalAmount: payloadBase.price,
- 	  currency:   "KRW",
- 	  payMethod:  "CARD",  // ★ 여기! pay_method → payMethod 로 수정
- 	  customer: {
- 	    fullName:    receiverName,
- 	    phoneNumber: String(receiverPhoneRaw),
- 	    email: email,
- 	    address: {
- 	      addressLine1: roadAddress,
- 	      addressLine2: namujiAddress,
- 	      postalCode:   zipcode
- 	    }
- 	  }
- 	});
+   	  storeId:    "store-292f1f91-b8c2-4608-9394-615315d5f811",
+   	  channelKey: "channel-key-16983525-2a28-41f4-b177-b4f8e27769dc",
+   	  paymentId:  paymentId,
+   	  orderName:  payloadBase.pd_name,
+   	  totalAmount: payloadBase.price,
+   	  currency:   "KRW",
+   	  payMethod:  "CARD",  // ★ 여기! pay_method → payMethod 로 수정
+   	  customer: {
+   	    fullName:    receiverName,
+   	    phoneNumber: String(receiverPhoneRaw),
+   	    email: email,
+   	    address: {
+   	      addressLine1: roadAddress,
+   	      addressLine2: namujiAddress,
+   	      postalCode:   zipcode
+   	    }
+   	  }
+   	});
 
     if (response.code != null) {
       alert(response.message || "결제 실패");
@@ -202,7 +203,9 @@
       card_pay_month: cardPayMonthFromPO,
       paymentId: paymentId,
       portone_paymentKey: paymentKey,
-      paymentStatus: response.status
+      paymentStatus: response.status,
+      couponDiscount: toInt(document.querySelector('#couponDiscountVal')?.value), //할인금액 추가
+      couponId: document.querySelector('#couponId')?.value || null
     };
 
     try {
@@ -246,8 +249,8 @@
 
       <label for="oi_receiver_phone">수령자 연락처</label>
       <input type="text" id="oi_receiver_phone" name="oi_receiver_phone" placeholder="01012345678" pattern="[0-9]{10,11}" required>
-	  <label for="oi_member_email">구매자 이메일</label>
-	  <input type="text" id="oi_member_email" name="oi_member_email" placeholder="구매자 이메일" required>
+    	<label for="oi_member_email">구매자 이메일</label>
+    	<input type="text" id="oi_member_email" name="oi_member_email" placeholder="구매자 이메일" required>
       <label for="zipcode">우편번호</label>
       <div style="display: flex; gap: 10px;">
         <input type="text" id="zipcode" name="zipcode" placeholder="우편번호" required>
@@ -265,7 +268,7 @@
     </div>
 
     <!-- 주문상품 리스트 출력 -->
-    <div class="box">
+    <div class="listbox">
       <h2>주문 상품 목록</h2>
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
@@ -280,9 +283,9 @@
           <c:forEach var="item" items="${myOrderList}">
             <tr>
               <td style="padding: 8px;">${item.otGoodsName}</td>
-              <td style="padding: 8px; text-align: right;"><fmt:formatNumber value="${item.otGoodsPrice}" pattern="#,###" /> 원</td>
+              <td style="padding: 8px; text-align: right;"><fmt:formatNumber value="${item.otGoodsPrice}" pattern=",###" /> 원</td>
               <td style="padding: 8px; text-align: right;">${item.otGoodsQty}개</td>
-              <td style="padding: 8px; text-align: right;"><fmt:formatNumber value="${item.otGoodsPrice * item.otGoodsQty}" pattern="#,###" />원</td>
+              <td style="padding: 8px; text-align: right;"><fmt:formatNumber value="${item.otGoodsPrice * item.otGoodsQty}" pattern=",###" />원</td>
             </tr>
 
             <!-- 서버 전송용 히든 -->
@@ -300,31 +303,61 @@
       <h2>결제 정보</h2>
 
       <table class="summary-table" role="presentation">
-		  <tr>
-		    <td>상품금액</td>
-		    <td align="right"><span id="sumGoods">
-		      <fmt:formatNumber value="${totalGoodsPrice}" pattern="#,###" />원
-		    </span></td>
-		  </tr>
-		  <tr>
-		    <td>쿠폰 할인</td>
-		    <td align="right"><span id="sumCoupon">
-		      -<fmt:formatNumber value="${couponDiscount}" pattern="#,###" />원
-		    </span></td>
-		  </tr>
-		  <tr>
-		    <td>배송비</td>
-		    <td align="right"><span id="sumDelivery">
-		      +<fmt:formatNumber value="${deliveryFee}" pattern="#,###" />원
-		    </span></td>
-		  </tr>
-		  <tr><td colspan="2"><hr></td></tr>
-		  <tr>
-		    <td>총 결제금액</td>
-		    <td align="right" class="total"><span id="sumFinal">
-		      <fmt:formatNumber value="${finalTotalPrice}" pattern="#,###" />원
-		    </span></td>
-		  </tr>
+      	<tr>
+      	  <td>상품금액</td>
+      	  <td align="right"><span id="sumGoods">
+      	    <fmt:formatNumber value="${totalGoodsPrice}" pattern=",###" />원
+      	  </span></td>
+      	</tr>
+      	<tr>
+      	  <td>쿠폰 목록</td>
+      	  <td align="right">
+      	    <button type="button" id="btnOpenCoupon" class="btn" style="color:#000;">쿠폰 선택</button>
+      	    <input type="hidden" name="couponId" id="couponId">
+      	    <!-- 서버전송 명시필드 -->
+      	    <input type="hidden" name="couponDiscount" id="couponDiscount">
+      	    <span id="couponSummary" style="margin-left:8px;color:#555;">선택된 쿠폰 없음</span>
+
+      	    <!-- 모달 -->
+      	    <div id="couponModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="couponTitle">
+			  <div class="modal-content" role="document">
+			    <div class="modal-header">
+			      <h3 id="couponTitle">쿠폰 선택</h3>
+			      <button type="button" class="close" aria-label="닫기" id="btnCloseCoupon">&times;</button>
+			    </div>
+			
+			    <div class="modal-body">
+			      <div id="couponNotice" class="notice"></div>
+			      <div id="couponListBox" class="list"></div>
+			    </div>
+			
+			    <div class="modal-footer">
+			      <button type="button" id="btnApplyCoupon" class="btn primary" disabled>적용</button>
+			      <button type="button" id="btnCancelCoupon" class="btn">취소</button>
+			    </div>
+			  </div>
+			</div>
+      	  </td>
+      	</tr>
+      	<tr>
+      	  <td>쿠폰 할인</td>
+      	  <td align="right"><span id="sumCoupon">
+      	    -<fmt:formatNumber value="${couponDiscount}" pattern=",###" />원
+      	  </span></td>
+      	</tr>
+      	<tr>
+      	  <td>배송비</td>
+      	  <td align="right"><span id="sumDelivery">
+      	    +<fmt:formatNumber value="${deliveryFee}" pattern=",###" />원
+      	  </span></td>
+      	</tr>
+      	<tr><td colspan="2"><hr></td></tr>
+      	<tr>
+      	  <td>총 결제금액</td>
+      	  <td align="right" class="total"><span id="sumFinal">
+      	    <fmt:formatNumber value="${finalTotalPrice}" pattern=",###" />원
+      	  </span></td>
+      	</tr>
 		</table>
 		
 		<!-- 숫자 히든(포맷 없이 원시 숫자) : 모델이 null이면 0 -->
@@ -337,9 +370,16 @@
         <input type="checkbox" required>
               <input type="button" class="submit-btn" value="결제하기" />
       </div>
-
-
+<script>window.ctx='${contextPath}';</script>
+<script src="${contextPath}/resources/js/coupon.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    CouponModal.init({
+      apiUrl: '${contextPath}/coupon/list.do' // 네 컨트롤러 엔드포인트
+      // ids, getSubtotal, onApply 필요하면 여기서 오버라이드
+    });
+  });
+</script>
     </div>
   </div>
 </body>
-</html>
