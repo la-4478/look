@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -187,13 +188,23 @@ public class SijangSearchService {
 	    return courseList;
 	}
 	public List<Map<String, Object>> fetchFestivalListByRegionName(String regionName) {
-	    String normalizedRegionName = normalizeRegionName(regionName); // ← 정규화 적용
-	    String areaCode = areaCodeMap.get(normalizedRegionName);       // 정규화된 지역명으로 areaCode 검색
+	    String areaCode;
+	    	
+	    if (regionName.matches("\\d+")) {
+	        areaCode = regionName;
+	    } else {
+	        String normalized = normalizeRegionName(regionName);
+	        areaCode = areaCodeMap.get(normalized);
+	    }
+	    System.out.println("areaCode :" + areaCode );
 
-	    System.out.println("입력: " + regionName + " → 정규화: " + normalizedRegionName + " → areaCode: " + areaCode); // 디버깅 로그
+	    if (areaCode == null) {
+	        throw new IllegalArgumentException("유효하지 않은 지역명입니다: " + regionName);
+	    }
 
-	    return fetchFestivalList(areaCode);  // 기존 메서드 활용
+	    return fetchFestivalList(areaCode);
 	}
+
 
 
 
@@ -256,9 +267,9 @@ public class SijangSearchService {
 	    try {
 	        String rawServiceKey = "2jgkuxtnmXwkyNhBItGVEgjMOV8IATXuwlZLJsbjbELR1bhnG0pCi7GH4eJlWLhuC1sohQgeOlCeX1WwrhWLSA==";
 	        String encodedServiceKey = URLEncoder.encode(rawServiceKey, StandardCharsets.UTF_8);
-
-	        //String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
+	        System.out.println("서비스에서 받은 지역코드 : " + areaCode);
+	        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        
 	        String apiUrl = "https://apis.data.go.kr/B551011/KorService2/searchFestival2"
 	            + "?serviceKey=" + encodedServiceKey
 	            + "&MobileOS=ETC"
@@ -266,7 +277,8 @@ public class SijangSearchService {
 	            + "&_type=json"
 	            + "&numOfRows=20"
 	            + "&pageNo=1"
-	            + "&areaCode=" + areaCode;
+	            + "&areaCode=" + areaCode
+	            + "&eventStartDate=" + today;
 
 	        URL url = new URL(apiUrl);
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -280,8 +292,13 @@ public class SijangSearchService {
 	                sb.append(line);
 	            }
 	            in.close();
-
-	            JSONObject json = new JSONObject(sb.toString());
+	            String responseString = sb.toString();
+                System.out.println("📡 API 응답 원문: " + responseString);
+                JSONObject json = new JSONObject(responseString);
+                if (!json.has("response")) {
+                    System.out.println("❌ API 응답에 'response'가 없습니다. 요청 URL 확인 필요.");
+                    return Collections.emptyList();
+                }
 	            JSONObject response = json.getJSONObject("response");
 	            JSONObject body = response.getJSONObject("body");
 	            JSONObject items = body.getJSONObject("items");
@@ -300,6 +317,7 @@ public class SijangSearchService {
 	                festival.put("eventEndDate", item.optString("eventenddate", ""));
 
 	                festivalList.add(festival);
+
 	            }
 	        } else {
 	            System.out.println("축제 API 오류 코드: " + conn.getResponseCode());
@@ -338,13 +356,13 @@ public class SijangSearchService {
 	private static final Map<String, String> areaCodeMap = new HashMap<>();
 
 	static {
-	    areaCodeMap.put("서울특별시", "1");
-	    areaCodeMap.put("인천광역시", "2");
-	    areaCodeMap.put("대전광역시", "3");
-	    areaCodeMap.put("대구광역시", "4");
-	    areaCodeMap.put("광주광역시", "5");
-	    areaCodeMap.put("부산광역시", "6");
-	    areaCodeMap.put("울산광역시", "7");
+	    areaCodeMap.put("1", "서울");
+	    areaCodeMap.put("인천", "2");
+	    areaCodeMap.put("대전", "3");
+	    areaCodeMap.put("대구", "4");
+	    areaCodeMap.put("광주", "5");
+	    areaCodeMap.put("부산", "6");
+	    areaCodeMap.put("울산", "7");
 	    areaCodeMap.put("세종특별자치시", "8");
 	    areaCodeMap.put("경기도", "31");
 	    areaCodeMap.put("강원도", "32");
