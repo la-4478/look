@@ -23,7 +23,7 @@
             <select id="promoDiscountType" name="promoDiscountType" required>
                 <option value="">-- 선택 --</option>
                 <option value="1">정률 할인 (%)</option>
-                <option value="2">정액 할인 (₩)</option>
+<!--                 <option value="2">정액 할인 (₩)</option> -->
             </select>
         </div>
 

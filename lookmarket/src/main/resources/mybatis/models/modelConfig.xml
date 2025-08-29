@@ -37,7 +37,7 @@
 	    <typeAlias type="com.lookmarket.account.vo.AccCategoryVO" alias="accCategoryVO"/>
 	    <typeAlias type="com.lookmarket.account.vo.AccTxnVO" alias="accTxnVO"/>
 	    <typeAlias type="com.lookmarket.notify.vo.NotifyVO" alias="notifyVO"/>
-	    <typeAlias type="com.lookmarket.order.vo.CouponVO" alias="ecouponVO"/>
+	    <typeAlias type="com.lookmarket.event.vo.CouponVO" alias="couponVO"/>	    
   	</typeAliases>
 
 

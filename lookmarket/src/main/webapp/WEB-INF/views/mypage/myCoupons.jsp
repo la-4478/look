@@ -30,9 +30,9 @@
                     <c:forEach var="coupon" items="${myCoupons}">
                         <tr>
                             <td>${coupon.promoCode}</td>
-                            <td>${coupon.promoDiscountValue}</td>
-                            <td>${coupon.promoMaxDiscount}</td>
-                            <td>${coupon.promoMinPurchase}</td>
+                            <td> <fmt:formatNumber value="${Math.floor(coupon.promoDiscountValue)}" pattern="0" />%</td>
+                            <td>${coupon.promoMaxDiscount}원</td>
+                            <td>${coupon.promoMinPurchase}원</td>
                             <td>
 							    <fmt:formatDate value="${coupon.promoStartDate}" pattern="yyyy-MM-dd" />
 							    ~

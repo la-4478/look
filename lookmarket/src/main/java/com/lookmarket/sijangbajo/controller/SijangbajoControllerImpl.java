@@ -93,13 +93,13 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         String viewName = (String) request.getAttribute("viewName");
         mav.addObject("viewName", viewName);
 
-        String apiUrl1 = "https://api.odcloud.kr/api/15052837/v1/uddi:8e90c34b-c086-422f-882a-d3c15efd101f?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
+
         String apiUrl2 = "https://api.odcloud.kr/api/15052836/v1/uddi:2253111c-b6f3-45ad-9d66-924fd92dabd7?page=1&perPage=1000&serviceKey=YU6e42LEcBk0HxFjOvjJmeT93M%2FftIc3HK8kXmgMnh%2Fen2s2q2dPNQKL2ifT5WQd5LnY4a2J9KmhwBMECJDMuQ%3D%3D";
-        List<Map<String, String>> sijangList1 = sijangService.fetchAllDataFromApi(apiUrl1);
+
         List<Map<String, String>> sijangList2 = sijangService.fetchAllDataFromApi(apiUrl2);
 
         List<Map<String, String>> allSijangList = new ArrayList<>();
-        if (sijangList1 != null) allSijangList.addAll(sijangList1);
+
         if (sijangList2 != null) allSijangList.addAll(sijangList2);
         
         // 서울만 좌표 부여 테스트 (그대로 유지)
@@ -119,7 +119,7 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         mav.addObject("seoulSijangList", seoulWithCoord);
         mav.addObject("seoulSijangListJson", om.writeValueAsString(seoulWithCoord));
 
-        mav.addObject("sijangList1", sijangList1);
+
         mav.addObject("sijangList2", sijangList2);
 
         mav.addObject("kakaoJsKey", kakaoJsKey);
