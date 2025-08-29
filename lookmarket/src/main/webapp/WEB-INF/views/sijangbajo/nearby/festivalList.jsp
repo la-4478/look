@@ -15,9 +15,6 @@
 
 <h2>지역 축제 검색</h2>
 
-<!-- ✅ 검색 폼 -->
-<form method="get" action="${pageContext.request.contextPath}/sijangbajo/nearby/festivalList.do">
-
     <label for="areaCode">지역 선택:</label>
     <select name="areaCode" id="areaCode">
         <option value="">-- 지역 선택 --</option>
@@ -39,51 +36,28 @@
         <option value="38" ${areaCode == '38' ? 'selected' : ''}>전라남도</option>
         <option value="39" ${areaCode == '39' ? 'selected' : ''}>제주도</option>
     </select>
-    <button type="submit">검색</button>
-</form>
-
-    <c:forEach var="festival" items="${festivalList}">
-        <c:if test="${not empty festival.latitude && not empty festival.longitude}">
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: new kakao.maps.LatLng(${festival.latitude}, ${festival.longitude}),
-                title: "${festival.title}"
-            });
-
-            var infowindow = new kakao.maps.InfoWindow({
-                content: "<div style='padding:5px;font-size:14px;'>${festival.title}</div>"
-            });
-
-            kakao.maps.event.addListener(marker, 'mouseover', function() {
-                infowindow.open(map, marker);
-            });
-
-            kakao.maps.event.addListener(marker, 'mouseout', function() {
-                infowindow.close();
-            });
-        </c:if>
-    </c:forEach>
-</script>
+    
 
     
 <!-- ✅ 축제 결과 리스트 -->
+<div id="festivalContainer">
 <c:if test="${not empty festivalList}">
     <c:forEach var="festival" items="${festivalList}">
         <div class="festival">
             <h3>${festival.title}</h3>
             <p><strong>주소:</strong> ${festival.address}</p>
-
-            <!-- 날짜 포맷 처리 -->
+		        <fmt:parseDate value="${festival.startDate}" pattern="yyyyMMdd" var="startDate" />
+				<fmt:parseDate value="${festival.endDate}" pattern="yyyyMMdd" var="endDate" />
+			</p>
+			<p><strong>기간:</strong>
+			    <fmt:formatDate value="${startDate}" pattern="yyyy-MM-dd" />
+			    ~
+			    <fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd" />
+			</p>
             <c:if test="${not empty festival.eventStartDate && not empty festival.eventEndDate}">
-                <fmt:parseDate value="${festival.eventStartDate}" pattern="yyyyMMdd" var="startDate" />
-                <fmt:parseDate value="${festival.eventEndDate}" pattern="yyyyMMdd" var="endDate" />
-                <p><strong>기간:</strong>
-                    <fmt:formatDate value="${startDate}" pattern="yyyy-MM-dd" /> ~
-                    <fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd" />
-                </p>
-            </c:if>
 
-            <!-- 이미지 처리 -->
+                
+            </c:if>
             <c:choose>
                 <c:when test="${not empty festival.image}">
                     <img src="${festival.image}" alt="${festival.title}" />
@@ -95,11 +69,62 @@
         </div>
     </c:forEach>
 </c:if>
+</div>
 
 <!-- ✅ 결과 없음 -->
 <c:if test="${empty festivalList}">
     <p>검색된 축제가 없습니다.</p>
 </c:if>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#areaCode').change(function() {
+        var selectedArea = $(this).val();
+        if (!selectedArea) {
+            $('#festivalContainer').html('<p>지역을 선택해주세요.</p>');
+            clearMarkers(); // 지도 마커도 초기화
+            return;
+        }
+        $.ajax({
+            url: '${pageContext.request.contextPath}/api/festivals.do',
+            type: 'GET',
+            data: { areaCode: selectedArea },
+            success: function(data) {
+                var festivalContainer = $('#festivalContainer');
+                festivalContainer.empty();
+
+                if (data.length === 0) {
+                    festivalContainer.append('<p>검색된 축제가 없습니다.</p>');
+                } else {
+                    data.forEach(function(festival) {
+                        var startDate = formatDate(festival.eventStartDate);
+                        var endDate = formatDate(festival.eventEndDate);
+                        var imageSrc = festival.image ? festival.image : '/images/no-image.png';
+
+                        var html = '<div class="festival">' +
+                            '<h3>' + festival.title + '</h3>' +
+                            '<p><strong>주소:</strong> ' + festival.address + '</p>' +
+                            '<p><strong>기간:</strong> ' + startDate + ' ~ ' + endDate + '</p>' +
+                            '<img src="' + imageSrc + '" alt="' + festival.title + '">' +
+                            '</div>';
+
+                        festivalContainer.append(html);
+                    });
+                }
+            },
+            error: function() {
+                alert('축제 정보를 불러오는데 실패했습니다.');
+            }
+        });
+    });
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        return dateStr.substring(0,4) + '-' + dateStr.substring(4,6) + '-' + dateStr.substring(6,8);
+    }
+});
+</script>
 
 </body>
 

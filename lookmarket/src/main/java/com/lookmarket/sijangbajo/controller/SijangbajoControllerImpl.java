@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -510,6 +512,7 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         return out;
     }
     
+ // festivalList.do 수정
     @Override
     @RequestMapping(value="/nearby/festivalList.do", method = { RequestMethod.GET, RequestMethod.POST })
     public ModelAndView festivalList(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -518,16 +521,21 @@ public class SijangbajoControllerImpl implements SijangbajoController {
         mav.addObject("viewName", "sijangbajo/nearby/festivalList");
         mav.addObject("pageType", "sijangbajo");
 
-        // 🟡 파라미터 받기
-        String areaCode = request.getParameter("areaCode"); // 예: "1" (서울)
+        String areaCode = request.getParameter("areaCode"); // 선택한 지역코드
+        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
-        // 🟢 오늘 날짜 기준
-        String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        List<Map<String, Object>> festivalList;
 
-        // 🟢 지역코드 기반으로 필터된 축제 목록 요청
-        List<Map<String, Object>> festivalList = sijangService.fetchFestivals(today);
+        if (areaCode != null && !areaCode.isEmpty()) {
+            // ✅ 지역 코드가 있을 경우 해당 지역의 축제만 가져오기
+            festivalList = sijangService.fetchFestivalList(areaCode);
+        } else {
+            // ✅ 지역 코드 없으면 전체 축제 중 오늘 날짜 기준으로 필터링
+            festivalList = sijangService.fetchFestivals(today);
+        }
+
         mav.addObject("festivalList", festivalList);
-        mav.addObject("areaCode", areaCode); // → 뷰에서 드롭다운 유지용
+        mav.addObject("areaCode", areaCode); // 드롭다운 선택 유지용
 
         HttpSession session = request.getSession();
         session.setAttribute("sideMenu", "reveal");
@@ -535,14 +543,43 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
         return mav;
     }
+
     @GetMapping("/api/festivals.do")
-    public ResponseEntity<List<Map<String, Object>>> getFestivalsByRegion(@RequestParam("areaCode") String areaCode, HttpServletRequest request) {
-        // 🔥 normalize 사용
-    	HttpSession session = request.getSession();
-        List<Map<String, Object>> festivals = sijangService.fetchFestivalListByRegionName(areaCode);
-        session.setAttribute("festivalList", festivals);
+    public ResponseEntity<List<Map<String, Object>>> getFestivalsByRegion(
+            @RequestParam(value = "areaCode", required = false) String areaCode) {
+
+        List<Map<String, Object>> festivals;
+
+        if (areaCode == null || areaCode.isEmpty()) {
+            // 전체 축제 중 진행 중인 것만 필터링
+            List<Map<String, Object>> allFestivals = sijangService.fetchAllFestivals(); // 전체 API 데이터
+            LocalDate today = LocalDate.now();
+
+            festivals = allFestivals.stream()
+                .filter(f -> {
+                    try {
+                        String startStr = (String) f.get("eventStartDate");
+                        String endStr = (String) f.get("eventEndDate");
+
+                        LocalDate start = LocalDate.parse(startStr, DateTimeFormatter.BASIC_ISO_DATE); // yyyyMMdd
+                        LocalDate end = LocalDate.parse(endStr, DateTimeFormatter.BASIC_ISO_DATE);
+
+                        return !today.isBefore(start) && !today.isAfter(end); // 진행 중인지 확인
+                    } catch (Exception e) {
+                        return false; // 날짜 파싱 실패하면 제외
+                    }
+                })
+                .collect(Collectors.toList());
+
+        } else {
+            // 지역별 축제 리스트
+            festivals = sijangService.fetchFestivalListByRegionName(areaCode);
+        }
+
         return ResponseEntity.ok(festivals);
     }
+
+
 //    @GetMapping("/api/festivals/today")
 //    @ResponseBody
 //    public ResponseEntity<List<Map<String, Object>>> getOngoingFestivalsByRegion(@RequestParam String region) {

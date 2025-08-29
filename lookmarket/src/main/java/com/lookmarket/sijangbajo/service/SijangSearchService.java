@@ -67,47 +67,6 @@ public class SijangSearchService {
 	    return dataList;
 	}
 	
-	public List<Map<String, String>> fetchAllDataFromApi1(String apiUrl) {
-		List<Map<String, String>> dataList  = new ArrayList<>();
-		
-	    try {
-	        URL url = new URL(apiUrl);
-	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-	        conn.setRequestMethod("GET");
-
-	        if (conn.getResponseCode() == 200) {
-	            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-	            StringBuilder sb = new StringBuilder();
-	            String line;
-	            while ((line = in.readLine()) != null) {
-	                sb.append(line);
-	            }
-	            in.close();
-
-	            JSONObject json = new JSONObject(sb.toString());
-	            JSONArray dataArray = json.getJSONArray("data");
-
-	            for (int i = 0; i < dataArray.length(); i++) {
-	                JSONObject item = dataArray.getJSONObject(i);
-	                Map<String, String> map = new LinkedHashMap<>(); // 순서 보장
-
-	                Iterator<String> keys = item.keys();
-	                while (keys.hasNext()) {
-	                    String key = keys.next();
-	                    map.put(key, item.optString(key, ""));
-	                }
-
-	                dataList.add(map);
-	            }
-	        } else {
-	            System.out.println("API 응답 오류: " + conn.getResponseCode());
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-
-	    return dataList;
-	}
 	
 	public List<Map<String, Object>> fetchFestivals(String startDate) {
 	    List<Map<String, Object>> festivalList = new ArrayList<>();
@@ -228,9 +187,14 @@ public class SijangSearchService {
 	    return courseList;
 	}
 	public List<Map<String, Object>> fetchFestivalListByRegionName(String regionName) {
-	    String areaCode = areaCodeMap.get(regionName);
+	    String normalizedRegionName = normalizeRegionName(regionName); // ← 정규화 적용
+	    String areaCode = areaCodeMap.get(normalizedRegionName);       // 정규화된 지역명으로 areaCode 검색
+
+	    System.out.println("입력: " + regionName + " → 정규화: " + normalizedRegionName + " → areaCode: " + areaCode); // 디버깅 로그
+
 	    return fetchFestivalList(areaCode);  // 기존 메서드 활용
 	}
+
 
 
 	public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -293,7 +257,7 @@ public class SijangSearchService {
 	        String rawServiceKey = "2jgkuxtnmXwkyNhBItGVEgjMOV8IATXuwlZLJsbjbELR1bhnG0pCi7GH4eJlWLhuC1sohQgeOlCeX1WwrhWLSA==";
 	        String encodedServiceKey = URLEncoder.encode(rawServiceKey, StandardCharsets.UTF_8);
 
-	        String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        //String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
 
 	        String apiUrl = "https://apis.data.go.kr/B551011/KorService2/searchFestival2"
 	            + "?serviceKey=" + encodedServiceKey
@@ -302,11 +266,7 @@ public class SijangSearchService {
 	            + "&_type=json"
 	            + "&numOfRows=20"
 	            + "&pageNo=1"
-	            + "&eventStartDate=" + today;
-
-	        if (areaCode != null && !areaCode.trim().isEmpty()) {
-	            apiUrl += "&areaCode=" + areaCode;
-	        }
+	            + "&areaCode=" + areaCode;
 
 	        URL url = new URL(apiUrl);
 	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -351,6 +311,29 @@ public class SijangSearchService {
 
 	    return festivalList;
 	}
+	private String normalizeRegionName(String input) {
+        if (input == null) return null;
+
+        if (input.contains("서울")) return "서울특별시";
+        if (input.contains("부산")) return "부산광역시";
+        if (input.contains("인천")) return "인천광역시";
+        if (input.contains("대전")) return "대전광역시";
+        if (input.contains("대구")) return "대구광역시";
+        if (input.contains("광주")) return "광주광역시";
+        if (input.contains("울산")) return "울산광역시";
+        if (input.contains("세종")) return "세종특별자치시";
+        if (input.contains("경기")) return "경기도";
+        if (input.contains("강원")) return "강원도";
+        if (input.contains("충북")) return "충청북도";
+        if (input.contains("충남")) return "충청남도";
+        if (input.contains("경북")) return "경상북도";
+        if (input.contains("경남")) return "경상남도";
+        if (input.contains("전북")) return "전라북도";
+        if (input.contains("전남")) return "전라남도";
+        if (input.contains("제주")) return "제주특별자치도";
+
+        return input;
+    }
 	// 지역명 → areaCode 매핑
 	private static final Map<String, String> areaCodeMap = new HashMap<>();
 
@@ -372,6 +355,11 @@ public class SijangSearchService {
 	    areaCodeMap.put("전라북도", "37");
 	    areaCodeMap.put("전라남도", "38");
 	    areaCodeMap.put("제주특별자치도", "39");
+	}
+
+	public List<Map<String, Object>> fetchAllFestivals() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
