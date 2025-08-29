@@ -11,7 +11,9 @@
 <head>
 <meta charset="UTF-8">
 <title>header</title>
-<link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css"><!-- 해더 CSS 파일 -->
+<link href="${contextPath}/resources/css/common.css" rel="stylesheet"
+	type="text/css">
+<!-- 해더 CSS 파일 -->
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -113,15 +115,15 @@ document.addEventListener("DOMContentLoaded", function(){
 			<div id="logo">
 				<c:choose>
 					<c:when test="${pageType eq 'sijangbajo'}">
-						<a href="${contextPath}/main/sijangbajoMain.do"> 
-						<img width="176" height="80" alt="시장봐조"
-							 src="${contextPath}/resources/image/sijangbajologo.png" />
+						<a href="${contextPath}/main/sijangbajoMain.do"> <img
+							width="176" height="80" alt="시장봐조"
+							src="${contextPath}/resources/image/sijangbajologo.png" />
 						</a>
 					</c:when>
 					<c:when test="${pageType eq 'jangbogo'}">
-						<a href="${contextPath}/main/jangbogoMain.do"> 
-						<img width="176" height="80" alt="장보고"
-							 src="${contextPath}/resources/image/jangbogologo.png" />
+						<a href="${contextPath}/main/jangbogoMain.do"> <img
+							width="176" height="80" alt="장보고"
+							src="${contextPath}/resources/image/jangbogologo.png" />
 						</a>
 					</c:when>
 				</c:choose>
@@ -145,32 +147,41 @@ document.addEventListener("DOMContentLoaded", function(){
 									<li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
 									<li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문내역</a></li>
 									<li><a href="${contextPath}/inquiry/inquiryList.do">1:1문의</a></li>
-									<li>${memberInfo.m_name}님 환영합니다.</li>
+									<li>${memberInfo.m_name}님환영합니다.</li>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 2}">
-									<li><a href="${contextPath}/business/businessMain.do">사업자 페이지</a></li>
-									<li><a href="${contextPath}/business/businessGoodsList.do?category=all">내 상품관리</a></li>
+									<li><a href="${contextPath}/business/businessMain.do">사업자
+											페이지</a></li>
+									<li><a
+										href="${contextPath}/business/businessGoodsList.do?category=all">내
+											상품관리</a></li>
 									<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
-									<li>${memberInfo.m_name}님 환영합니다.</li>
-									<div id="bell" class="bell" role="button" tabindex="0" aria-label="알림" data-ctx="${ctx}">
-									  🔔 <span id="badge" class="badge" style="display:none;">0</span>
-									  <div id="panel" class="panel" style="display:none;"></div><div id="notifyOverlay" style="display:none;">
-									</div>
-									<div id="notifyModal" role="dialog" aria-modal="true" aria-labelledby="notifyTitle">
-									    <div class="modal-header">
-									      <h3 id="notifyTitle">알림</h3>
-									      <button type="button" id="notifyClose" aria-label="닫기">✕</button>
-									    </div>
-									    <div id="notifyBody"><!-- 여기로 리스트가 들어감 --></div>
-									  </div>
+									<li>${memberInfo.m_name}님환영합니다.</li>
+									<div id="bell" class="bell" role="button" tabindex="0"
+										aria-label="알림" data-ctx="${ctx}">
+										🔔 <span id="badge" class="badge" style="display: none;">0</span>
+										<div id="panel" class="panel" style="display: none;"></div>
+										<div id="notifyOverlay" style="display: none;"></div>
+										<div id="notifyModal" role="dialog" aria-modal="true"
+											aria-labelledby="notifyTitle">
+											<div class="modal-header">
+												<h3 id="notifyTitle">알림</h3>
+												<button type="button" id="notifyClose" aria-label="닫기">✕</button>
+											</div>
+											<div id="notifyBody">
+												<!-- 여기로 리스트가 들어감 -->
+											</div>
+										</div>
 									</div>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
-									<li><a href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
-									<li>${memberInfo.m_name}님 환영합니다.</li>
-									<div id="bell" class="bell" role="button" tabindex="0" aria-label="알림" data-ctx="${ctx}">
-									  🔔 <span id="badge" class="badge" style="display:none;">0</span>
-									  <div id="panel" class="panel" style="display:none;"></div>
+									<li><a
+										href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
+									<li>${memberInfo.m_name}님환영합니다.</li>
+									<div id="bell" class="bell" role="button" tabindex="0"
+										aria-label="알림" data-ctx="${ctx}">
+										🔔 <span id="badge" class="badge" style="display: none;">0</span>
+										<div id="panel" class="panel" style="display: none;"></div>
 									</div>
 								</c:when>
 							</c:choose>
@@ -201,60 +212,75 @@ document.addEventListener("DOMContentLoaded", function(){
 										<a href="${contextPath}/sijangbajo/nearby/nearby.do"
 											class="menu__title">주변상권</a>
 									</div>
-									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/sijangbajo/nearby/nearby.do">주변상권</a></li>
-										<li><a
-											href="${contextPath}/sijangbajo/nearby/nearCourse.do">추천코스</a></li>
-										<li><a href="${contextPath}/sijangbajo/nearby/festivalList.do">지역축제</a></li>
-									</ul>
 								</li>
 								<li class="menu">
-
-							<!-- 사용자 (m_role == 1) -->
-								<c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
-								<div>
-									<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
-								</div>
-									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
-									</ul>
-								</c:if>
-								
-							<!-- 관리자 (m_role == 3) -->
-								<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
-								<div>
-									<a href="${contextPath}/community/blackBoardList.do" class="menu__title">커뮤니티 관리</a>
-								</div>
-									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/community/communityList.do" class="menu__title">사용자 리뷰</a></li>
-										<li><a href="${contextPath}/community/blackBoardList.do" class="menu__title">사장님 고충방</a></li>
-									</ul>
-								</c:if>
-								
-							<!-- 비회원 또는 기타 -->
-							<c:if test="${not isLogOn or empty memberInfo}">
-								<div>
-									<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
-								</div>
-							</c:if>
-							</li>
-								
-							<li class="menu">
 									<div>
-										<a href="${contextPath}/event/promotionList.do" class="menu__title">이벤트★</a>											
+										<a href="${contextPath}/sijangbajo/nearby/festivalList.do"
+											class="menu__title">지역축제</a>
+									</div>
+								</li>
+
+								<li class="menu">
+									<div>
+										<a href="${contextPath}/event/promotionList.do"
+											class="menu__title">이벤트★</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
-										<li><a href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션 목록</a></li>
-										<li><a href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰 목록</a></li>
-									</ul> 
-									<c:if test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
+										<li><a
+											href="${contextPath}/event/promotionList.do?pageType=sijangbajo">프로모션
+												목록</a></li>
+										<li><a
+											href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰
+												목록</a></li>
+									</ul> <c:if
+										test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
 										<ul id="tipSybm1" class="navbar__submenu">
-											<li><a href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션 등록</a></li>
-											<li><a href="${contextPath}/event/couponAddForm.do">쿠폰 등록</a></li>
-											<li><a href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰 목록</a></li>
+											<li><a
+												href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션
+													등록</a></li>
+											<li><a href="${contextPath}/event/couponAddForm.do">쿠폰
+													등록</a></li>
+											<li><a
+												href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰
+													목록</a></li>
 										</ul>
 									</c:if>
-							</li>
+								</li>
+
+								<!-- 사용자 (m_role == 1) -->
+								<c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
+									<div>
+										<a href="${contextPath}/community/communityList.do"
+											class="menu__title">리뷰</a>
+									</div>
+									<ul id="tipSybm1" class="navbar__submenu">
+										<li><a
+											href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
+									</ul>
+								</c:if>
+
+								<!-- 관리자 (m_role == 3) -->
+								<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+									<div>
+										<a href="${contextPath}/community/blackBoardList.do"
+											class="menu__title">커뮤니티 관리</a>
+									</div>
+									<ul id="tipSybm1" class="navbar__submenu">
+										<li><a href="${contextPath}/community/communityList.do"
+											class="menu__title">사용자 리뷰</a></li>
+										<li><a href="${contextPath}/community/blackBoardList.do"
+											class="menu__title">사장님 고충방</a></li>
+									</ul>
+								</c:if>
+
+								<!-- 비회원 또는 기타 -->
+								<c:if test="${not isLogOn or empty memberInfo}">
+									<div>
+										<a href="${contextPath}/community/communityList.do"
+											class="menu__title">리뷰</a>
+									</div>
+								</c:if>
+								</li>
 
 								<li class="menu">
 									<div>
@@ -302,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function(){
 									<div>
 										<a href="${contextPath}/community/communityList.do"
 											class="menu__title">리뷰</a>
-									</div>								
+									</div>
 								</li>
 
 								<li class="menu">
