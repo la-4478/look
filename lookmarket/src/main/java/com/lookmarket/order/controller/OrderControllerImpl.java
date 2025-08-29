@@ -465,13 +465,7 @@ public class OrderControllerImpl implements OrderController {
 	    
 	    couponService.useCoupon(couponId, member_id);
 	    
-	    orderService.confirmPaymentAndRecordAccounting(
-	    	    paymentId, paymentKey, generatedOrderId, paidTotal,
-	    	    memberInfo.getM_id(), 
-	    	    (provider != null ? provider : payMethod), // 간편결제면 provider, 아니면 method
-	    	    cardCompany,
-	    	    (cardPayMonth != null ? cardPayMonth : 0)
-	    	);
+	    orderService.recordTransactionAfterPayment(orderVO, payVO);
 	    
 	    // 8) 세션 저장
 	    session.setAttribute("itemVO", itemVO);

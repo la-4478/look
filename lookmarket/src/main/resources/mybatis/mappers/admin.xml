@@ -59,27 +59,6 @@
 	<update id="revers" parameterType="String">
 		update business_member set bm_status = 1 where m_id = #{m_id}
 	</update>
-	
-	<select id="allOrderInfo1" resultMap="orderMap">
-    	SELECT o_id, m_id, oi_delivery_price, oi_total_goods_price, oi_sale_price,
-      		oi_name, oi_receiver_name, oi_receiver_phone, oi_date,
-      		oi_delivery_address, oi_deli_namuji_address, oi_delivery_message
-       from order_info
-  	</select>
-  	
-  	<select id="allOrderItem1" resultMap="ItemMap">
-  		select 
-  		o_num, o_id, ot_g_id, ot_goods_price, ot_sale_price,
-      	ot_goods_name, ot_goods_qty
-       from order_item
-  	</select>
-  	
-  	<select id="allDelivery1" resultMap="deliMap">
-  		select 
-      		d_id, o_id, d_status, d_company, d_transport_num,
-      		d_shipped_date, d_delivery_date, d_m_id
-       	from delivery
-  	</select>
   	
   	<select id="getMemberList" resultType="memberVO">
   		select * from member where m_role = 1 or m_role = 2
@@ -88,7 +67,70 @@
   	<select id="allboardList" resultType="blackBoardVO">
   		select * from blackboard
   	</select>
-  
+  	
+	  <!-- 주문 목록 페이징 -->
+	<select id="selectOrderPage" resultMap="orderMap">
+	    SELECT o_id, m_id, oi_delivery_price, oi_total_goods_price, oi_sale_price,
+	           oi_name, oi_receiver_name, oi_receiver_phone, oi_date,
+	           oi_delivery_address, oi_deli_namuji_address, oi_delivery_message
+	    FROM order_info
+	    ORDER BY oi_date DESC
+	    LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<!-- 주문 상품 -->
+	<select id="selectOrderItemsByOrderId" resultMap="ItemMap">
+	    SELECT o_num, o_id, ot_g_id, ot_goods_price, ot_sale_price,
+	           ot_goods_name, ot_goods_qty
+	    FROM order_item
+	    WHERE o_id = #{o_id}
+	</select>
+	
+	<!-- 배송 정보 -->
+	<select id="selectDeliveryByOrderId" resultMap="deliMap">
+	    SELECT d_id, o_id, d_company, d_tracking_num, d_status, d_created_at
+	    FROM delivery
+	    WHERE o_id = #{o_id}
+	</select>
+	
+	<!-- 전체 주문 수 -->
+	<select id="selectOrderCount" resultType="int">
+	    SELECT COUNT(*) FROM order_info
+	</select>
+	<resultMap id="OrderDTO" type="com.lookmarket.order.vo.OrderDTO">
+	  <association property="order" javaType="com.lookmarket.order.vo.OrderVO">
+	    <id property="oId" column="o_id"/>
+	    <result property="oiName" column="oi_name"/>
+	    <result property="oiDeliveryAddress" column="oi_delivery_address"/>
+	    <result property="oi_deli_namuji_address" column="oi_deli_namuji_address"/>
+	    <result property="oiSalePrice" column="oi_sale_price"/>
+	  </association>
+	
+	  <association property="delivery" javaType="com.lookmarket.order.vo.DeliveryVO">
+	    <result property="d_company" column="d_company"/>
+	  </association>
+	
+	  <collection property="orderItems" ofType="com.lookmarket.order.vo.OrderItemVO">
+	    <result property="otGoodsName" column="ot_goods_name"/>
+	    <result property="otGoodsPrice" column="ot_goods_price"/>
+	  </collection>
+	</resultMap>
+		
+	<select id="joinedOrderData" resultMap="OrderDTO">
+	  SELECT 
+	    oi.o_id,
+	    oi.oi_name,
+	    oi.oi_sale_price,
+	    ot.ot_goods_name,
+	    ot.ot_goods_price,
+	    d.d_company,
+	    oi.oi_delivery_address,
+	    oi.oi_deli_namuji_address
+	  FROM order_info oi
+	  JOIN order_item ot ON oi.o_id = ot.o_id
+	  JOIN delivery d ON oi.o_id = d.o_id
+	  ORDER BY oi.o_id DESC
+	</select>
 	
 </mapper>
 

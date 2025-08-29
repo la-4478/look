@@ -1,11 +1,7 @@
 package com.lookmarket.admin.controller;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +26,7 @@ import com.lookmarket.mypage.service.MyPageService;
 import com.lookmarket.mypage.vo.MyPageVO;
 import com.lookmarket.order.service.DeliveryService;
 import com.lookmarket.order.service.OrderService;
-import com.lookmarket.order.vo.DeliveryVO;
-import com.lookmarket.order.vo.OrderItemVO;
-import com.lookmarket.order.vo.OrderVO;
+import com.lookmarket.order.vo.OrderDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -114,43 +108,58 @@ public class AdminControllerImpl implements AdminController{
 		return mav;
 	}
 	
-	@Override
 	@RequestMapping(value="/allOrderList.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView allOrderList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		//주문정보
-		HttpSession session;
-		ModelAndView mav = new ModelAndView();
-		String layout = "common/layout";
-		mav.setViewName(layout);
-		String viewName = (String)request.getAttribute("viewName");
-		mav.addObject("viewName", viewName);
-		
-		List<OrderVO> orderList = orderService.allOrderList();
-		List<OrderItemVO> orderItem = orderService.allItemList();
-		List<DeliveryVO> delivery = deliveryService.allDeliList();
-		System.out.println("orderList : " + orderList);
-		System.out.println("orderItem : " + orderItem);
-		System.out.println("delivery : " + delivery);
-		for(OrderVO vo : orderList) {
-			for(OrderItemVO vo1 : orderItem) {
-				System.out.println("o_name : " + vo1.getOtGoodsName());
-				System.out.println("금액 : " + vo1.getOtGoodsPrice());
-				System.out.println("개수 :" + vo1.getOtGoodsQty());
-			}
-			System.out.println("o_id : " + vo.getOId());
-			System.out.println("oiName : " +vo.getOiName());
-			System.out.println("주소 : " + vo.getOiDeliveryAddress());
-			
-		}
-		
-		session = request.getSession();
-		session.setAttribute("sideMenu", "reveal");
-		session.setAttribute("sideMenu_option", "myPage_admin");
-		session.setAttribute("orderList", orderList);
-		session.setAttribute("orderItem", orderItem);
-		session.setAttribute("delivery", delivery);
-		
-		return mav;
+	public ModelAndView allOrderList(HttpServletRequest request) throws Exception {
+	    ModelAndView mav = new ModelAndView("common/layout");
+	    String viewName = (String) request.getAttribute("viewName");
+	    mav.addObject("viewName", viewName);
+
+	    int page = 1;
+	    int size = 10;
+
+	    String pageParam = request.getParameter("page");
+	    if (pageParam != null && !pageParam.isEmpty()) {
+	        page = Integer.parseInt(pageParam);
+	    }
+
+	    List<OrderDTO> fullList = orderService.joinedOrderData();  // DTO로 묶인 한 줄짜리 주문 정보
+	    int totalItems = fullList.size();
+	    int totalPages = (int) Math.ceil((double) totalItems / size);
+	    System.out.println("fullList.size : " + fullList.size());
+	    for(OrderDTO order : fullList) {
+	        if (order == null) {
+	            System.out.println("order 객체가 null입니다.");
+	            continue;
+	        }
+
+	        if (order.getDelivery() == null) {
+	            System.out.println("🚨 Delivery가 null입니다!");
+	        } else {
+	            System.out.println("📦 Delivery: " + order.getDelivery());
+	        }
+
+	        if (order.getOrder() == null) {
+	            System.out.println("🚨 Order가 null입니다!");
+	        } else {
+	            System.out.println("🧾 Order: " + order.getOrder());
+	        }
+
+	        if (order.getOrderItems() == null || order.getOrderItems().isEmpty()) {
+	            System.out.println("🚨 OrderItems가 비어있습니다!");
+	        } else {
+	            System.out.println("🛒 OrderItems: " + order.getOrderItems());
+	        }
+	    }
+
+	    int start = (page - 1) * size;
+	    int end = Math.min(start + size, totalItems);
+	    List<OrderDTO> pagedList = fullList.subList(start, end);
+
+	    mav.addObject("pagedOrderList", pagedList);
+	    mav.addObject("totalPages", totalPages);
+	    mav.addObject("currentPage", page);
+
+	    return mav;
 	}
 	
 	@Override

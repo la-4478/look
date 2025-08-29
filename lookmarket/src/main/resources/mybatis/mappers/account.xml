@@ -8,17 +8,6 @@
        - org_id, posting_type 포함
        - category_id: 이체면 NULL 허용
      ================================= -->
-  <insert id="insertTxn" parameterType="com.lookmarket.account.vo.AccTxnVO"
-          useGeneratedKeys="true" keyProperty="txnId">
-    INSERT INTO acc_txn
-      (txn_date, org_id, account_id, category_id,
-       amount, memo, partner_name, order_id, payment_id,
-       transfer_key, posting_type)
-    VALUES
-      (#{txnDate}, #{orgId}, #{accountId}, #{categoryId},
-       #{amount}, #{memo}, #{partnerName}, #{orderId}, #{paymentId},
-       #{transferKey}, #{postingType})
-  </insert>
 
   <!-- 멱등성 체크: 같은 결제에 같은 posting_type 전표 존재 여부 -->
   <select id="existsPosting" parameterType="map" resultType="int">
@@ -164,5 +153,15 @@
     <include refid="txnWhere"/>
     ORDER BY t.txn_id
   </select>
+  
+  <insert id="insertTxn" parameterType="AccTxnVO">
+  INSERT INTO acc_txn (
+    txn_date, account_id, category_id, amount, memo,
+    partner_name, order_id, payment_id
+  ) VALUES (
+    NOW(), #{accountId}, #{categoryId}, #{amount}, #{memo},
+    #{partnerName}, #{orderId}, #{paymentId}
+  )
+</insert>
 
 </mapper>

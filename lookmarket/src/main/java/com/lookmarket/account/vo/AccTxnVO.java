@@ -15,8 +15,8 @@ public class AccTxnVO {
     private BigDecimal amount;      // DECIMAL(15,2)  (수입=+, 지출=-)
     private String memo;            // 비고
     private String partnerName;     // 거래처명 텍스트(옵션)
-    private Long orderId;           // 주문번호(옵션)
-    private Long paymentId;         // 결제로그 키(옵션)
+    private int orderId;           // 주문번호(옵션)
+    private String paymentId;         // 결제로그 키(옵션)
     private String transferKey;     // UUID 문자열(이체쌍 식별)
     private LocalDateTime createdAt;// TIMESTAMP
 	
@@ -63,16 +63,16 @@ public class AccTxnVO {
 	public void setPartnerName(String partnerName) {
 		this.partnerName = partnerName;
 	}
-	public Long getOrderId() {
+	public int getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(Long orderId) {
+	public void setOrderId(int orderId) {
 		this.orderId = orderId;
 	}
-	public Long getPaymentId() {
+	public String getPaymentId() {
 		return paymentId;
 	}
-	public void setPaymentId(Long paymentId) {
+	public void setPaymentId(String paymentId) {
 		this.paymentId = paymentId;
 	}
 	public String getTransferKey() {

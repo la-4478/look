@@ -1,5 +1,8 @@
 package com.lookmarket.order.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +10,15 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lookmarket.account.vo.AccTxnVO;
 import com.lookmarket.cart.dao.CartDAO;
 import com.lookmarket.cart.vo.CartVO;
+import com.lookmarket.order.dao.DeliveryDAO;
 import com.lookmarket.order.dao.OrderDAO;
 import com.lookmarket.order.portone.PortOneService;
 import com.lookmarket.order.vo.AccountingVO;
+import com.lookmarket.order.vo.DeliveryVO;
+import com.lookmarket.order.vo.OrderDTO;
 import com.lookmarket.order.vo.OrderItemVO;
 import com.lookmarket.order.vo.OrderVO;
 import com.lookmarket.order.vo.PayVO;
@@ -24,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private CartDAO cartDAO;
     @Autowired
     private PortOneService portOneService;
+    @Autowired private DeliveryDAO deliveryDAO;
 	
 	public List<OrderVO> listMyOrderGoods(OrderVO orderVO) throws Exception{
 		List<OrderVO> orderGoodsList;
@@ -87,16 +95,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderVO> allOrderList() throws Exception {
-		return orderDAO.allOrderList();
-	}
-
-	@Override
-	public List<OrderItemVO> allItemList() throws Exception {
-		return orderDAO.allItemList();
-	}
-
-	@Override
 	public String reviewgoodsname(int o_id) throws Exception {
 		return orderDAO.reviewgoodsname(o_id);
 	}
@@ -127,13 +125,49 @@ public class OrderServiceImpl implements OrderService {
 	            throw new RuntimeException("결제 검증 실패: 회계 등록 불가");
 	        }
 	    }
+	 @Override
+	 @Transactional
+	 public void recordTransactionAfterPayment(OrderVO order, PayVO pay) throws Exception {
+		 AccTxnVO txn = new AccTxnVO();
+	     txn.setTxnDate(LocalDate.now());
+	     txn.setAccountId(3L); // 포트원 정산 계좌 ID (미리 조회해도 됨)
+	     txn.setCategoryId(1L); // 상품매출 카테고리 ID
+	     txn.setAmount(BigDecimal.valueOf(order.getOiTotalGoodsPrice()));
+	     txn.setMemo("결제번호: " + order.getOId());
+	     txn.setPartnerName("사업자");
+	     txn.setOrderId(order.getOId());
+	     txn.setPaymentId(pay.getPTransactionId()); // 있으면
+
+	     orderDAO.insertTxn(txn);
+	 }
 
 	@Override
-	public void confirmPaymentAndRecordAccounting(String paymentId,
-			String paymentKey, int generatedOrderId, long paidTotal,
-			String m_id, Object object, String cardCompany, int i)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
+	public List<OrderDTO> getPagedOrderList(int offset, int limit) {
+        List<OrderVO> orders = orderDAO.selectOrderPage(offset, limit);
+        List<OrderDTO> result = new ArrayList<>();
+
+        for (OrderVO order : orders) {
+            List<OrderItemVO> items = orderDAO.selectOrderItemsByOrderId(order.getOId());
+            DeliveryVO delivery = deliveryDAO.selectDeliveryByOrderId(order.getOId());
+
+            OrderDTO dto = new OrderDTO();
+            dto.setOrder(order);
+            dto.setOrderItems(items);
+            dto.setDelivery(delivery);
+
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+	@Override
+	public int countAllOrders() {
+        return orderDAO.selectOrderCount();
+    }
+
+	@Override
+	public List<OrderDTO> joinedOrderData() {
+		return orderDAO.joinedOrderData();
 	}
 }
