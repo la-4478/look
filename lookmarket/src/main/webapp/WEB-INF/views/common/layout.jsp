@@ -13,6 +13,7 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
     <link href="${contextPath}/resources/css/chatbot.css" rel="stylesheet" type="text/css"><!-- 챗봇 CSS 파일 -->
+    <link href="${contextPath}/resources/css/admin.css" rel="stylesheet">
 </head>
 
 

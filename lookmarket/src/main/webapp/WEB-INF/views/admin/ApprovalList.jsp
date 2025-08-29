@@ -6,7 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="${contextPath}/resources/css/admin.css">
-
+</head>
+<body>
 <div class="approval-wrap">
   <h2 class="approval-title">사업자 승인 대기 목록</h2>
 
@@ -71,3 +72,4 @@
     </c:otherwise>
   </c:choose>
 </div>
+</body>

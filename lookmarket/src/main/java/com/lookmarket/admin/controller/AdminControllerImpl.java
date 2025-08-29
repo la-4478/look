@@ -244,7 +244,7 @@ public class AdminControllerImpl implements AdminController{
 		    dto.setPendingList(memberService.findbusinessMember2(member.getM_id()));
 		    approvalData.add(dto);
 		}
-		session.setAttribute("sideMenu", "reavel");
+		session.setAttribute("sideMenu", "reveal");
 		session.setAttribute("sideMenu_option", "myPage_admin");
 		mav.addObject("approvalList", approvalData);
 

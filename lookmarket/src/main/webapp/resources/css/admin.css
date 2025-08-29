@@ -25,7 +25,7 @@
   padding:0 20px;
   font-family:'Pretendard',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
   color:var(--text);
-  background:var(--surface);
+  background: transparent;
 }
 
 .approval-title{
