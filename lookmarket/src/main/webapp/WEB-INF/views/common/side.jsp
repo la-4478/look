@@ -63,10 +63,10 @@
 				<c:when test="${sideMenu_option == 'nearby'}">
 					<li>
 						<h3>주변상권</h3>
-						<ul>
-							<li><a href="${contextPath}/sijangbajo/nearby/nearby.do">주변상권</a></li>
-							<li><a href="${contextPath}/sijangbajo/nearby/nearCourse.do">추천코스</a></li>
-						</ul>
+				</c:when>
+				<c:when test="${sideMenu_option == 'festival'}">
+					<li>
+						<h3>지역축제</h3>
 				</c:when>
 				<c:when test="${sideMenu_option == 'event'}">
 					<li>

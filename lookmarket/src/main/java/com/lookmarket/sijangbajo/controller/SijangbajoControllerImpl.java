@@ -539,7 +539,7 @@ public class SijangbajoControllerImpl implements SijangbajoController {
 
         HttpSession session = request.getSession();
         session.setAttribute("sideMenu", "reveal");
-        session.setAttribute("sideMenu_option", "nearby");
+        session.setAttribute("sideMenu_option", "festival");
 
         return mav;
     }
