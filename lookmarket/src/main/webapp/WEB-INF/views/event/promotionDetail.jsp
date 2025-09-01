@@ -10,7 +10,7 @@
     <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
 
 </head>
-<body class="bg-light">
+<body>
 
 <div class="container py-5">
     <h2 class="fw-bold mb-4">프로모션 상세</h2>

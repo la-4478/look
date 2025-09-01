@@ -9,7 +9,7 @@
     <title>프로모션 목록</title>
     <link href="${contextPath}/resources/css/event.css" rel="stylesheet" type="text/css">
 </head>
-<body class="bg-light">
+<body>
 
 <div class="container py-5">
     <h2 class="mb-4 fw-bold">이벤트 프로모션</h2>

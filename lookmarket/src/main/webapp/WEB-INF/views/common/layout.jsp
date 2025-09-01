@@ -29,7 +29,7 @@
             <%@ include file="header.jsp" %>
         </header>
 
-        <div style="display: flex;">
+        <div style="display: flex; padding-top:30px;">
             <c:if test="${sideMenu == 'reveal'}">
                 <aside>
                     <%@ include file="side.jsp" %>

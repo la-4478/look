@@ -31,7 +31,7 @@
         <th>생년월일</th>
         <th>휴대폰</th>
         <th>이메일</th>
-        <th>레벨</th>
+<!--         <th>레벨</th> -->
         <th>권한</th>
         <th>가입일</th>
         <th>탈퇴일</th>
@@ -79,7 +79,7 @@
                 <span class="muted">${m.m_email}</span>
               </td>
 
-              <td class="center">${m.m_level}</td>
+<%--               <td class="center">${m.m_level}</td> --%>
 
               <!-- 권한: 숫자 → 라벨 (예시: 1=USER, 2=BUSINESS, 9=ADMIN) -->
               <td class="center">
