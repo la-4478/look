@@ -2,34 +2,24 @@
 body{background-color:#fff} /* 페이지 배경 흰색 */
 ul{list-style:none;padding:0;text-align:center} /* 리스트 불릿 제거 + 중앙 정렬 */
 a{text-decoration:none;color:#000} /* 링크 밑줄 제거 + 기본 색 */
-header{position:fixed;top:0;background-color:#fff;margin:0 auto;width:1296px;height:220px !important; overflow:visible !important; transition:none; z-index:1000; } /* 상단 고정 헤더(1296px) */
-header:hover {height: 220px !important;}
+header{position:fixed;top:0;background-color:#fff;margin:0 auto;width:1296px;height:250px !important; overflow:visible !important; transition:none; z-index:1000; } /* 상단 고정 헤더(1296px) */
 .navbar__menu{display:flex;justify-content:space-evenly;gap:40px} /* 1차 메뉴 가로 배치(균등 간격) */
-.navbar__submenu{ display: none; position: absolute; top:100%; left:0; width:160px; background-color:#f0eaff; box-shadow: 0 2px 5px rgba(0,0,0,0.15); padding: 10px 0; border-radius: 4px; z-index:1002; margin-top: 0; } /* 서브메뉴 상단 여백 */
+.navbar__submenu{ display: none; position: absolute; top:100%; left:0; width:160px; background-color:#f7f4ec; box-shadow: 0 2px 5px rgba(0,0,0,0.15); padding: 10px 0; border-radius: 4px; z-index:1002; margin-top: 0; } /* 서브메뉴 상단 여백 */
 .navbar__submenuu{ display: none; position: absolute; top:100%; left:0; width:160px; background-color:#eaffea; box-shadow: 0 2px 5px rgba(0,0,0,0.15); padding: 10px 0; border-radius: 4px; z-index:1002; margin-top: 0; } /* 서브메뉴 상단 여백 */
 .menu:hover .navbar__submenu, .menu:hover .navbar__submenuu {display: block;}/* 3) 메뉴 아이템에 호버 시 서브메뉴 보이기 */
-.contents{width:100%;height:45px;margin-top:50px;} /* 본문 영역 크기/여백 */
+.contents{width:100%;height:17%;margin-top:30px;} /* 본문 영역 크기/여백 */
 .navbar__div nav.navbar{position:relative;z-index:1001 } /* 메뉴가 헤더 위로 보이도록 z-index */
-.menu{position:relative;padding:0 10px} /* 메뉴 아이템 박스 */
-.menu__title{display:block;padding:4px 15px;font-weight:bold} /* 메뉴 타이틀(블록/패딩/볼드) */
+.menu{position:relative;padding:0 10px; font-size:15px;} /* 메뉴 아이템 박스 */
+.menu__title{display:block;padding:0px 15px;font-weight:bold; font-size:15px;} /* 메뉴 타이틀(블록/패딩/볼드) */
 .menu__title:hover{border-radius:5px;} /* 타이틀 호버 시 모서리 둥글게 */
-#head_link{display:flex;justify-content:space-between;align-items:center;padding:0 20px;width:100%} /* 상단 링크/검색 바 컨테이너 */
+#head_link{display:flex;justify-content:space-between;align-items:center;padding:0 20px;width:100%; height:20px; margin-bottom:10px; } /* 상단 링크/검색 바 컨테이너 */
 #head_link form{display:flex;align-items:center;height:40px} /* 검색 폼 정렬/높이 */
 #head_link input[type="search"]{height:32px;font-size:14px;padding:0 10px} /* 검색 입력창 크기/패딩 */
 #head_link button{height:32px;padding:0 10px;font-size:14px;margin-left:5px} /* 검색 버튼 크기/여백 */
 #head_link ul{display:flex;align-items:center;list-style:none;margin:0;padding:0} /* 우측 링크 리스트 가로 정렬 */
 #head_link ul li{font-size:14px} /* 링크 항목 텍스트 크기 */
-.bg-sijangbajo{background-color:#f0eaff} /* 보라톤 배경 테마(sijangbajo) */
+.bg-sijangbajo{background-color:#f7f4ec;} /* 보라톤 배경 테마(sijangbajo) */
 .bg-jangbogo{background-color:#eaffea} /* 연녹 배경 테마(jangbogo) */
 
 
 
-#notifyOverlay{position: fixed; inset: 0; background: rgba(0,0,0,.35);display: none; z-index: 10000;}
-#notifyModal{position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);width: min(90vw, 420px);max-height: 70vh; overflow: auto; background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.25); padding: 12px 12px 16px;}
-#notifyModal .modal-header{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;}
-#notifyModal #notifyClose{border:0; background: transparent; font-size: 18px; cursor: pointer; line-height: 1;}
-#notifyBody .item{ padding:10px 8px; border-bottom:1px solid #eee; }
-#notifyBody .item:last-child{ border-bottom:0; }
-#notifyBody .title{ font-weight:600; margin-bottom:4px; }
-#notifyBody .msg{ color:#555; font-size:13px; margin-bottom:8px; }
-#notifyBody .actions{ display:flex; gap:10px; }

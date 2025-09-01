@@ -41,15 +41,15 @@ header #head_link li {
 #head_link .no_line {
 	border-right-color: currentColor; border-right-width: medium; border-right-style: none;
 }
-/* header #search {
-	margin: 20px 10px 0px 0px; padding: 0px; float: right;
-}
-header #search .main_input {
-	padding: 0px 5px; border: 3px solid rgb(51, 102, 153); border-image: none; width: 260px; height: 22px;
-}
-header #search .btn1 {
-	border: 1px solid rgb(51, 102, 153); border-image: none; width: 55px; height: 28px; color: rgb(255, 255, 255); margin-left: 2px; background-color: rgb(51, 102, 153);
-} */
+/*  header #search { */
+/* 	margin: 20px 10px 0px 0px; padding: 0px; float: right; */
+/* } */
+/* header #search .main_input { */
+/* 	padding: 0px 5px; border: 3px solid rgb(51, 102, 153); border-image: none; width: 260px; height: 22px; */
+/* } */
+/* header #search .btn1 { */
+/* 	border: 1px solid rgb(51, 102, 153); border-image: none; width: 55px; height: 28px; color: rgb(255, 255, 255); margin-left: 2px; background-color: rgb(51, 102, 153); */
+/* }  */
 /* 부모가 flexbox라면 */
 .header {           /* 검색창을 감싸는 부모 요소 */
   display: flex;
@@ -58,8 +58,13 @@ header #search .btn1 {
   background-color: #f0f0f0;
 }
 #logo img {
-  width: 250px;
+  width: 430px;
   height: auto;
+}
+
+#logo .logo2 img {	
+	width: 390px;
+	height: auto;
 }
 
 .main-nav {
@@ -116,10 +121,10 @@ header #search .btn1 {
 
 
 aside {
-	width: 205px; float: left;
+	width: 205px; float: left; margin-top : 60px;
 }
 nav {
-	margin: 25px 0px 0px 10px; font-family: "NanumGothic", Serif; font-size: 0.8em;
+	margin: 0px 0px 0px 10px; font-family: "NanumGothic", Serif; font-size: 0.8em; padding: 0px;
 }
 nav ul {
 	list-style: none;
@@ -155,7 +160,7 @@ aside #banner {
 	background-position: left; padding: 0px 0px 0px 7px; line-height: 1.5em; background-image: url("../imgs/notice_li.gif"); background-repeat: no-repeat;
 }
 article {
-	margin: 20px 0px 0px 0px; width: 100%; float: right;
+	margin: 50px 0px 0px 0px; width: 100%; float: right;
 }
 
 .link {

@@ -264,7 +264,12 @@
       <input type="text" id="oi_deli_namuji_address" name="oi_deli_namuji_address" placeholder="나머지 주소 입력">
 
       <label for="oi_delivery_message">배송메시지</label>
-      <textarea id="oi_delivery_message" name="oi_delivery_message" rows="3" placeholder="배송 요청사항을 입력하세요."></textarea>
+      <select id="oi_delivery_message" name="oi_delivery_message">
+          <option value="부재시 문 앞" selected>부재시 문 앞</option>
+          <option value="직접 받고 부재시 문 앞">직접 받고 부재시 문 앞</option>
+          <option value="경비실">경비실</option>
+          <option value="택배함">택배함</option>
+      </select>
     </div>
 
     <!-- 주문상품 리스트 출력 -->

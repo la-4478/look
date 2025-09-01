@@ -15,6 +15,17 @@
 	type="text/css">
 <!-- 해더 CSS 파일 -->
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<style>
+#notifyOverlay{position: fixed; inset: 0; background: rgba(0,0,0,.35);display: none; z-index: 10000;}
+#notifyModal{position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);width: min(90vw, 420px);max-height: 70vh; overflow: auto; background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.25); padding: 12px 12px 16px;}
+#notifyModal .modal-header{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;}
+#notifyModal #notifyClose{border:0; background: transparent; font-size: 18px; cursor: pointer; line-height: 1;}
+#notifyBody .item{ padding:10px 8px; border-bottom:1px solid #eee; }
+#notifyBody .item:last-child{ border-bottom:0; }
+#notifyBody .title{ font-weight:600; margin-bottom:4px; }
+#notifyBody .msg{ color:#555; font-size:13px; margin-bottom:8px; }
+#notifyBody .actions{ display:flex; gap:10px; }
+</style>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
   const bell  = document.getElementById('bell');
@@ -117,11 +128,11 @@ document.addEventListener("DOMContentLoaded", function(){
 					<c:when test="${pageType eq 'sijangbajo'}">
 						<a href="${contextPath}/main/sijangbajoMain.do"> <img
 							width="176" height="80" alt="시장봐조"
-							src="${contextPath}/resources/image/sijangbajologo.png" />
+							src="${contextPath}/resources/image/sijanglogo12.png" />
 						</a>
 					</c:when>
 					<c:when test="${pageType eq 'jangbogo'}">
-						<a href="${contextPath}/main/jangbogoMain.do"> <img
+						<a href="${contextPath}/main/jangbogoMain.do"  class="logo2"> <img
 							width="176" height="80" alt="장보고"
 							src="${contextPath}/resources/image/jangbogologo.png" />
 						</a>
@@ -157,22 +168,22 @@ document.addEventListener("DOMContentLoaded", function(){
 											상품관리</a></li>
 									<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 									<li>${memberInfo.m_name}님환영합니다.</li>
-									<div id="bell" class="bell" role="button" tabindex="0"
-										aria-label="알림" data-ctx="${ctx}">
-										🔔 <span id="badge" class="badge" style="display: none;">0</span>
-										<div id="panel" class="panel" style="display: none;"></div>
-										<div id="notifyOverlay" style="display: none;"></div>
-										<div id="notifyModal" role="dialog" aria-modal="true"
-											aria-labelledby="notifyTitle">
-											<div class="modal-header">
-												<h3 id="notifyTitle">알림</h3>
-												<button type="button" id="notifyClose" aria-label="닫기">✕</button>
-											</div>
-											<div id="notifyBody">
-												<!-- 여기로 리스트가 들어감 -->
-											</div>
-										</div>
-									</div>
+<!-- 									<div id="bell" class="bell" role="button" tabindex="0" -->
+<%-- 										aria-label="알림" data-ctx="${ctx}"> --%>
+<!-- 										🔔 <span id="badge" class="badge" style="display: none;">0</span> -->
+<!-- 										<div id="panel" class="panel" style="display: none;"></div> -->
+<!-- 										<div id="notifyOverlay" style="display: none;"></div> -->
+<!-- 										<div id="notifyModal" role="dialog" aria-modal="true" -->
+<!-- 											aria-labelledby="notifyTitle"> -->
+<!-- 											<div class="modal-header"> -->
+<!-- 												<h3 id="notifyTitle">알림</h3> -->
+<!-- 												<button type="button" id="notifyClose" aria-label="닫기">✕</button> -->
+<!-- 											</div> -->
+<!-- 											<div id="notifyBody"> -->
+<!-- 												여기로 리스트가 들어감 -->
+<!-- 											</div> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
 									<li><a
@@ -249,9 +260,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
 								<!-- 사용자 (m_role == 1) -->
 								<c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
-									<div>
-										<a href="${contextPath}/community/communityList.do"
-											class="menu__title">리뷰</a>
+										<div>
+											<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
 									</div>
 									<ul id="tipSybm1" class="navbar__submenu">
 										<li><a
@@ -275,12 +285,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
 								<!-- 비회원 또는 기타 -->
 								<c:if test="${not isLogOn or empty memberInfo}">
-									<div>
-										<a href="${contextPath}/community/communityList.do"
-											class="menu__title">리뷰</a>
-									</div>
+										<div>
+											<a href="${contextPath}/community/communityList.do" class="menu__title">리뷰</a>
+										</div>	
 								</c:if>
-								</li>
 
 								<li class="menu">
 									<div>

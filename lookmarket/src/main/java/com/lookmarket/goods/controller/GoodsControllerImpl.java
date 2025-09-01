@@ -88,7 +88,8 @@ public class GoodsControllerImpl implements GoodsController {
 
 			mav.addObject("myWishList", myWishList);
 		}
-
+		session.setAttribute("sideMenu", "reveal");
+		session.setAttribute("sideMenu_option", "category");
 		return mav;
 	}
 

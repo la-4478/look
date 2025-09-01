@@ -228,3 +228,4 @@ function renderList(items, subtotal, nodes, state){
   window.CouponModal = { init: init };
 
 })(window, document);
+
