@@ -16,7 +16,7 @@
 	            <a href="${contextPath}/main/jangbogoMain.do"><img width="147px" height="62px" alt="jangbogologo" src="${contextPath}/resources/image/jangbogologo.png" /></a>
 	        </c:when>
 	        <c:otherwise>
-	            <a href="${contextPath}/main/sijangbajoMain.do"><img width="147px" height="62px" alt="sijangbajologo" src="${contextPath}/resources/image/sijangbajologo.png" /></a>
+	            <a href="${contextPath}/main/sijangbajoMain.do"><img width="147px" height="62px" alt="sijangbajologo" src="${contextPath}/resources/image/sijanglogo12.png" /></a>
 	        </c:otherwise>
 	    </c:choose>
 	

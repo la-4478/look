@@ -52,19 +52,18 @@ header #head_link li {
 /* }  */
 /* 부모가 flexbox라면 */
 .header {           /* 검색창을 감싸는 부모 요소 */
-  display: flex;
   justify-content: flex-end; /* 오른쪽 끝 정렬 */
   padding: 10px 20px;
   background-color: #f0f0f0;
 }
 #logo img {
-  width: 430px;
-  height: auto;
+  width: 450px;
+  height: 190px;
 }
 
 #logo .logo2 img {	
-	width: 390px;
-	height: auto;
+	width: 300px;
+	height: 150px;
 }
 
 .main-nav {
@@ -160,7 +159,7 @@ aside #banner {
 	background-position: left; padding: 0px 0px 0px 7px; line-height: 1.5em; background-image: url("../imgs/notice_li.gif"); background-repeat: no-repeat;
 }
 article {
-	margin: 50px 0px 0px 0px; width: 100%; float: right;
+	margin: 0px 0px 0px 0px; width: 100%; float: right;
 }
 
 .link {

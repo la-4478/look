@@ -2,7 +2,7 @@
 body{background-color:#fff} /* 페이지 배경 흰색 */
 ul{list-style:none;padding:0;text-align:center} /* 리스트 불릿 제거 + 중앙 정렬 */
 a{text-decoration:none;color:#000} /* 링크 밑줄 제거 + 기본 색 */
-header{position:fixed;top:0;background-color:#fff;margin:0 auto;width:1296px;height:250px !important; overflow:visible !important; transition:none; z-index:1000; } /* 상단 고정 헤더(1296px) */
+header{top:0;background-color:#fff;margin:0 auto;width:1296px;height:250px !important; overflow:visible !important; transition:none; z-index:1000; } /* 상단 고정 헤더(1296px) */
 .navbar__menu{display:flex;justify-content:space-evenly;gap:40px} /* 1차 메뉴 가로 배치(균등 간격) */
 .navbar__submenu{ display: none; position: absolute; top:100%; left:0; width:160px; background-color:#f7f4ec; box-shadow: 0 2px 5px rgba(0,0,0,0.15); padding: 10px 0; border-radius: 4px; z-index:1002; margin-top: 0; } /* 서브메뉴 상단 여백 */
 .navbar__submenuu{ display: none; position: absolute; top:100%; left:0; width:160px; background-color:#eaffea; box-shadow: 0 2px 5px rgba(0,0,0,0.15); padding: 10px 0; border-radius: 4px; z-index:1002; margin-top: 0; } /* 서브메뉴 상단 여백 */

@@ -99,11 +99,11 @@
 					<li>
 						<h3>카테고리</h3>
 						<ul>
-							<li><a href="${contextPath}/jangbogo/goodsList.do?">신선식품</a></li>
-							<li><a href="${contextPath}/jangbogo/goodsList.do?">가공식품</a></li>
-							<li><a href="${contextPath}/jangbogo/goodsList.do?">생활용품</a></li>
-							<li><a href="${contextPath}/jangbogo/goodsList.do?">패션잡화</a></li>
-							<li><a href="${contextPath}/jangbogo/goodsList.do?">지역특산물 </a></li>
+							<li><a href="${contextPath}/jangbogo/goodsList.do?category=fresh">신선식품</a></li>
+							<li><a href="${contextPath}/jangbogo/goodsList.do?category=processed">가공식품</a></li>
+							<li><a href="${contextPath}/jangbogo/goodsList.do?category=living">생활용품</a></li>
+							<li><a href="${contextPath}/jangbogo/goodsList.do?category=fashion">패션잡화</a></li>
+							<li><a href="${contextPath}/jangbogo/goodsList.do?category=local">지역특산물 </a></li>
 						</ul>
 				</c:when>
 			</c:choose>
