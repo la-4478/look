@@ -11,7 +11,6 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
             margin: 40px;
         }
 
@@ -169,7 +168,7 @@
     </tbody>
 </table>
 <div class="d-flex justify-content-end mb-3 ma-1">
-<a href="${contextPath}/community/blackBoardAddForm.do" class="btn btn-primary">고충방 등록</a>
+<a href="${contextPath}/business/blackBoardAddForm2.do" class="btn btn-primary">고충방 등록</a>
 </div>
 </body>
 </html>

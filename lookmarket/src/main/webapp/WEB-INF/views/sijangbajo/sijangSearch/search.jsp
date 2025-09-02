@@ -143,21 +143,12 @@
 																					var name = (item["시장명"] || "")
 																							.trim()
 																							|| "시장명 없음";
-																					var addr = ((item["지번주소"] || "")
-																							.trim())
-																							|| ((item["도로명주소"] || "")
-																									.trim())
-																							|| ((item["소재지지번주소"] || "")
-																									.trim())
-																							|| ((item["소재지 주소"] || "")
-																									.trim())
-																							|| ((item["주소"] || "")
-																									.trim())
-																							|| ((item["소재지주소"] || "")
-																									.trim())
-																							|| ((item["소재지도로명주소"] || "")
-																									.trim())
-																							|| "주소 정보 없음";
+																					var addr = ((item["도로명주소"] || "").trim())
+																			        || ((item["소재지 주소"] || "").trim())
+																			        || ((item["주소"] || "").trim())
+																			        || ((item["소재지주소"] || "").trim())
+																			        || ((item["소재지도로명주소"] || "").trim())
+																			        || "주소 정보 없음";
 																					return renderMarketItem(
 																							name,
 																							addr); // ☜ JSP와 동일 마크업

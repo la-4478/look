@@ -140,13 +140,13 @@ document.addEventListener("DOMContentLoaded", function(){
 				</c:choose>
 			</div>
 
-			<div id="head_link">
-				<form class="d-flex" role="search" action="${contextPath}/search.do"
-					method="get">
-					<input class="form-control me-2" type="search" name="q"
-						placeholder="검색어를 입력하세요" />
-					<button class="btn btn-outline-success" type="submit">🔍</button>
-				</form>
+			<div id="head_link" class="justify-content-end">
+<%-- 				<form class="d-flex" role="search" action="${contextPath}/search.do" --%>
+<!-- 					method="get"> -->
+<!-- 					<input class="form-control me-2" type="search" name="q" -->
+<!-- 						placeholder="검색어를 입력하세요" /> -->
+<!-- 					<button class="btn btn-outline-success" type="submit">🔍</button> -->
+<!-- 				</form> -->
 				<ul>
 					<c:choose>
 						<c:when test="${isLogOn eq true}">
@@ -189,11 +189,11 @@ document.addEventListener("DOMContentLoaded", function(){
 									<li><a
 										href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
 									<li>${memberInfo.m_name}님환영합니다.</li>
-									<div id="bell" class="bell" role="button" tabindex="0"
-										aria-label="알림" data-ctx="${ctx}">
-										🔔 <span id="badge" class="badge" style="display: none;">0</span>
-										<div id="panel" class="panel" style="display: none;"></div>
-									</div>
+<!-- 									<div id="bell" class="bell" role="button" tabindex="0" -->
+<%-- 										aria-label="알림" data-ctx="${ctx}"> --%>
+<!-- 										🔔 <span id="badge" class="badge" style="display: none;">0</span> -->
+<!-- 										<div id="panel" class="panel" style="display: none;"></div> -->
+<!-- 									</div> -->
 								</c:when>
 							</c:choose>
 						</c:when>
@@ -246,14 +246,8 @@ document.addEventListener("DOMContentLoaded", function(){
 									</ul> <c:if
 										test="${isLogOn==true and not empty memberInfo and memberInfo.m_role == 3}">
 										<ul id="tipSybm1" class="navbar__submenu">
-											<li><a
-												href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo">프로모션
-													등록</a></li>
-											<li><a href="${contextPath}/event/couponAddForm.do">쿠폰
-													등록</a></li>
-											<li><a
-												href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰
-													목록</a></li>
+											<li><a href="${contextPath}/event/promotionList.do">프로모션</a></li>
+											<li><a href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰 목록</a></li>
 										</ul>
 									</c:if>
 								</li>

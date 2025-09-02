@@ -73,6 +73,7 @@
 						<h3>이벤트</h3>
 						<ul>
 							<li><a href="${contextPath}/event/promotionList.do">프로모션</a></li>
+							<li><a href="${contextPath}/event/couponList.do?pageType=sijangbajo">쿠폰 목록</a></li>
 						</ul>
 				</c:when>
 				

@@ -7,7 +7,6 @@
 <head>
   <meta charset="UTF-8">
   <title>상품 등록</title>
-  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   	<link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -89,6 +88,18 @@
     <div class="mb-3">
 		<label for="sub_image"class="form-label">상세 이미지</label>
 		<input type="file" class="form-control" name="sub_image" id="sub_image" accept="image/*" multiple>
+	</div>
+	
+	<div class="mb-3">
+		<label for="sub_image"class="form-label">상세 이미지 (다중 선택 가능)</label>
+		<input type="file" class="form-control" name="sub_image" id="sub_image" accept="image/*" multiple>
+	<c:if test="${not empty detailImageList}">
+		<div class="form-text mt-1"> 현재 상세 이미지파일:
+		    <c:forEach var="img" items="${detailImageList}">
+		        ${img.i_filename}<br/>
+		    </c:forEach>
+		</div>
+	</c:if>
 	</div>
 
     <!-- (선택) g_status를 기본값으로 숨겨 보낼 수도 있음: 컨트롤러 intParams 포함됨 -->

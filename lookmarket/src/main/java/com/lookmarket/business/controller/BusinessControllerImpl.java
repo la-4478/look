@@ -292,7 +292,7 @@ public class BusinessControllerImpl implements BusinessController{
 	    communityService.insertBlackBoard(blackBoardVO);
 	    
 	    redirectAttributes.addFlashAttribute("message", "고충방 글이 등록되었습니다.");
-	    return new ModelAndView("redirect:/business/blackBoardList.do");
+	    return new ModelAndView("redirect:/business/BlackBoardList.do");
 	}
 	
 	@Override
@@ -327,6 +327,22 @@ public class BusinessControllerImpl implements BusinessController{
 	    
 	    return mav;
 	}
-	
+	@RequestMapping(value="/blackBoardAddForm2.do", method=RequestMethod.GET)
+	public ModelAndView blackBoardAddForm(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		HttpSession session;
+		ModelAndView mav = new ModelAndView();
+		String layout = "common/layout";
+		mav.setViewName(layout);
+		String viewName = (String)request.getAttribute("viewName");
+		mav.addObject("viewName", viewName);
+		
+		
+		
+		session = request.getSession();
+		session.setAttribute("sideMenu", "reveal");
+		session.setAttribute("sideMenu_option", "community_admin");
+		
+		return mav;
+	}
 	
 }

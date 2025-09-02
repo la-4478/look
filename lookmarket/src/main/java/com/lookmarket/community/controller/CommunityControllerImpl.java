@@ -408,7 +408,7 @@ import jakarta.servlet.http.HttpSession;
 		    communityService.updateBlackBoard(blackBoardVO);
 		    
 		    redirectAttributes.addFlashAttribute("message", "고충방 글이 수정되었습니다.");
-		    return new ModelAndView("redirect:/community/blackBoardDetail.do?b_id=" + b_id);
+		    return new ModelAndView("redirect:/business/BlackBoardList.do?b_id=" + b_id);
 		}
 
 		@RequestMapping(value="/communityDelete.do", method=RequestMethod.POST)

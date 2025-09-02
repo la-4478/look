@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -87,6 +88,25 @@ public class AdminControllerImpl implements AdminController{
 		mav.addObject("member", myPageVO);
 		
 		return mav;
+	}
+	@RequestMapping(value="/updateMyInfo.do", method=RequestMethod.POST)
+	public ModelAndView updateMyInfo(@ModelAttribute MyPageVO myPageVO, HttpSession session, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		
+		String m_email_id = myPageVO.getM_email_id();
+		String m_email_domain =myPageVO.getM_email_domain();
+		myPageVO.setM_email(m_email_id + "@" + m_email_domain);
+
+	    int result = myPageService.updateMyInfo(myPageVO);
+
+	    if(result == 1) {
+	    	redirectAttributes.addFlashAttribute("message", "정보가 수정되었습니다.");
+	    	mav.setViewName("redirect:/admin/mypage/mypageAdminInfo.do");
+	    }else {
+	    	redirectAttributes.addFlashAttribute("message", "정보가 수정에 오류가 발생하였습니다. 다시시도해주세요.");
+	    	mav.setViewName("redirect:/admin/mypage/mypageAdminInfo.do");
+	    }
+	    return mav;
 	}
 	
 	@Override

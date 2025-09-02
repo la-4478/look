@@ -23,13 +23,11 @@
 		<textarea name="question" cols="3" rows="5" class="form-control"></textarea>
 	</div>
 	<div>
-		<label for="status" class="form-label">공개여부</label>
-		<input type="radio" name="status" value="0" checked>공개
-		<input type="radio" name="status" value="1">비공개
-	</div>
+		<input type="hidden" name="status" value="0">
+		</div>
 	<div>
 		<input type="submit" class="submit-btn" value="문의하기">
 	</div>
 </form>		 
 </body>
-</html>
+</html>s

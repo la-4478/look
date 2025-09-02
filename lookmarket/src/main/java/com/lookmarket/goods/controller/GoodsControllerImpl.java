@@ -505,157 +505,178 @@ public class GoodsControllerImpl implements GoodsController {
 			HttpServletResponse response) throws Exception {
 
 		multipartRequest.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=UTF-8");
+	    response.setContentType("text/html; charset=UTF-8");
 
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Type", "text/html; charset=utf-8");
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "text/html; charset=utf-8");
 
-		Map<String, Object> goodsMap = new HashMap<>();
+	    Map<String, Object> goodsMap = new HashMap<>();
 
-		// 1) 숫자 파라미터 목록 (프로젝트 스키마에 맞춰 조정)
-		Set<String> intParams = Set.of("g_id", "g_category", "g_price",
-				"g_stock", "g_status", "g_delivery_price");
+	    // 1) 숫자 파라미터
+	    Set<String> intParams = Set.of("g_id","g_category","g_price","g_stock","g_status","g_delivery_price");
 
-		// 2) 파라미터 수집
-		Enumeration<?> enu = multipartRequest.getParameterNames();
-		while (enu.hasMoreElements()) {
-			String name = (String) enu.nextElement();
-			String value = multipartRequest.getParameter(name);
-			if (value == null || value.isBlank()) {
-				goodsMap.put(name, null);
-				continue;
-			}
-			if (intParams.contains(name)) {
-				goodsMap.put(name, Integer.parseInt(value));
-			} else {
-				goodsMap.put(name, value);
-			}
-		}
+	    // 2) 일반 파라미터 수집
+	    Enumeration<?> enu = multipartRequest.getParameterNames();
+	    while (enu.hasMoreElements()) {
+	        String name = (String) enu.nextElement();
+	        String value = multipartRequest.getParameter(name);
+	        if (value == null || value.isBlank()) { goodsMap.put(name, null); continue; }
+	        if (intParams.contains(name)) goodsMap.put(name, Integer.parseInt(value));
+	        else goodsMap.put(name, value);
+	    }
 
-		// 필수: g_id
-		Object gidObj = goodsMap.get("g_id");
-		if (gidObj == null) {
-			String msg = "<script>alert('필수 값 g_id가 없습니다.'); history.back();</script>";
-			return new ResponseEntity<>(msg, headers, HttpStatus.OK);
-		}
-		int g_id = (gidObj instanceof Number)
-				? ((Number) gidObj).intValue()
-				: Integer.parseInt(String.valueOf(gidObj));
+	    // 필수 g_id
+	    Object gidObj = goodsMap.get("g_id");
+	    if (gidObj == null) {
+	        String msg = "<script>alert('필수 값 g_id가 없습니다.'); history.back();</script>";
+	        return new ResponseEntity<>(msg, headers, HttpStatus.OK);
+	    }
+	    int g_id = (gidObj instanceof Number) ? ((Number) gidObj).intValue() : Integer.parseInt(String.valueOf(gidObj));
 
-		// 기존 파일명(유지용)
-		String oldFileName = String
-				.valueOf(goodsMap.getOrDefault("old_i_filename", ""));
+	    // 기존 대표이미지 파일명
+	    String oldFileName = String.valueOf(goodsMap.getOrDefault("old_i_filename", ""));
 
-		// 3) 로그인 사용자(수정자) 기록(선택)
-		HttpSession session = multipartRequest.getSession(false);
-		if (session != null) {
-			MemberVO memberVO = (MemberVO) session.getAttribute("memberInfo");
-			if (memberVO != null) {
-				goodsMap.put("upd_id", memberVO.getM_id()); // 매퍼/컬럼에 맞춰 쓰거나 빼도
-															// 됨
-			}
-		}
+	    // (A) 대표이미지 업로드(단일)
+	    boolean hasNewImage = false;
+	    String newFileName = null;
+	    MultipartFile file = multipartRequest.getFile("i_filename");
+	    if (file != null && !file.isEmpty() && file.getOriginalFilename() != null) {
+	        newFileName = normalizeFilename(file.getOriginalFilename());
+	        hasNewImage = true;
 
-		// 4) 새 파일 업로드 여부 확인 → temp 저장
-		boolean hasNewImage = false;
-		String newFileName = null;
+	        Path tempDir = Paths.get(CURR_IMAGE_REPO_PATH, "temp");
+	        Files.createDirectories(tempDir);
 
-		MultipartFile file = multipartRequest.getFile("i_filename");
-		if (file != null && !file.isEmpty()
-				&& file.getOriginalFilename() != null) {
-			String original = file.getOriginalFilename();
-			String ext = "";
-			int dot = original.lastIndexOf('.');
-			if (dot >= 0)
-				ext = original.substring(dot).toLowerCase(); // .jpg ...
+	        file.transferTo(tempDir.resolve(newFileName).toFile());
+	        goodsMap.put("i_filename", newFileName);
+	    } else {
+	        if (oldFileName != null && !oldFileName.isBlank()) {
+	            goodsMap.put("i_filename", oldFileName);
+	        }
+	    }
 
-			newFileName = original + ext;
-			hasNewImage = true;
+	    // (B) 상세이미지(멀티) — form name="detailImages"
+	    // 기존 상세이미지: hidden name="old_sub_images" value="a.jpg,b.png,c.webp"
+	    String oldSubsCsv = String.valueOf(goodsMap.getOrDefault("old_sub_images", ""));
+	    List<String> oldSubImages = new ArrayList<>();
+	    if (oldSubsCsv != null && !oldSubsCsv.isBlank()) {
+	        for (String s : oldSubsCsv.split(",")) {
+	            String t = s.trim();
+	            if (!t.isEmpty()) oldSubImages.add(t);
+	        }
+	    }
 
-			// 임시 저장: {CURR_IMAGE_REPO_PATH}/temp
-			java.nio.file.Path tempDir = java.nio.file.Paths
-					.get(CURR_IMAGE_REPO_PATH, "temp");
-			java.io.File tempDirFile = tempDir.toFile();
-			if (!tempDirFile.exists())
-				tempDirFile.mkdirs();
+	    List<MultipartFile> subFiles = multipartRequest.getFiles("sub_image");
+	    List<ImageFileVO> detailImageList = new ArrayList<>();
+	    List<String> newSubImageNames = new ArrayList<>();
 
-			java.io.File dest = new java.io.File(tempDirFile, newFileName);
-			file.transferTo(dest);
+	    if (subFiles != null && !subFiles.isEmpty()) {
+	        Path tempDir = Paths.get(CURR_IMAGE_REPO_PATH, "temp");
+	        Files.createDirectories(tempDir);
 
-			// DB에 반영할 새 파일명 키
-			goodsMap.put("i_filename", newFileName);
-		} else {
-			// 새 파일 없으면 기존 파일 유지
-			if (oldFileName != null && !oldFileName.isBlank()) {
-				goodsMap.put("i_filename", oldFileName);
-			}
-		}
+	        int order = 0;
+	        for (MultipartFile mf : subFiles) {
+	            if (mf == null || mf.isEmpty() || mf.getOriginalFilename() == null) continue;
 
-		String message;
-		java.io.File movedNewFile = null;
-		try {
-			// 5) DB 업데이트 (서비스/매퍼 명은 프로젝트에 맞게 수정)
-			// 예시 A) goodsService.updateGoods(goodsMap); // void
-			// 예시 B) int updated = goodsService.updateGoods(goodsMap); // 1 기대
-			int updated = goodsService.updateGoods(goodsMap); // 너 서비스 시그니처에 맞게
-																// 바꿔도 됨
-			if (updated <= 0)
-				throw new RuntimeException("업데이트 대상이 없습니다.");
+	            String original = normalizeFilename(mf.getOriginalFilename());
+	            String safeName = System.currentTimeMillis() + "_" + (order++) + "_" + original;
 
-			// 6) 파일 이동: temp → {CURR_IMAGE_REPO_PATH}/{g_id}/
-			if (hasNewImage && newFileName != null) {
-				java.io.File goodsDir = java.nio.file.Paths
-						.get(CURR_IMAGE_REPO_PATH, String.valueOf(g_id))
-						.toFile();
-				if (!goodsDir.exists())
-					goodsDir.mkdirs();
+	            mf.transferTo(tempDir.resolve(safeName).toFile());
 
-				java.io.File src = new java.io.File(java.nio.file.Paths
-						.get(CURR_IMAGE_REPO_PATH, "temp").toFile(),
-						newFileName);
-				if (src.exists()) {
-					org.apache.commons.io.FileUtils.moveFileToDirectory(src,
-							goodsDir, true);
-					movedNewFile = new java.io.File(goodsDir, newFileName);
-				}
+	            ImageFileVO vo = new ImageFileVO();
+	            vo.setG_id(g_id);
+	            vo.setI_filename(original);      // DB 칼럼명에 맞춰 사용
+	            System.out.println("original : " + original);
+	            vo.setI_filetype("subimage");    // 필요 없으면 제거
+	            // vo.setSort_order(order - 1);   // 정렬 칼럼 쓰면 활성화
 
-				// 7) 기존 파일 삭제 (파일명이 다를 때만)
-				if (oldFileName != null && !oldFileName.isBlank()
-						&& !oldFileName.equals(newFileName)) {
-					java.io.File old = new java.io.File(goodsDir, oldFileName);
-					if (old.exists())
-						old.delete();
-				}
-			}
+	            detailImageList.add(vo);
+	            newSubImageNames.add(safeName);
+	        }
+	        if (!detailImageList.isEmpty()) {
+	            goodsMap.put("detailImageList", detailImageList);
+	        }
+	    }
 
-			message = "<script>";
-			message += "alert('수정 완료되었습니다.');";
-			message += "location.href='" + multipartRequest.getContextPath()
-					+ "/admin/allGoodsList.do';";
-			message += "</script>";
+	    String message;
+	    File movedNewFile = null;
+	    List<File> movedSubFiles = new ArrayList<>();
 
-		} catch (Exception e) {
-			e.printStackTrace();
+	    try {
+	        // 5) DB 업데이트 (대표정보 + 상세이미지 메타)
+	        int updated = goodsService.updateGoods(goodsMap);   // 서비스에서 detailImageList가 있으면 전체 교체(DELETE → INSERT)
+	        if (updated <= 0) throw new RuntimeException("업데이트 대상이 없습니다.");
 
-			// 실패 시 temp에 남은 새 파일 제거
-			if (hasNewImage && newFileName != null) {
-				java.io.File temp = new java.io.File(java.nio.file.Paths
-						.get(CURR_IMAGE_REPO_PATH, "temp").toFile(),
-						newFileName);
-				if (temp.exists())
-					temp.delete();
-				// 혹시 이미 이동했다면 롤백 겸 삭제
-				if (movedNewFile != null && movedNewFile.exists())
-					movedNewFile.delete();
-			}
+	        // 6) 파일 이동: temp -> {CURR_IMAGE_REPO_PATH}/{g_id}/
+	        File goodsDir = Paths.get(CURR_IMAGE_REPO_PATH, String.valueOf(g_id)).toFile();
+	        if (!goodsDir.exists()) goodsDir.mkdirs();
 
-			message = "<script>";
-			message += "alert('수정 실패. 다시 시도해주세요.');";
-			message += "history.back();";
-			message += "</script>";
-		}
+	        // 대표이미지 이동
+	        if (hasNewImage && newFileName != null) {
+	            File src = Paths.get(CURR_IMAGE_REPO_PATH, "temp", newFileName).toFile();
+	            if (src.exists()) {
+	                org.apache.commons.io.FileUtils.moveFileToDirectory(src, goodsDir, true);
+	                movedNewFile = new File(goodsDir, newFileName);
+	            }
+	            // 기존 대표이미지 삭제(파일명이 다를 때)
+	            if (oldFileName != null && !oldFileName.isBlank() && !oldFileName.equals(newFileName)) {
+	                File old = new File(goodsDir, oldFileName);
+	                if (old.exists()) old.delete();
+	            }
+	        }
 
-		return new ResponseEntity<>(message, headers, HttpStatus.OK);
+	        // 상세이미지 이동 + 기존 상세이미지 정리
+	        if (!newSubImageNames.isEmpty()) {
+	            File tempDir = Paths.get(CURR_IMAGE_REPO_PATH, "temp").toFile();
+	            for (String fname : newSubImageNames) {
+	                File src = new File(tempDir, fname);
+	                if (src.exists()) {
+	                    org.apache.commons.io.FileUtils.moveFileToDirectory(src, goodsDir, true);
+	                    movedSubFiles.add(new File(goodsDir, fname));
+	                }
+	            }
+	            // 전체 교체 방식: 새 목록에 없는 기존 파일만 삭제
+	            for (String old : oldSubImages) {
+	                if (!newSubImageNames.contains(old)) {
+	                    File f = new File(goodsDir, old);
+	                    if (f.exists()) f.delete();
+	                }
+	            }
+	        }
+
+	        message  = "<script>";
+	        message += "alert('수정 완료되었습니다.');";
+	        message += "location.href='" + multipartRequest.getContextPath() + "/admin/allGoodsList.do';";
+	        message += "</script>";
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+
+	        // 실패 시 temp에 남은 새 파일 제거 + 이미 이동한 것 롤백
+	        if (hasNewImage && newFileName != null) {
+	            File temp = Paths.get(CURR_IMAGE_REPO_PATH, "temp", newFileName).toFile();
+	            if (temp.exists()) temp.delete();
+	            if (movedNewFile != null && movedNewFile.exists()) movedNewFile.delete();
+	        }
+	        if (!newSubImageNames.isEmpty()) {
+	            File tempDir = Paths.get(CURR_IMAGE_REPO_PATH, "temp").toFile();
+	            for (String fname : newSubImageNames) {
+	                File t = new File(tempDir, fname);
+	                if (t.exists()) t.delete();
+	            }
+	            for (File moved : movedSubFiles) {
+	                if (moved.exists()) moved.delete();
+	            }
+	        }
+
+	        String messageErr  = "<script>";
+	        messageErr += "alert('수정 실패. 다시 시도해주세요.');";
+	        messageErr += "history.back();";
+	        messageErr += "</script>";
+	        return new ResponseEntity<>(messageErr, headers, HttpStatus.OK);
+	    }
+
+	    return new ResponseEntity<>(message, headers, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/busigoodsUpdate.do", method = RequestMethod.POST)

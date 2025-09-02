@@ -53,6 +53,11 @@
             </div> <!-- promotion-card 닫는 태그 -->
         </c:forEach>
     </div>
+        <c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+        <div class="action-buttons">
+            <a href="${contextPath}/event/promotionAddForm.do?pageType=sijangbajo" class="btn-add">프로모션 등록</a>
+        </div>
+    </c:if>
 </div>
 
 </body>

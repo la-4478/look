@@ -80,7 +80,7 @@
 
   <h2>내 정보 수정</h2>
 
-  <form name="frm_mod_member" action="${contextPath}/mypage/updateMyInfo.do" method="post">
+  <form name="frm_mod_member" action="${contextPath}/admin/updateMyInfo.do" method="post">
     <table>
       <tr class="label-row">
         <td>아이디</td>

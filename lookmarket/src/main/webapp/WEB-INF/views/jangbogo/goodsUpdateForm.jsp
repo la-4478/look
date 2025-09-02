@@ -7,7 +7,6 @@
 <head>
   <meta charset="UTF-8">
   <title>상품 수정</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link href="${contextPath}/resources/css/goods.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -83,11 +82,23 @@
     </div>
 
     <div class="mb-3">
-      <label for="i_filename" class="form-label">이미지 (교체 시 선택)</label>
+      <label for="i_filename" class="form-label"> 메인 이미지 (교체 시 선택)</label>
       <input type="file" class="form-control" id="i_filename" name="i_filename" accept="image/*">
       <c:if test="${not empty goods.i_filename}">
-        <div class="form-text mt-1">현재 파일: ${goods.i_filename}</div>
+        <div class="form-text mt-1">현재 메인 이미지 파일: ${goods.i_filename}</div>
       </c:if>
+      
+    <div class="mb-3">
+		<label for="sub_image"class="form-label">상세 이미지 (다중 선택 가능)</label>
+		<input type="file" class="form-control" name="sub_image" id="sub_image" accept="image/*" multiple>
+	<c:if test="${not empty detailImageList}">
+		<div class="form-text mt-1"> 현재 상세 이미지파일:
+		    <c:forEach var="img" items="${detailImageList}">
+		        ${img.i_filename}<br/>
+		    </c:forEach>
+		</div>
+	</c:if>
+	</div>
     </div>
 
     <div class="d-flex justify-content-end">

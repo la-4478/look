@@ -18,7 +18,7 @@
         <table class="coupon-table">
             <thead>
                 <tr>
-                    <th>쿠폰 코드</th>
+                    <th>쿠폰명</th>
                     <th>할인 유형</th>
                     <th>할인 수치</th>
                     <th>최대 할인 금액</th>
@@ -42,7 +42,7 @@
                         <td class="btn-event">
                             <c:choose>
                                 <c:when test="${coupon.promoDiscountType == 1}">
-                                    ${coupon.promoDiscountValue}%
+                                    <fmt:formatNumber value="${Math.floor(coupon.promoDiscountValue)}" pattern="0" />%
                                 </c:when>
                                 <c:when test="${coupon.promoDiscountType == 2}">
                                     <fmt:formatNumber value="${coupon.promoDiscountValue}" type="currency" currencySymbol="₩"/>
@@ -68,25 +68,30 @@
                         <td class="btn-event">
                             <c:choose>
                                 <c:when test="${coupon.promoCouponActive}">
-                                    <span class="coupon-active">활성</span>
+                                    <span class="coupon-active">발급 가능</span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="coupon-expired">비활성</span>
+                                    <span class="coupon-expired">발급 기간만료</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
                         <td>
                          <div class="coupon-btn-group">
-                            <a href="${contextPath}/event/couponDetail.do?promoId=${coupon.promoId}" class="detail">상세보기</a>
                             <c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
+                                <a href="${contextPath}/event/couponDetail.do?promoId=${coupon.promoId}" class="detail">상세보기</a>
 						        <a href="${contextPath}/event/couponUpdateForm.do?promoId=${coupon.promoId}" class="update">수정</a>
 						        <a href="${contextPath}/event/deleteCoupon.do?promoId=${coupon.promoId}${not empty postId ? '&postId=' += postId : ''}" class="delete"
 						           onclick="return confirm('삭제하시겠습니까?')">삭제</a>
 						    </c:if>
 						    <!-- 일반 회원에게 발급 버튼 노출 -->
-			                <c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
+						    <c:choose>
+                                <c:when test="${coupon.promoCouponActive}">
+   			                <c:if test="${isLogOn eq true and memberInfo.m_role == 1}">
 			                    <a href="#" class="issue" onclick="event.preventDefault(); issueCoupon(${coupon.promoId});">발급하기</a>
 			                </c:if>
+                                </c:when>
+                                <c:otherwise></c:otherwise>
+                            </c:choose>
 				    	 </div>
                         </td>
                     </tr>
