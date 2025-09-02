@@ -14,7 +14,7 @@
     <h2>쿠폰 등록</h2>
     <form action="${contextPath}/event/insertCoupon.do" method="post">
         <div class="form-group">
-            <label for="promoCode">쿠폰 코드</label>
+            <label for="promoCode">쿠폰명</label>
             <input type="text" id="promoCode" name="promoCode" required/>
         </div>
 		<input type = "hidden" name="postId" value="${postId}"/>

@@ -27,14 +27,16 @@ public class CouponController {
             HttpSession session,
             @RequestParam(value="memberId", required=false) String memberIdParam) {
 
-        String memberId = (String) session.getAttribute("current_id");
-        if (memberId == null) memberId = memberIdParam; // DEV ONLY
+        String mId = (String) session.getAttribute("current_id");
+        System.out.println("로그인 아이디 : " + mId);
+        if (mId == null) mId = memberIdParam; // DEV ONLY
 
         try {
-            if (memberId == null) {
+            if (mId == null) {
                 return ResponseEntity.ok(java.util.Collections.emptyList());
             }
-            List<CouponVO> items = couponService.getCouponsForMember(memberId);
+            List<CouponVO> items = couponService.getCouponsForMember(mId);
+            System.out.println(items);
             return ResponseEntity.ok(items == null ? java.util.Collections.emptyList() : items);
 
         } catch (Exception e) {

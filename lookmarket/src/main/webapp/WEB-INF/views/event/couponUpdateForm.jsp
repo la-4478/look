@@ -16,7 +16,7 @@
         <input type="hidden" name="postId" value="${postId}"/>
 
         <div class="form-group">
-            <label for="promoCode">쿠폰 코드</label>
+            <label for="promoCode">쿠폰명</label>
             <input type="text" id="promoCode" name="promoCode" value="${coupon.promoCode}" required/>
         </div>
 

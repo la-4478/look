@@ -15,7 +15,7 @@
     <h2>쿠폰 상세</h2>
 
     <div class="form-group">
-        <label>쿠폰 코드</label>
+        <label>쿠폰명</label>
         <div class="readonly-field">${coupon.promoCode}</div>
     </div>
 

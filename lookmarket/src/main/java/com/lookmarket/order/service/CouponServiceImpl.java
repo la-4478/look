@@ -22,11 +22,12 @@ public class CouponServiceImpl implements CouponService {
 	}
 	@Override
 	public List<CouponVO> getCouponsForMember(String memberId) throws Exception {
+		System.out.println("서비스에 넘어온 : " + memberId);
 		return couponDAO.getCouponsForMember(memberId);
 	}
 	@Override
-	public void useCoupon(String couponId, String member_id) throws Exception {
-		couponDAO.useCoupon(couponId, member_id);
+	public void useCoupon(String couponId, String mId) throws Exception {
+		couponDAO.useCoupon(couponId, mId);
 	}
 
 }

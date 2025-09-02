@@ -18,7 +18,7 @@
             <table class="coupon-table">
                 <thead>
                     <tr>
-                        <th>쿠폰 코드</th>
+                        <th>쿠폰명</th>
                         <th>할인 금액</th>
                         <th>최대 할인</th>
                         <th>최소 구매</th>

@@ -84,11 +84,6 @@
       <input type="file" class="form-control" name="i_filename" id="i_filename" accept="image/*">
       <input type="hidden" name="cre_m_id" value="${loginUserId}"/>
     </div>
-    
-    <div class="mb-3">
-		<label for="sub_image"class="form-label">상세 이미지</label>
-		<input type="file" class="form-control" name="sub_image" id="sub_image" accept="image/*" multiple>
-	</div>
 	
 	<div class="mb-3">
 		<label for="sub_image"class="form-label">상세 이미지 (다중 선택 가능)</label>

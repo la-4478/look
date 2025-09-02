@@ -12,8 +12,8 @@ public interface CouponDAO {
 
 	public List<CouponVO> couponList(List<Integer> promo_id) throws DataAccessException;
 
-	public List<CouponVO> getCouponsForMember(String memberId) throws DataAccessException;
+	public List<CouponVO> getCouponsForMember(String mId) throws DataAccessException;
 
-	public void useCoupon(String couponId, String member_id) throws DataAccessException;
+	public void useCoupon(String couponId, String mId) throws DataAccessException;
 
 }

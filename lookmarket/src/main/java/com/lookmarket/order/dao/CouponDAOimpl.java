@@ -25,14 +25,15 @@ public class CouponDAOimpl implements CouponDAO{
 		return sqlSession.selectList("mapper.mypage.couponList", promo_id);
 	}
 	@Override
-	public List<CouponVO> getCouponsForMember(String memberId) throws DataAccessException {
-		return sqlSession.selectList("mapper.mypage.getCouponsForMember", memberId);
+	public List<CouponVO> getCouponsForMember(String mId) throws DataAccessException {
+		System.out.println("DAO에 넘어온 : " + mId);
+		return sqlSession.selectList("com.lookmarket.event.dao.EventDAO.selectCouponsIssuedToMember", mId);
 	}
 	@Override
-	public void useCoupon(String couponId, String member_id) throws DataAccessException {
+	public void useCoupon(String couponId, String mId) throws DataAccessException {
 		Map<String, Object> paramMap = new HashMap<>();
 	    paramMap.put("promo_id", couponId);
-	    paramMap.put("m_id", member_id);
+	    paramMap.put("m_id", mId);
 
 	    sqlSession.update("mapper.mypage.useCoupon", paramMap);
 	}

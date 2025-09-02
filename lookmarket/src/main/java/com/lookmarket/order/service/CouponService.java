@@ -9,7 +9,7 @@ public interface CouponService {
 
 	public List<CouponVO> couponList(List<Integer> promo_id) throws Exception;
 
-	public List<CouponVO> getCouponsForMember(String memberId)throws Exception;
+	public List<CouponVO> getCouponsForMember(String mId)throws Exception;
 
-	public void useCoupon(String couponId, String member_id) throws Exception;
+	public void useCoupon(String couponId, String mId) throws Exception;
 }
