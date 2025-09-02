@@ -10,11 +10,11 @@
 </head>
 <body>
 <div class="form-container">
-    <h2>이벤트 등록</h2>
+    <h2>프로모션 등록</h2>
     <form action="${contextPath}/event/insertPromotionPost.do" method="post" enctype="multipart/form-data">
         
         <div class="form-group">
-            <label for="title">이벤트 제목</label>
+            <label for="title">프로모션 제목</label>
             <input type="text" id="promoTitle" name="promoTitle" required />
         </div>
 
@@ -24,12 +24,12 @@
         </div>
 
         <div class="form-group">
-            <label for="start_date">이벤트 시작일</label>
+            <label for="start_date">프로모션 시작일</label>
             <input type="date" id="promoStartDate" name="promoStartDate" required />
         </div>
 
         <div class="form-group">
-            <label for="end_date">이벤트 종료일</label>
+            <label for="end_date">프로모션 종료일</label>
             <input type="date" id="promoEndDate" name="promoEndDate" required />
         </div>
 

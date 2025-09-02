@@ -24,7 +24,7 @@
         <div class="readonly-field">
             <c:choose>
                 <c:when test="${coupon.promoDiscountType == 1}">정률 할인 (%)</c:when>
-                <c:when test="${coupon.promoDiscountType == 2}">정액 할인 (₩)</c:when>
+<%--                 <c:when test="${coupon.promoDiscountType == 2}">정액 할인 (₩)</c:when> --%>
                 <c:otherwise>기타</c:otherwise>
             </c:choose>
         </div>

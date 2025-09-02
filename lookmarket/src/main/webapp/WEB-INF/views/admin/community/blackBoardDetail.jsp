@@ -51,7 +51,7 @@
     </c:if>
 
     <div class="back-btn">
-        <a href="${contextPath}/community/blackBoardList.do">← 목록으로</a>
+        <a href="${contextPath}/admin/community/allBlackBoardList.do">← 목록으로</a>
     </div>
 </div>
 </body>

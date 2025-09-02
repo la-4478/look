@@ -124,6 +124,7 @@
 	    ot.ot_goods_name,
 	    ot.ot_goods_price,
 	    d.d_company,
+	    oi.oi_receiver_name,
 	    oi.oi_delivery_address,
 	    oi.oi_deli_namuji_address
 	  FROM order_info oi

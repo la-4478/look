@@ -94,7 +94,7 @@
 				</c:when>
 				<c:when test="${sideMenu_option == 'category'}">
 					<li>
-						<h3>카테고리</h3>x
+						<h3>카테고리</h3>
 						<ul>
 							<li><a href="${contextPath}/jangbogo/goodsList.do?category=fresh">신선식품</a></li>
 							<li><a href="${contextPath}/jangbogo/goodsList.do?category=processed">가공식품</a></li>

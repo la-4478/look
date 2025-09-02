@@ -50,8 +50,8 @@
     </c:if>
 
     <div class="back-btn">
-        <a href="${contextPath}/community/blackBoardList.do">← 목록으로</a>
+        <a href="${contextPath}/business/BlackBoardList.do">← 목록으로</a>
     </div>
 </div>
 </body>
-</html>
+</html>	

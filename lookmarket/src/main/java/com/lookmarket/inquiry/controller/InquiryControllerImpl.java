@@ -128,7 +128,7 @@ public class InquiryControllerImpl implements InquiryController {
 
         inquiryService.answerInquiry(inquiryId, adminId, role, answer);
 
-        return new ModelAndView("redirect:/inquiry/detail.do?inquiryId=" + inquiryId);
+        return new ModelAndView("redirect:/inquiry/inquiryList.do");
     }
 
 	@Override

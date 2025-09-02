@@ -315,7 +315,7 @@ public class GoodsControllerImpl implements GoodsController {
 			message = "<script>";
 			message += "alert('등록성공.');";
 			message += "location.href='" + multipartRequest.getContextPath()
-					+ "/jangbogo/goodsList.do?category=all';";
+					+ "/admin/allGoodsList.do';";
 			message += "</script>";
 
 		} catch (Exception e) {

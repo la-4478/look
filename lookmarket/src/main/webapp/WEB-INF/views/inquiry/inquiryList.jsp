@@ -151,7 +151,7 @@ tbody td {
     </table>
 
     <p style="margin-top:10px">
-      <a href="${contextPath}/inquiry/inquiryAddForm.do">문의하기</a>
+      <a href="${contextPath}/inquiry/inquiryAddForm.do" class="btn btn-primary">문의하기</a>
     </p>
   </c:when>
 

@@ -65,7 +65,6 @@
             <a href="${contextPath}/event/couponList.do?postId=${postId}">취소</a>
         </div>
     </form>
-    <c:out value="${postId}" default="postId 없음"/>
 </div>
 </body>
 </html>

@@ -11,9 +11,9 @@
     var day = String(d.getDate()).padStart(2,'0');
     return y + '-' + m + '-' + day;
   }
-  // 백엔드 숫자타입(정액=1, 정률=2 등)을 프론트 문자열로 변환
+  // 백엔드 숫자타입(정률)을 프론트 문자열로 변환
 function toTypeString(promoDiscountType){
-   return Number(promoDiscountType) === 2 ? 'RATE' : 'AMOUNT';
+   return Number(promoDiscountType) === 1 ? 'RATE' : 'AMOUNT';
  }
 
   function calcDiscount(coupon, subtotal){

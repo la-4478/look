@@ -25,7 +25,7 @@
             <select id="promoDiscountType" name="promoDiscountType" required>
                 <option value="">-- 선택 --</option>
                 <option value="1" <c:if test="${coupon.promoDiscountType == 1}">selected</c:if>>정률 할인 (%)</option>
-                <option value="2" <c:if test="${coupon.promoDiscountType == 2}">selected</c:if>>정액 할인 (₩)</option>
+<%--                 <option value="2" <c:if test="${coupon.promoDiscountType == 2}">selected</c:if>>정액 할인 (₩)</option> --%>
             </select>
         </div>
 

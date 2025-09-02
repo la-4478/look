@@ -30,7 +30,7 @@
         <th>금액</th>
         <th>할인금액</th>
         <th>구매자</th>
-        <th>수령인</th>
+<!--         <th>수령인</th> -->
         <th>배송 주소</th>
       </tr>
     </thead>
@@ -57,7 +57,7 @@
 			  </td>
               <td>${order.order.oiSalePrice}</td>
               <td>${order.order.oiName}</td>
-              <td>${order.order.oiReceiverName}</td>
+<%--               <td>${order.order.oiReceiverName}</td> --%>
               <td>${order.order.oiDeliveryAddress} - ${order.order.oi_deli_namuji_address}</td>
             </tr>
           </c:forEach>
