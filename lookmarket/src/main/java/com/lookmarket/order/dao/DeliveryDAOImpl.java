@@ -42,4 +42,9 @@ public class DeliveryDAOImpl implements DeliveryDAO {
         return sqlSession.selectOne("mapper.admin.selectDeliveryByOrderId", o_id);
     }
 
+	@Override
+	public void finish(int o_id) throws DataAccessException {
+		sqlSession.update("mapper.deli.finish", o_id);
+	}
+
 }

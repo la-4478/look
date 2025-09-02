@@ -123,20 +123,24 @@
     <c:when test="${o.d_status == 2}">배송중</c:when>
     <c:when test="${o.d_status == 1}">배송준비중</c:when>
     <c:when test="${o.d_status == 4}">주문취소</c:when>
+    <c:when test="${o.d_status == 3 }">배송완료</c:when>
     <c:otherwise>-</c:otherwise>
   </c:choose>
 </td>
 
 
       <%-- 관리: 상세는 OId로 유지, 나머지 버튼은 st가 null이면 노출 안 됨(기존 조건 그대로) --%>
-      <td class="actions">
-        <a class="btn" href="${contextPath}/order/detail.do?o_id=${o.OId}">상세</a>
+      <td>
+<%--         <a class="btn" href="${contextPath}/order/detail.do?o_id=${o.OId}">상세</a> --%>
         <c:if test="${o.d_status == 1}">
           <button class="btn" type="button" onclick="fn_delivery_on(${o.OId})"> 배송등록</button>
         </c:if>
-        <c:if test="${o.d_status == 3}">
-          <a class="btn" href="${contextPath}/order/shipTrace.do?o_id=${o.OId}">배송조회</a>
+        <c:if test="${o.d_status == 2}">
+          <a href="${contextPath}/business/deliveryfinish.do?o_id=${o.OId}" class="btn" >배송완료</a>
         </c:if>
+<%--         <c:if test="${o.d_status == 3}"> --%>
+<%--           <a class="btn" href="${contextPath}/order/shipTrace.do?o_id=${o.OId}">배송조회</a> --%>
+<%--         </c:if> --%>
       </td>
     </tr>
   </c:forEach>

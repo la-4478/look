@@ -35,6 +35,9 @@
                     	<input type="submit" value="주문 취소">
                     </form>
                     </c:if>
+                    <c:if test="${delivery.d_status == 3 }">
+                    	<a href="${contextPath}/community/communityAddForm.do" class="btn" style="background-color:#FFE4FF;">리뷰 작성</a>
+                    </c:if>
                 </div>
             </c:forEach>
         </c:when>

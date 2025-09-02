@@ -38,5 +38,11 @@ public class DeliveryServiceImpl implements DeliveryService {
 		deliveryDAO.cencelDlivery(o_id);
 		
 	}
+
+	@Override
+	public void finish(int o_id) throws Exception {
+		deliveryDAO.finish(o_id);
+		
+	}
 	
 }

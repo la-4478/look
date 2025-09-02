@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -343,6 +344,12 @@ public class BusinessControllerImpl implements BusinessController{
 		session.setAttribute("sideMenu_option", "community_admin");
 		
 		return mav;
+	}
+	@RequestMapping(value="/deliveryfinish.do", method= {RequestMethod.GET,RequestMethod.POST})
+	public String deliveryfinish (@RequestParam("o_id") int o_id, HttpServletRequest request, HttpServletResponse response) throws Exception{
+		deliveryService.finish(o_id);
+		
+		return "redirect:/business/businessOrderList.do";
 	}
 	
 }

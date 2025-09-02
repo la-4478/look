@@ -20,4 +20,7 @@
 		<update id="updatedelivery" parameterType="int">
 			update delivery set d_status = 2 where o_id = #{o_id}
 		</update>
+		<update id="finish" parameterType="int">
+			update delivery set d_status = 3 where o_id = #{o_id}
+		</update> 
 	</mapper>

@@ -79,13 +79,9 @@
 				
 				<c:when test="${sideMenu_option == 'community'}">
 					<li>
-						<h3>커뮤니티</h3>
+						<h3>리뷰</h3>
 						<ul>
-							<li><a href="${contextPath}/community/communityList.do">커뮤니티</a></li>
-							<!-- 로그인한 사용자만 리뷰쓰기 메뉴 표시 -->
-							<c:if test="${not empty sessionScope.current_id}">
-								<li><a href="${contextPath}/community/communityAddForm.do">리뷰쓰기</a></li>
-							</c:if>
+							<li><a href="${contextPath}/community/communityList.do">리뷰</a></li>
 						</ul>
 					</li>
 				</c:when>
@@ -98,7 +94,7 @@
 				</c:when>
 				<c:when test="${sideMenu_option == 'category'}">
 					<li>
-						<h3>카테고리</h3>
+						<h3>카테고리</h3>x
 						<ul>
 							<li><a href="${contextPath}/jangbogo/goodsList.do?category=fresh">신선식품</a></li>
 							<li><a href="${contextPath}/jangbogo/goodsList.do?category=processed">가공식품</a></li>
