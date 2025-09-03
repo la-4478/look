@@ -265,10 +265,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
 								<!-- 관리자 (m_role == 3) -->
 								<c:if test="${isLogOn eq true and memberInfo.m_role == 3}">
-									<div>
-										<a href="${contextPath}/community/blackBoardList.do"
-											class="menu__title">커뮤니티 관리</a>
-									</div>
+<!-- 									<div> -->
+<%-- 										<a href="${contextPath}/community/blackBoardList.do" --%>
+<!-- 											class="menu__title">커뮤니티 관리</a> -->
+<!-- 									</div> -->
 									<ul id="tipSybm1" class="navbar__submenu">
 										<li><a href="${contextPath}/community/communityList.do"
 											class="menu__title">사용자 리뷰</a></li>

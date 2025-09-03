@@ -65,7 +65,7 @@
   	</select>
   	
   	<select id="allboardList" resultType="blackBoardVO">
-  		select * from blackboard
+  		select * from blackboard order by b_date desc
   	</select>
   	
 	  <!-- 주문 목록 페이징 -->

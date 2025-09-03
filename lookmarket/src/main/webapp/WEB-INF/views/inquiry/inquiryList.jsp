@@ -110,6 +110,10 @@ tbody td {
     text-align: left;
   }
 }
+			.ma-1{
+			margin-top :1%;
+			margin-right: 5%;
+			}
 
 </style>
 <h2>내 1:1 문의 목록</h2>
@@ -118,7 +122,7 @@ tbody td {
   <c:when test="${memberInfo.m_role == 1}">
     <table border="1" width="100%">
       <thead>
-        <tr>
+        <tr>on
           <th>번호</th>
           <th>제목</th>
           <th>상태</th>
@@ -150,9 +154,9 @@ tbody td {
       </tbody>
     </table>
 
-    <p style="margin-top:10px">
+<div class="d-flex justify-content-end mb-3 ma-1">
       <a href="${contextPath}/inquiry/inquiryAddForm.do" class="btn btn-primary">문의하기</a>
-    </p>
+</div>
   </c:when>
 
   <c:when test="${memberInfo.m_role == 3}">
