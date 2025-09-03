@@ -21,7 +21,7 @@
 							<li><a href="${contextPath}/mypage/listMyDelivery.do">배송조회</a></li>
 							<li><a href="${contextPath}/mypage/myCoupons.do">내 쿠폰</a></li>
 							<li><a href="${contextPath}/mypage/myWishList.do">찜목록</a></li>
-							<li><a href="${contextPath}/mypage/myCommunity.do">커뮤니티</a></li>
+							<li><a href="${contextPath}/mypage/myCommunity.do">내가 쓴 리뷰 목록</a></li>
 						</ul>
 					</li>
 				</c:when>

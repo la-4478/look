@@ -97,7 +97,7 @@ public class MemberControllerImpl implements MemberController {
 	}
 	
 	@Override
-	@RequestMapping(value = "/naverCallback.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/naverCallback.do", method = {RequestMethod.POST,RequestMethod.GET})
 	public String naverCallback(@RequestParam("code") String code, @RequestParam("state") String state, HttpSession session, Model model) throws Exception {
 		MemberVO naverMember = naverLoginService.getNaverUserInfo(code, state);
 		
