@@ -7,17 +7,17 @@
     <title>지역 축제 검색</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        .festival { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; }
+        .festival { border: 1px solid #ccc; padding: 10px; margin-bottom: 15px; width:40%; outline-style:double;}
         .festival img { max-width: 300px; height: auto; }
+        select{width: 11%; padding: 10px; font-size: 14px;box-sizing: border-box; }
+        article{margin: 55px 71px 0px 62px; width: 100%; float: right; }
     </style>
 </head>
 <body>
 
 <h2>지역 축제 검색</h2>
-
-    <label for="areaCode">지역 선택:</label>
-    <select name="areaCode" id="areaCode">
-        <option value="">-- 지역 선택 --</option>
+    <label for="areaCode">지역 선택:     <select name="areaCode" id="areaCode">
+        <option value=""> 지역 선택 </option>
         <option value="1" ${areaCode == '1' ? 'selected' : ''}>서울</option>
         <option value="2" ${areaCode == '2' ? 'selected' : ''}>인천</option>
         <option value="3" ${areaCode == '3' ? 'selected' : ''}>대전</option>
@@ -35,9 +35,7 @@
         <option value="37" ${areaCode == '37' ? 'selected' : ''}>전라북도</option>
         <option value="38" ${areaCode == '38' ? 'selected' : ''}>전라남도</option>
         <option value="39" ${areaCode == '39' ? 'selected' : ''}>제주도</option>
-    </select>
-    
-
+    </select></label>
     
 <!-- ✅ 축제 결과 리스트 -->
 <div id="festivalContainer">

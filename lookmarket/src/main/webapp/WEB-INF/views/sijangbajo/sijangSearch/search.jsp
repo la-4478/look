@@ -13,6 +13,9 @@
 <!-- 카카오 지도 SDK (컨트롤러에서 kakaoJsKey 내려옴) — 실제 운영에선 레이아웃에 1회만 로드 권장 -->
 <script
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f3a5008edad1780fc2ddff81474f335f&libraries=clusterer,services"></script>
+<style>
+.btn1{width: 75px; padding: 8px; margin-top: 5px; box-sizing: border-box;}
+</style>
 
 <script>
 	// ----- 공통 유틸: XSS-safe 문자열 escape -----
@@ -285,7 +288,7 @@
 		</select> <label for="marketName">시장명</label> <input type="text"
 			name="marketName" id="marketName" placeholder="시장명 입력">
 
-		<button type="button" id="searchBtn">검색</button>
+		<button type="button" id="searchBtn" class="btn1">검색</button>
 	</form>
 
 	<!-- 초기 서울 리스트 (JSP 마크업) -->

@@ -38,13 +38,14 @@ th {
 .result-row {
 	cursor: pointer;
 }
+.btn1{ width: 75px; padding: 8px; margin-top: 5px; box-sizing: border-box; }
 </style>
 </head>
 <body>
 	<h2>전통시장 주변 상권 검색</h2>
 
 	<form id="searchForm">
-		<label>지역 <select id="region" name="key">
+		지역 <select id="region" name="key">
 				<option value="11">서울특별시</option>
 				<option value="26">부산광역시</option>
 				<option value="27">대구광역시</option>
@@ -63,7 +64,7 @@ th {
 				<option value="48">경상남도</option>
 				<option value="50">제주특별자치도</option>
 		</select>
-		</label> <label>업종 대분류 <select id="categoryLcls" name="indsLclsCd">
+		업종 대분류 <select id="categoryLcls" name="indsLclsCd">
 				<option value="">-- 전체 --</option>
 				<option value="G2">도소매</option>
 				<option value="I1">숙박</option>
@@ -77,11 +78,11 @@ th {
 				<option value="S2">수리, 개인 서비스</option>
 		</select>
 
-		</label> <label>업종 중분류 <select id="categoryMcls" name="indsMclsCd">
+		업종 중분류 <select id="categoryMcls" name="indsMclsCd">
 				<option value="">-- 전체 --</option>
 		</select>
-		</label> <input type="text" id="keyword" name="keyword" placeholder="키워드" />
-		<button type="submit">검색</button>
+		<input type="text" id="keyword" name="keyword" placeholder="키워드" />
+		<button type="submit" class="btn1">검색</button>
 	</form>
 
 	<div class="loading" id="loadingMsg">검색 중...</div>
