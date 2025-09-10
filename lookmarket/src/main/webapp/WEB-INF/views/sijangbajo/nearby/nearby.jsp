@@ -236,6 +236,9 @@ $(function(){
                 map.setCenter(position);
                 map.setLevel(3);
             }
+            $('html, body').animate({
+                scrollTop: $('#map').offset().top - 50
+            }, 600);
         }
     });
 
@@ -291,6 +294,10 @@ $(function(){
             	    		));
             	    $tr.append($('<td>').text(safeText(store.rdnmAdr) || ''));
             	    $tr.appendTo(tbody);
+            	    
+            	    $tr.on('click', function() {
+            	        openInfoWindowForStore(store);
+            	    });
 
             	    if (isValidCoord) {
             	        const marker = new kakao.maps.Marker({

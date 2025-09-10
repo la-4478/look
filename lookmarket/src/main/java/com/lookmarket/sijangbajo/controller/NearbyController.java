@@ -162,7 +162,7 @@ public class NearbyController {
         urlBuilder.append("?serviceKey=").append(encodedKey);
         urlBuilder.append("&divId=").append(divId);
         urlBuilder.append("&key=").append(key);
-        urlBuilder.append("&numOfRows=10&type=json");
+        urlBuilder.append("&numOfRows=50&type=json");
 
         if (indsLclsCd != null && !indsLclsCd.isEmpty()) urlBuilder.append("&indsLclsCd=").append(indsLclsCd);
         if (indsMclsCd != null && !indsMclsCd.isEmpty()) urlBuilder.append("&indsMclsCd=").append(indsMclsCd);
