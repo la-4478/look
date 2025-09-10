@@ -16,8 +16,6 @@
     <div class="meta-info">
         👤 작성자: ${blackBoard.m_id} | 📅 작성일: ${blackBoard.b_date} | 👁 조회수: ${blackBoard.b_hit}
     </div>
-
-    <div class="board-content">${blackBoard.b_content}</div>
     
     <div class="board-content">${blackBoard.b_content}</div><hr>
     <div class="board-comment">
