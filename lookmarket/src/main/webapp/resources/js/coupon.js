@@ -11,7 +11,7 @@
     var day = String(d.getDate()).padStart(2,'0');
     return y + '-' + m + '-' + day;
   }
-  // 백엔드 숫자타입(정률)을 프론트 문자열로 변환
+  // 백엔드 숫자타입(정률,정액)을 프론트 문자열로 변환
 function toTypeString(promoDiscountType){
    return Number(promoDiscountType) === 1 ? 'RATE' : 'AMOUNT';
  }
@@ -21,13 +21,16 @@ function toTypeString(promoDiscountType){
     if(subtotal <= 0) return 0;
     if(coupon && coupon.promoMinPurchase && subtotal < coupon.promoMinPurchase) return 0;
     var discount = 0;
-    var type = coupon ? toTypeString(coupon.promoDiscountType) : 'AMOUNT';
-      if(type === 'RATE'){
-      discount = Math.floor(subtotal * (Number(coupon.promoDiscountValue||0) / 100));
-       if(coupon.promoMaxDiscount) discount = Math.min(discount, coupon.promoMaxDiscount);
-    } else {
-      discount = Number(coupon ? coupon.promoDiscountValue||0 : 0);
-    }
+	var type = coupon ? toTypeString(coupon.promoDiscountType) : 'AMOUNT';
+	
+	if (type === 'RATE') {
+	  // 퍼센트 할인
+	  var rate = Number(coupon.promoDiscountValue || 0); // % 값
+	  discount = Math.floor(subtotal * (rate / 100));
+	} else {
+	  // 정액 할인은 maxDiscount를 고정 금액으로
+	  discount = Number(coupon.promoMaxDiscount || 0);
+	}
     return Math.max(0, Math.min(discount, subtotal));
   }
 
@@ -63,7 +66,7 @@ function renderList(items, subtotal, nodes, state){
     var typeStr  = toTypeString(c.promoDiscountType);
     var descText = c.description
       ? c.description
-      : (typeStr === 'RATE' ? (c.promoDiscountValue + '% 할인') : (toKRW(c.promoDiscountValue) + ' 할인'));
+      : (typeStr === 'RATE' ? (c.promoDiscountValue + '% 할인') : (toKRW(c.promoMaxDiscount) + ' 할인'));
     var cond = '최소주문 ' + (c.promoMinPurchase ? toKRW(c.promoMinPurchase) : '제한 없음')
              + (c.promoMaxDiscount ? (' • 최대 ' + toKRW(c.promoMaxDiscount)) : '');
     var expire = c.promoEndDate ? ('<div class="expire">만료: ' + formatDate(c.promoEndDate) + '</div>') : '';

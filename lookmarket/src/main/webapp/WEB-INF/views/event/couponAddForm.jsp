@@ -23,13 +23,13 @@
             <select id="promoDiscountType" name="promoDiscountType" required>
                 <option value="">-- 선택 --</option>
                 <option value="1">정률 할인 (%)</option>
-<!--                 <option value="2">정액 할인 (₩)</option> -->
+                <option value="2">정액 할인 (₩)</option>
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="discountValueWrapper" style="display:none;">
             <label for="promoDiscountValue">할인 수치</label>
-            <input type="number" id="promoDiscountValue" name="promoDiscountValue" min="0" value="0" required/>
+            <input type="number" id="promoDiscountValue" name="promoDiscountValue" min="0" value="0"/>
         </div>
 
         <div class="form-group">
@@ -66,5 +66,19 @@
         </div>
     </form>
 </div>
+<script>
+  const typeSelect = document.getElementById("promoDiscountType");
+  const valueWrapper = document.getElementById("discountValueWrapper");
+
+  typeSelect.addEventListener("change", function() {
+	  if (this.value === "1") {
+	    valueWrapper.style.display = "block";
+	    document.getElementById("promoDiscountValue").required = true;
+	  } else {
+	    valueWrapper.style.display = "none";
+	    document.getElementById("promoDiscountValue").required = false;
+	  }
+	});
+</script>
 </body>
 </html>

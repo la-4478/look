@@ -11,21 +11,10 @@
 <head>
 <meta charset="UTF-8">
 <title>header</title>
-<link href="${contextPath}/resources/css/common.css" rel="stylesheet"
-	type="text/css">
+<link href="${contextPath}/resources/css/common.css" rel="stylesheet" type="text/css">
+<link href="${contextPath}/resources/css/notify.css" rel="stylesheet" type="text/css">
 <!-- 해더 CSS 파일 -->
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<style>
-#notifyOverlay{position: fixed; inset: 0; background: rgba(0,0,0,.35);display: none; z-index: 10000;}
-#notifyModal{position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);width: min(90vw, 420px);max-height: 70vh; overflow: auto; background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.25); padding: 12px 12px 16px;}
-#notifyModal .modal-header{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px;}
-#notifyModal #notifyClose{border:0; background: transparent; font-size: 18px; cursor: pointer; line-height: 1;}
-#notifyBody .item{ padding:10px 8px; border-bottom:1px solid #eee; }
-#notifyBody .item:last-child{ border-bottom:0; }
-#notifyBody .title{ font-weight:600; margin-bottom:4px; }
-#notifyBody .msg{ color:#555; font-size:13px; margin-bottom:8px; }
-#notifyBody .actions{ display:flex; gap:10px; }
-</style>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
   const bell  = document.getElementById('bell');
@@ -36,6 +25,24 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // HTML 이스케이프
   function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  
+  panel.addEventListener('click', function(e){
+	    if (e.target.matches('.notify-link')) {
+	      e.preventDefault();
+	      const id = e.target.dataset.id;
+	      const href = e.target.dataset.href;
+	      if (!id || !href) return;
+
+	      markRead(id).then(() => {
+	        const item = e.target.closest('.item');
+	        if (item) item.remove();
+	        window.location.href = href;
+	      }).catch((err) => {
+	        console.error('[notify] 바로가기 실패', err);
+	        alert('알림 처리 중 문제가 발생했습니다.');
+	      });
+	    }
+	  });
 
   // 패널 토글
   async function togglePanel(e){
@@ -71,14 +78,19 @@ document.addEventListener("DOMContentLoaded", function(){
         const msg   = n.message || '';
         const link  = (n.linkUrl || n.link_url || '#');
         return `
-          <div class="item" data-id="\${id}">
-            <div class="title">\${escapeHtml(title)}</div>
-            <div class="msg">\${escapeHtml(msg)}</div>
-            <div class="actions">
-              <a href="\${ctx}\${link}">바로가기</a>
-              <button type="button" onclick="markRead(\${id})">읽음</button>
-            </div>
-          </div>
+        <div class="item" data-id="\${id}">
+        <div class="title">\${escapeHtml(title)}</div>
+        <div class="msg">\${escapeHtml(msg)}</div>
+        <div class="actions">
+          <a href="#" 
+             class="notify-link" 
+             data-id="\${id}" 
+             data-href="\${ctx}\${link}">
+             바로가기
+          </a>
+          <button type="button" onclick="markRead(\${id})">읽음</button>
+        </div>
+      </div>
         `;
       }).join('') : '<div class="empty">새 알림 없음</div>';
     }catch(e){
@@ -88,20 +100,25 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   // 읽음 처리
-  window.markRead = async function(id){
-    try{
-      const opts = {
-        method:'POST',
-        headers:{ 'Content-Type':'application/x-www-form-urlencoded' },
-        body:'n_id='+encodeURIComponent(id),
-        credentials:'same-origin'
-      };
-      const r = await fetch(ctx + '/notify/read.do', opts);
-      if(!r.ok) throw new Error('read http ' + r.status);
-      await refreshCount();
-      await openPanel();
-    }catch(e){ console.error('[notify] read error', e); alert('읽음 처리 실패'); }
+  window.markRead = async function(id, options = {}) {
+  const silent = options.silent || false;
+  try {
+    const opts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'n_id=' + encodeURIComponent(id),
+      credentials: 'same-origin'
+    };
+    const r = await fetch(ctx + '/notify/read.do', opts);
+    if (!r.ok) throw new Error('read http ' + r.status);
+    await refreshCount();
+    if (!silent) await openPanel();  // silent 옵션이 false일 때만 전체 새로고침
+  } catch (e) {
+    console.error('[notify] read error', e);
+    alert('읽음 처리 실패');
   }
+};
+
 
   // 초기 실행
   refreshCount();
@@ -168,32 +185,27 @@ document.addEventListener("DOMContentLoaded", function(){
 											상품관리</a></li>
 									<li><a href="${contextPath}/business/businessOrderList.do">주문관리</a></li>
 									<li>${memberInfo.m_name}님환영합니다.</li>
-<!-- 									<div id="bell" class="bell" role="button" tabindex="0" -->
-<%-- 										aria-label="알림" data-ctx="${ctx}"> --%>
-<!-- 										🔔 <span id="badge" class="badge" style="display: none;">0</span> -->
-<!-- 										<div id="panel" class="panel" style="display: none;"></div> -->
-<!-- 										<div id="notifyOverlay" style="display: none;"></div> -->
-<!-- 										<div id="notifyModal" role="dialog" aria-modal="true" -->
-<!-- 											aria-labelledby="notifyTitle"> -->
-<!-- 											<div class="modal-header"> -->
-<!-- 												<h3 id="notifyTitle">알림</h3> -->
-<!-- 												<button type="button" id="notifyClose" aria-label="닫기">✕</button> -->
-<!-- 											</div> -->
-<!-- 											<div id="notifyBody"> -->
-<!-- 												여기로 리스트가 들어감 -->
-<!-- 											</div> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
+									<div id="bell" class="bell" role="button" tabindex="0"
+										aria-label="알림" data-ctx="${ctx}">
+										🔔 <span id="badge" class="badge" style="display: none;">0</span>
+										<div id="panel" class="panel" style="display: none;"></div>
+										<div id="notifyOverlay" style="display: none;"></div>
+										<div id="notifyModal" role="dialog" aria-modal="true"
+											aria-labelledby="notifyTitle">
+											<div class="modal-header">
+												<h3 id="notifyTitle">알림</h3>
+												<button type="button" id="notifyClose" aria-label="닫기">✕</button>
+											</div>
+											<div id="notifyBody">
+												여기로 리스트가 들어감
+											</div>
+										</div>
+									</div>
 								</c:when>
 								<c:when test="${memberInfo.m_role == 3}">
 									<li><a
 										href="${contextPath}/admin/mypage/mypageAdminInfo.do">관리자페이지</a></li>
 									<li>${memberInfo.m_name}님환영합니다.</li>
-<!-- 									<div id="bell" class="bell" role="button" tabindex="0" -->
-<%-- 										aria-label="알림" data-ctx="${ctx}"> --%>
-<!-- 										🔔 <span id="badge" class="badge" style="display: none;">0</span> -->
-<!-- 										<div id="panel" class="panel" style="display: none;"></div> -->
-<!-- 									</div> -->
 								</c:when>
 							</c:choose>
 						</c:when>
